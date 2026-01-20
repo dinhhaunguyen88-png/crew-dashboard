@@ -89,6 +89,30 @@ def insert_flights(flights_data: list):
         print(f"Error inserting flights: {e}")
         return None
 
+def _fetch_all(query):
+    """Fetch all records using pagination to bypass 1000-row limit"""
+    all_data = []
+    limit = 1000
+    start = 0
+    
+    while True:
+        try:
+            # Use range for pagination: start to start + limit - 1
+            result = query.range(start, start + limit - 1).execute()
+            data = result.data if result.data else []
+            all_data.extend(data)
+            
+            # If we fetched fewer than limit, we're done
+            if len(data) < limit:
+                break
+                
+            start += limit
+        except Exception as e:
+            print(f"Error in pagination: {e}")
+            break
+            
+    return all_data
+
 def get_flights(filter_date: str = None):
     """Get flights, optionally filtered by date"""
     client = get_client()
@@ -100,9 +124,8 @@ def get_flights(filter_date: str = None):
         if filter_date:
             query = query.eq('date', filter_date)
         
-        # Explicitly increase limit to bypass default 1000
-        result = query.limit(10000).execute()
-        return result.data if result.data else []
+        # Use pagination helper
+        return _fetch_all(query)
     except Exception as e:
         print(f"Error getting flights: {e}")
         return []
@@ -115,9 +138,11 @@ def get_available_dates():
     
     try:
         # Increase limit to check all dates
-        result = client.table('flights').select('date').limit(10000).execute()
-        if result.data:
-            dates = list(set([r['date'] for r in result.data]))
+        query = client.table('flights').select('date')
+        all_data = _fetch_all(query)
+        
+        if all_data:
+            dates = list(set([r['date'] for r in all_data]))
             # Sort dates chronologically
             try:
                 dates.sort(key=lambda d: tuple(map(int, d.split('/')[::-1])))
@@ -164,8 +189,7 @@ def get_ac_utilization(filter_date: str = None):
         if filter_date:
             query = query.eq('date', filter_date)
         
-        result = query.limit(10000).execute()
-        return result.data if result.data else []
+        return _fetch_all(query)
     except Exception as e:
         print(f"Error getting AC utilization: {e}")
         return []
@@ -201,8 +225,8 @@ def get_rolling_hours():
         return []
     
     try:
-        result = client.table('rolling_hours').select('*').order('hours_28day', desc=True).limit(10000).execute()
-        return result.data if result.data else []
+        query = client.table('rolling_hours').select('*').order('hours_28day', desc=True)
+        return _fetch_all(query)
     except Exception as e:
         print(f"Error getting rolling hours: {e}")
         return []
@@ -242,8 +266,7 @@ def get_crew_schedule(filter_date: str = None):
         if filter_date:
             query = query.eq('date', filter_date)
         
-        result = query.limit(10000).execute()
-        return result.data if result.data else []
+        return _fetch_all(query)
     except Exception as e:
         print(f"Error getting crew schedule: {e}")
         return []
