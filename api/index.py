@@ -163,7 +163,7 @@ def index():
         traceback.print_exc()
     
     try:
-        return render_template('crew_dashboard.html', data=data, filter_date=filter_date)
+        return render_template('crew_dashboard.html', data=data, filter_date=filter_date, db_connected=supabase_connected)
     except Exception as e:
         return f"<h1>Template Error</h1><pre>{traceback.format_exc()}</pre>", 500
 
