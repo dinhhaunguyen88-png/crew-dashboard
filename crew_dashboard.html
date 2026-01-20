@@ -670,6 +670,14 @@
                 <button class="base-btn" data-base="han">HAN</button>
                 <button class="base-btn" data-base="dad">DAD</button>
             </div>
+            <!-- DB Status Indicator -->
+            <div
+                style="padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; gap: 6px; 
+                 {% if db_connected %}background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3);{% else %}background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3);{% endif %}">
+                <span
+                    style="width: 8px; height: 8px; border-radius: 50%; {% if db_connected %}background: #4ade80;{% else %}background: #f87171;{% endif %}"></span>
+                {% if db_connected %}DB Connected{% else %}Demo Mode (No DB){% endif %}
+            </div>
             <div class="datetime">
                 <div id="current-date">15/01/2026</div>
                 <div id="current-time">15:00</div>

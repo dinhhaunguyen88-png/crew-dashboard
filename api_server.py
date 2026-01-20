@@ -34,8 +34,12 @@ def index():
     # Get data
     data = processor.get_dashboard_data(filter_date)
     
+    # Check DB connection status for UI debugging
+    from supabase_client import is_connected
+    db_connected = is_connected()
+    
     # Render template with data
-    return render_template('crew_dashboard.html', data=data, filter_date=filter_date)
+    return render_template('crew_dashboard.html', data=data, filter_date=filter_date, db_connected=db_connected)
 
 @app.route('/upload', methods=['POST'])
 def upload_files():
