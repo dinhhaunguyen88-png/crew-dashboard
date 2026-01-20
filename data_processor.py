@@ -281,7 +281,7 @@ class DataProcessor:
         
         return col_map
     
-    def process_dayrep_csv(self, file_path=None, file_content=None):
+    def process_dayrep_csv(self, file_path=None, file_content=None, sync_db=True):
         """Process DayRepReport CSV file with operating day logic (04:00-03:59)
         Supports multiple CSV formats with auto-detection based on header"""
         self.flights = []
@@ -419,7 +419,7 @@ class DataProcessor:
         self.available_dates = sorted(list(unique_dates), key=lambda d: self._parse_date_for_sort(d))
         
         # INSERT TO SUPABASE
-        if db.is_connected() and len(self.flights) > 0:
+        if sync_db and db.is_connected() and len(self.flights) > 0:
             print("syncing flights to supabase...")
             flights_payload = []
             for flight in self.flights:
@@ -449,7 +449,7 @@ class DataProcessor:
         except:
             return (9999, 99, 99)
     
-    def process_sacutil_csv(self, file_path=None, file_content=None):
+    def process_sacutil_csv(self, file_path=None, file_content=None, sync_db=True):
         """Process SacutilReport CSV file"""
         self.ac_utilization = {}
         self.ac_utilization_by_date.clear()
@@ -621,7 +621,7 @@ class DataProcessor:
             }
         
         # INSERT TO SUPABASE
-        if db.is_connected() and len(self.ac_utilization_by_date) > 0:
+        if sync_db and db.is_connected() and len(self.ac_utilization_by_date) > 0:
             print("syncing ac_utilization to supabase...")
             util_data = []
             for date_str, ac_types in self.ac_utilization_by_date.items():
@@ -647,7 +647,7 @@ class DataProcessor:
 
         return len(self.ac_utilization)
     
-    def process_rolcrtot_csv(self, file_path=None, file_content=None):
+    def process_rolcrtot_csv(self, file_path=None, file_content=None, sync_db=True):
         """Process RolCrTotReport CSV file - Rolling crew hours totals"""
         self.rolling_hours = []
         
@@ -763,7 +763,7 @@ class DataProcessor:
         self.rolling_hours.sort(key=lambda x: x['hours_28day'], reverse=True)
         
         # INSERT TO SUPABASE
-        if db.is_connected() and len(self.rolling_hours) > 0:
+        if sync_db and db.is_connected() and len(self.rolling_hours) > 0:
             print("syncing rolling_hours to supabase...")
             hours_data = []
             for item in self.rolling_hours:
@@ -782,7 +782,7 @@ class DataProcessor:
             
         return len(self.rolling_hours)
     
-    def process_crew_schedule_csv(self, file_path=None, file_content=None):
+    def process_crew_schedule_csv(self, file_path=None, file_content=None, sync_db=True):
         """Process Crew schedule CSV file - Standby, sick-call, fatigue status"""
         self.crew_schedule = {
             'standby': [],
@@ -964,7 +964,7 @@ class DataProcessor:
                     continue
 
         # INSERT TO SUPABASE
-        if db.is_connected() and (self.crew_schedule_by_date or self.crew_schedule['summary']):
+        if sync_db and db.is_connected() and (self.crew_schedule_by_date or self.crew_schedule['summary']):
             print("syncing crew_schedule to supabase...")
             schedule_data = []
             # Note: insert_crew_schedule expects flat list.

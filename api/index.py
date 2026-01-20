@@ -177,7 +177,7 @@ def upload_files():
     try:
         if 'dayrep' in request.files and request.files['dayrep'].filename:
             content = request.files['dayrep'].read()
-            count = processor.process_dayrep_csv(file_content=content)
+            count = processor.process_dayrep_csv(file_content=content, sync_db=False)
             res = db.insert_flights([{
                 'date': f.get('date', ''), 'calendar_date': f.get('calendar_date', ''),
                 'reg': f.get('reg', ''), 'flt': f.get('flt', ''),
@@ -189,7 +189,7 @@ def upload_files():
 
         if 'sacutil' in request.files and request.files['sacutil'].filename:
             content = request.files['sacutil'].read()
-            processor.process_sacutil_csv(file_content=content)
+            processor.process_sacutil_csv(file_content=content, sync_db=False)
             util_data = []
             for date_str, ac_types in processor.ac_utilization_by_date.items():
                 for ac_type, stats in ac_types.items():
@@ -209,7 +209,7 @@ def upload_files():
         
         if 'rolcrtot' in request.files and request.files['rolcrtot'].filename:
             content = request.files['rolcrtot'].read()
-            processor.process_rolcrtot_csv(file_content=content)
+            processor.process_rolcrtot_csv(file_content=content, sync_db=False)
             hours_data = [{
                 'crew_id': item.get('id', ''), 'name': item.get('name', ''),
                 'seniority': item.get('seniority', ''),
@@ -226,7 +226,7 @@ def upload_files():
         
         if 'crew_schedule' in request.files and request.files['crew_schedule'].filename:
             content = request.files['crew_schedule'].read()
-            processor.process_crew_schedule_csv(file_content=content)
+            processor.process_crew_schedule_csv(file_content=content, sync_db=False)
             schedule_data = []
             for date_str, counts in processor.crew_schedule_by_date.items():
                 for status_type in ['SL', 'CSL', 'SBY', 'OSBY']:

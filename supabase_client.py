@@ -75,6 +75,7 @@ def insert_flights(flights_data: list):
     
     try:
         # Clear existing data before insert
+        # Check if we can delete (RLS might block)
         client.table('flights').delete().neq('id', '00000000-0000-0000-0000-000000000000').execute()
         
         # Insert new data in batches of 500
