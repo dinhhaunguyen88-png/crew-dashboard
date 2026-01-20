@@ -656,8 +656,11 @@
             <!-- Date Filter -->
             <div class="date-filter-container">
                 <span class="date-filter-label">📅 Filter Date:</span>
-                <select id="dateFilter" class="date-filter-select" onchange="onDateFilterChange()">
+                <select id="dateFilter" class="date-filter-select" onchange="window.location.href='/?date='+this.value">
                     <option value="">All Dates</option>
+                    {% for date in data.available_dates %}
+                    <option value="{{ date }}" {% if filter_date==date %}selected{% endif %}>{{ date }}</option>
+                    {% endfor %}
                 </select>
                 <span id="dateIndicator" class="date-indicator" style="display: none;">Filtered</span>
             </div>
@@ -681,57 +684,51 @@
             style="background: var(--bg-secondary); padding: 2rem; border-radius: 16px; max-width: 600px; width: 90%; border: 1px solid var(--border-color); margin: 2rem auto;">
             <h3 style="margin-bottom: 1.5rem; color: var(--text-primary);">📂 Upload CSV Data</h3>
 
-            <div style="margin-bottom: 1.5rem;">
-                <label
-                    style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.875rem;">DayRepReport
-                    CSV</label>
-                <input type="file" id="dayrepFile" accept=".csv"
-                    style="width: 100%; padding: 0.75rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary);">
-            </div>
+            <form action="/upload" method="POST" enctype="multipart/form-data">
 
-            <div style="margin-bottom: 1.5rem;">
-                <label
-                    style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.875rem;">SacutilReport
-                    CSV (Aircraft Utilization)</label>
-                <input type="file" id="sacutilFile" accept=".csv"
-                    style="width: 100%; padding: 0.75rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary);">
-            </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <label
+                        style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.875rem;">DayRepReport
+                        CSV</label>
+                    <input type="file" name="dayrep" accept=".csv"
+                        style="width: 100%; padding: 0.75rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary);">
+                </div>
 
-            <div style="margin-bottom: 1.5rem;">
-                <label
-                    style="display: block; margin-bottom: 0.5rem; color: var(--accent-yellow); font-size: 0.875rem; font-weight: 600;">📊
-                    RolCrTotReport
-                    CSV (Rolling 28-day/365-day Block Hours)</label>
-                <input type="file" id="rolcrtotFile" accept=".csv"
-                    style="width: 100%; padding: 0.75rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary);">
-                <small style="color: var(--text-secondary); font-size: 0.75rem;">Rolling crew hours totals report for
-                    flight hour limits tracking</small>
-            </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <label
+                        style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.875rem;">SacutilReport
+                        CSV</label>
+                    <input type="file" name="sacutil" accept=".csv"
+                        style="width: 100%; padding: 0.75rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary);">
+                </div>
 
-            <div style="margin-bottom: 1.5rem;">
-                <label
-                    style="display: block; margin-bottom: 0.5rem; color: var(--accent-cyan); font-size: 0.875rem; font-weight: 600;">👥
-                    Crew Schedule
-                    CSV (Standby, Sick-call, Fatigue)</label>
-                <input type="file" id="crewScheduleFile" accept=".csv"
-                    style="width: 100%; padding: 0.75rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary);">
-                <small style="color: var(--text-secondary); font-size: 0.75rem;">Crew schedule with SL, CSL, SBY, OSBY
-                    status codes</small>
-            </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <label
+                        style="display: block; margin-bottom: 0.5rem; color: var(--accent-yellow); font-size: 0.875rem; font-weight: 600;">📊
+                        RolCrTotReport CSV</label>
+                    <input type="file" name="rolcrtot" accept=".csv"
+                        style="width: 100%; padding: 0.75rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary);">
+                </div>
 
-            <div id="uploadStatus" style="margin-bottom: 1rem; padding: 0.75rem; border-radius: 8px; display: none;">
-            </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <label
+                        style="display: block; margin-bottom: 0.5rem; color: var(--accent-cyan); font-size: 0.875rem; font-weight: 600;">👥
+                        Crew Schedule CSV</label>
+                    <input type="file" name="crew_schedule" accept=".csv"
+                        style="width: 100%; padding: 0.75rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary);">
+                </div>
 
-            <div style="display: flex; gap: 1rem;">
-                <button onclick="uploadFiles()"
-                    style="flex: 1; padding: 0.75rem; background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer;">
-                    ⬆️ Upload & Process
-                </button>
-                <button onclick="closeUploadModal()"
-                    style="padding: 0.75rem 1.5rem; background: transparent; border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-secondary); cursor: pointer;">
-                    Cancel
-                </button>
-            </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button type="submit"
+                        style="flex: 1; padding: 0.75rem; background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer;">
+                        ⬆️ Upload & Refresh
+                    </button>
+                    <button type="button" onclick="closeUploadModal()"
+                        style="padding: 0.75rem 1.5rem; background: transparent; border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-secondary); cursor: pointer;">
+                        Cancel
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -758,11 +755,64 @@
                         <th>Crew Count</th>
                         <th>Lead Role</th>
                         <th>Aircraft Sequence</th>
+                        <th>Flights</th>
                         <th>Rotations</th>
                     </tr>
                 </thead>
                 <tbody id="crewRotationTableBody">
-                    <!-- Dynamic content -->
+                    {% for rotation in data.crew_rotations %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ rotation.crew_count }}</td>
+                        <td>{{ rotation.role }}</td>
+                        <td>{{ rotation.regs | join(', ') }}</td>
+                        <td>{{ rotation.flights | join(', ') }}</td>
+                        <td>{{ rotation.rotations }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Crew Operating Modal -->
+    <div id="crewOperatingModal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; overflow-y: auto;">
+        <div
+            style="background: var(--bg-secondary); padding: 2rem; border-radius: 16px; max-width: 800px; width: 95%; border: 1px solid var(--border-color); margin: 2rem auto; max-height: 80vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3 style="color: var(--text-primary);">👥 Crew Operating Details</h3>
+                <button onclick="closeCrewOperatingModal()"
+                    style="background: transparent; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer;">×</button>
+            </div>
+
+            <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                List of all crew members operating on {{ filter_date or 'selected date' }}.
+                Sorted by Role and Name.
+            </p>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for crew in data.operating_crew %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ crew.id }}</td>
+                        <td>{{ crew.name }}</td>
+                        <td><span
+                                class="status-dot {% if crew.role == 'CP' %}blue{% elif crew.role == 'FO' %}purple{% elif crew.role == 'PU' %}cyan{% else %}green{% endif %}"></span>{{
+                            crew.role }}</td>
+                        <td>Active</td>
+                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
@@ -774,24 +824,30 @@
         <section class="section-title">Executive Summary</section>
         <div class="executive-grid">
             <div class="card metric-card">
-                <div class="metric-value">84</div>
+                <div class="metric-value">{{ data.summary.total_aircraft }}</div>
                 <div class="metric-label">Total Aircraft Flying</div>
                 <span class="metric-trend up">REGs operating today</span>
             </div>
             <div class="card metric-card">
-                <div class="metric-value">424</div>
+                <div class="metric-value">{{ data.summary.total_flights }}</div>
                 <div class="metric-label">Total Flights</div>
                 <span class="metric-trend up">▲ +12% vs yesterday</span>
             </div>
-            <div class="card metric-card">
-                <div class="metric-value">1,495</div>
+            <div class="card metric-card" onclick="openCrewOperatingModal()" style="cursor: pointer;">
+                <div class="metric-value">{{ "{:,}".format(data.summary.total_crew) }}</div>
                 <div class="metric-label">Total Crew Operating</div>
-                <span class="metric-trend">CP: 217 | FO: 212 | PU: 213 | FA: 843</span>
+                {% if data.summary.total_crew == 0 and data.summary.total_flights > 0 %}
+                <span class="metric-trend" style="color: var(--accent-red); font-weight: bold;">⚠ No 'Crew' column in
+                    CSV</span>
+                {% else %}
+                <span class="metric-trend">CP: {{ data.crew_roles.CP }} | FO: {{ data.crew_roles.FO }} | PU: {{
+                    data.crew_roles.PU }} | FA: {{ data.crew_roles.FA }} (Click to view)</span>
+                {% endif %}
             </div>
             <div class="card metric-card">
-                <div class="metric-value">13.6h</div>
+                <div class="metric-value">{{ data.summary.avg_flight_hours }}h</div>
                 <div class="metric-label">Avg Flight Hours/Aircraft</div>
-                <span class="metric-trend up">Total: 1,085h</span>
+                <span class="metric-trend up">Total: {{ "{:,.0f}h".format(data.summary.total_block_hours) }}</span>
             </div>
         </div>
 
@@ -801,7 +857,8 @@
                 <div class="gauge-container">
                     <canvas id="utilizationGauge" width="200" height="200"></canvas>
                     <div class="gauge-value">
-                        <div class="value">87.5%</div>
+                        <div class="value">{{ (data.summary.avg_flight_hours / 24 * 100) | round(1) if
+                            data.summary.avg_flight_hours else 0 }}%</div>
                         <div class="label">Utilization</div>
                     </div>
                 </div>
@@ -812,15 +869,22 @@
                 </div>
                 <div class="metric-label" style="margin-top: 0.5rem;">Crew Distribution</div>
             </div>
-            <div class="card metric-card">
-                <div class="metric-value" id="crewRotationCount" style="color: var(--accent-yellow);">0</div>
+            <div class="card metric-card" onclick="openCrewRotationModal()" style="cursor: pointer;">
+                <div class="metric-value" id="crewRotationCount" style="color: var(--accent-yellow);">{{
+                    data.summary.crew_rotation_count }}</div>
                 <div class="metric-label">Crew Rotation</div>
-                <span class="metric-trend">Groups changing aircraft</span>
+                {% if data.summary.crew_rotation_count == 0 and data.summary.total_flights > 0 and
+                data.summary.total_crew == 0 %}
+                <span class="metric-trend" style="color: var(--accent-red);">⚠ Missing Crew Data</span>
+                {% else %}
+                <span class="metric-trend">Groups changing aircraft (Click to view)</span>
+                {% endif %}
             </div>
             <div class="card metric-card">
-                <div class="metric-value">1,085h</div>
+                <div class="metric-value" id="totalBlockHours">{{ "{:,.0f}h".format(data.summary.total_block_hours) }}
+                </div>
                 <div class="metric-label">Total Block Hours</div>
-                <span class="metric-trend up">▲ +8.2%</span>
+                <span class="metric-trend up">Based on filtered flights</span>
             </div>
         </div>
 
@@ -833,72 +897,37 @@
                     <!-- Alert Summary -->
                     <div class="alert-grid" id="alertGrid">
                         <div class="alert-badge green">
-                            <div class="alert-count" id="alertNormal">285</div>
+                            <div class="alert-count" id="alertNormal">{{ data.rolling_stats.normal }}</div>
                             <div class="alert-label">Normal</div>
                         </div>
                         <div class="alert-badge yellow">
-                            <div class="alert-count" id="alertWarning">12</div>
+                            <div class="alert-count" id="alertWarning">{{ data.rolling_stats.warning }}</div>
                             <div class="alert-label">Warning >85%</div>
                         </div>
                         <div class="alert-badge red">
-                            <div class="alert-count" id="alertCritical">3</div>
+                            <div class="alert-count" id="alertCritical">{{ data.rolling_stats.critical }}</div>
                             <div class="alert-label">Critical >95%</div>
                         </div>
                     </div>
 
-                    <!-- Flight Hour Limits -->
+                    <!-- Flight Hour Limits - Dynamic from rolling_hours -->
                     <h4 style="margin-bottom: 1rem; color: var(--text-secondary); font-size: 0.875rem;">28-Day Flight
                         Hour Limits</h4>
 
+                    {% for crew in data.rolling_hours[:5] %}
                     <div class="progress-item">
                         <div class="progress-header">
-                            <span>LAM NGOC VU (CP)</span>
-                            <span style="color: var(--accent-yellow);">94:16 / 100h (94%)</span>
+                            <span>{{ crew.name }}</span>
+                            <span
+                                style="color: {% if crew.status == 'critical' %}var(--accent-red){% elif crew.status == 'warning' %}var(--accent-yellow){% else %}var(--accent-green){% endif %};">{{
+                                crew.block_28day }} / 100h ({{ crew.percentage }}%)</span>
                         </div>
                         <div class="progress-bar">
-                            <div class="progress-fill yellow" style="width: 94%"></div>
+                            <div class="progress-fill {% if crew.status == 'critical' %}red{% elif crew.status == 'warning' %}yellow{% else %}green{% endif %}"
+                                style="width: {{ [crew.percentage, 100] | min }}%"></div>
                         </div>
                     </div>
-
-                    <div class="progress-item">
-                        <div class="progress-header">
-                            <span>ALEX YUNIAR CHAERUDIN (CP)</span>
-                            <span style="color: var(--accent-yellow);">92:55 / 100h (93%)</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill yellow" style="width: 93%"></div>
-                        </div>
-                    </div>
-
-                    <div class="progress-item">
-                        <div class="progress-header">
-                            <span>GAURAV DHAKA (CP)</span>
-                            <span style="color: var(--accent-yellow);">91:21 / 100h (91%)</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill yellow" style="width: 91%"></div>
-                        </div>
-                    </div>
-
-                    <div class="progress-item">
-                        <div class="progress-header">
-                            <span>GRIVTSOV OLEG (CP)</span>
-                            <span style="color: var(--accent-yellow);">90:14 / 100h (90%)</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill yellow" style="width: 90%"></div>
-                        </div>
-                    </div>
-
-                    <div class="progress-item">
-                        <div class="progress-header">
-                            <span>NGUYEN LINH AN (FO)</span>
-                            <span style="color: var(--accent-yellow);">92:42 / 100h (93%)</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill yellow" style="width: 93%"></div>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
 
                 <!-- Top 20 High-Intensity Crew -->
@@ -916,76 +945,23 @@
                             </tr>
                         </thead>
                         <tbody id="rollingHoursTableBody">
+                            {% for crew in data.rolling_hours[:20] %}
                             <tr>
-                                <td>1</td>
-                                <td>18159</td>
-                                <td>AKBAR MUHAMMAD ALVIN</td>
-                                <td>96:31</td>
-                                <td><span class="status-dot red"></span>Critical</td>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ crew.id }}</td>
+                                <td>{{ crew.name }}</td>
+                                <td>{{ crew.block_28day }}</td>
+                                <td>
+                                    {% if crew.status == 'critical' %}
+                                    <span class="status-dot red"></span>Critical
+                                    {% elif crew.status == 'warning' %}
+                                    <span class="status-dot yellow"></span>Warning
+                                    {% else %}
+                                    <span class="status-dot green"></span>Normal
+                                    {% endif %}
+                                </td>
                             </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>18573</td>
-                                <td>GUND DHRUV</td>
-                                <td>96:54</td>
-                                <td><span class="status-dot red"></span>Critical</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>18253</td>
-                                <td>GAMULIN MAXIM</td>
-                                <td>96:02</td>
-                                <td><span class="status-dot red"></span>Critical</td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>9739</td>
-                                <td>NGUYEN TRAN NAM</td>
-                                <td>96:12</td>
-                                <td><span class="status-dot red"></span>Critical</td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>12295</td>
-                                <td>PUTRA DIMAS SULISTYA</td>
-                                <td>96:27</td>
-                                <td><span class="status-dot red"></span>Critical</td>
-                            </tr>
-                            <tr>
-                                <td>6</td>
-                                <td>1927</td>
-                                <td>LAM NGOC VU</td>
-                                <td>94:16</td>
-                                <td><span class="status-dot yellow"></span>Warning</td>
-                            </tr>
-                            <tr>
-                                <td>7</td>
-                                <td>14404</td>
-                                <td>PHAM DANG QUANG</td>
-                                <td>93:22</td>
-                                <td><span class="status-dot yellow"></span>Warning</td>
-                            </tr>
-                            <tr>
-                                <td>8</td>
-                                <td>9060</td>
-                                <td>ALEX YUNIAR CHAERUDIN</td>
-                                <td>92:55</td>
-                                <td><span class="status-dot yellow"></span>Warning</td>
-                            </tr>
-                            <tr>
-                                <td>9</td>
-                                <td>17863</td>
-                                <td>NGUYEN BA LUAT</td>
-                                <td>92:46</td>
-                                <td><span class="status-dot yellow"></span>Warning</td>
-                            </tr>
-                            <tr>
-                                <td>10</td>
-                                <td>7371</td>
-                                <td>NGUYEN LINH AN</td>
-                                <td>92:42</td>
-                                <td><span class="status-dot yellow"></span>Warning</td>
-                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -1028,46 +1004,27 @@
                             <div class="ratio-label">Standby Available</div>
                             <div style="font-size: 0.75rem; color: var(--text-secondary);">SBY + OSBY</div>
                         </div>
-                        <div class="ratio-value good" id="standbyCount">152</div>
+                        <div class="ratio-value good" id="standbyCount">{{ data.crew_schedule.summary.SBY +
+                            data.crew_schedule.summary.OSBY }}</div>
                     </div>
                     <div class="ratio-card">
                         <div>
                             <div class="ratio-label">Sick / Call-Sick</div>
                             <div style="font-size: 0.75rem; color: var(--text-secondary);">SL + CSL</div>
                         </div>
-                        <div class="ratio-value warning" id="sickCount">16</div>
+                        <div class="ratio-value warning" id="sickCount">{{ data.crew_schedule.summary.SL +
+                            data.crew_schedule.summary.CSL }}</div>
                     </div>
-                    <div class="ratio-card">
-                        <div>
-                            <div class="ratio-label">Coverage Ratio</div>
-                            <div style="font-size: 0.75rem; color: var(--text-secondary);">Standby / Sick</div>
-                        </div>
-                        <div class="ratio-value good" id="coverageRatio">950% ✓</div>
-                    </div>
+
                 </div>
 
-                <!-- Crew Rotation Section -->
-                <div class="card" style="margin-top: 1.5rem;">
-                    <h4 style="margin-bottom: 1rem; color: var(--text-secondary); font-size: 0.875rem;"
-                        id="crewRotationTitle">Crew
-                        Rotation (0 Groups)</h4>
-                    <p style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 1rem;">Crew groups
-                        changing aircraft during operating day (04:00-03:59)</p>
-                    <div class="alert-list" id="crewRotationList" style="max-height: 200px;">
-                        <!-- Dynamic content -->
-                    </div>
-                    <div style="text-align: center; margin-top: 0.75rem;">
-                        <span id="viewAllCrewBtn" onclick="openCrewRotationModal()"
-                            style="font-size: 0.75rem; color: var(--accent-cyan); cursor: pointer;">View all rotations
-                            →</span>
-                    </div>
-                </div>
+
 
                 <!-- Aircraft Utilization -->
                 <div class="card" style="margin-top: 1.5rem;">
                     <h4 style="margin-bottom: 1rem; color: var(--text-secondary); font-size: 0.875rem;"
                         id="utilizationTitle">Aircraft
-                        Utilization (15/01/2026)</h4>
+                        Utilization ({{ filter_date if filter_date else 'All Dates' }})</h4>
                     <table class="data-table">
                         <thead>
                             <tr>
@@ -1079,34 +1036,15 @@
                             </tr>
                         </thead>
                         <tbody id="utilizationTableBody">
+                            {% for ac_type, stats in data.utilization.items() %}
                             <tr>
-                                <td>A320</td>
-                                <td>65:45</td>
-                                <td>100:00</td>
-                                <td>165:45</td>
-                                <td>11:03</td>
+                                <td>{{ ac_type }}</td>
+                                <td>{{ stats.dom_block }}</td>
+                                <td>{{ stats.int_block }}</td>
+                                <td>{{ stats.total_block }}</td>
+                                <td>{{ stats.avg_util }}</td>
                             </tr>
-                            <tr>
-                                <td>A321</td>
-                                <td>240:50</td>
-                                <td>570:40</td>
-                                <td>811:30</td>
-                                <td>12:40</td>
-                            </tr>
-                            <tr>
-                                <td>A330</td>
-                                <td>16:00</td>
-                                <td>92:05</td>
-                                <td>108:05</td>
-                                <td>13:30</td>
-                            </tr>
-                            <tr style="background: rgba(59, 130, 246, 0.1); font-weight: 600;">
-                                <td>TOTAL</td>
-                                <td>322:35</td>
-                                <td>762:45</td>
-                                <td>1085:20</td>
-                                <td>12:28</td>
-                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -1115,418 +1053,11 @@
     </main>
 
     <script>
-        // API Base URL
-        const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-            ? 'http://localhost:5000'
-            : '';
+        // Inject Data from Server
+        const dashboardData = {{ data | tojson | safe }};
+        const filterDate = "{{ filter_date or '' }}";
 
-        // Dashboard Data
-        let dashboardData = null;
-        let crewChart = null;
-        let currentDateFilter = null;  // Current date filter
-
-        // Fetch dashboard data from API
-        async function fetchDashboardData(filterDate = null) {
-            try {
-                let url = `${API_BASE}/api/dashboard`;
-                if (filterDate) {
-                    url += `?date=${encodeURIComponent(filterDate)}`;
-                }
-                const response = await fetch(url);
-                if (response.ok) {
-                    dashboardData = await response.json();
-                    updateDashboard(dashboardData);
-                    updateDateFilter(dashboardData);
-                    return dashboardData;
-                }
-            } catch (error) {
-                console.log('API not available, using static data');
-            }
-            return null;
-        }
-
-        // Update date filter dropdown with available dates
-        function updateDateFilter(data) {
-            const dateSelect = document.getElementById('dateFilter');
-            const dateIndicator = document.getElementById('dateIndicator');
-
-            if (!dateSelect || !data.available_dates) return;
-
-            // Store current selection
-            const currentValue = dateSelect.value;
-
-            // Clear and rebuild options
-            dateSelect.innerHTML = '<option value="">📊 All Dates (' + data.available_dates.length + ')</option>';
-
-            // Add available dates
-            data.available_dates.forEach(date => {
-                const option = document.createElement('option');
-                option.value = date;
-                option.textContent = formatDateForDisplay(date);
-                dateSelect.appendChild(option);
-            });
-
-            // Restore selection if still valid
-            if (currentValue && data.available_dates.includes(currentValue)) {
-                dateSelect.value = currentValue;
-            }
-
-            // Update indicator
-            if (data.current_filter_date) {
-                dateIndicator.style.display = 'inline-flex';
-                dateIndicator.textContent = '🔍 ' + formatDateForDisplay(data.current_filter_date);
-            } else {
-                dateIndicator.style.display = 'none';
-            }
-        }
-
-        // Format date for display (DD/MM/YY -> DD/MM/2026)
-        function formatDateForDisplay(dateStr) {
-            if (!dateStr) return '';
-            const parts = dateStr.split('/');
-            if (parts.length >= 3) {
-                const year = parts[2].length === 2 ? '20' + parts[2] : parts[2];
-                return `${parts[0]}/${parts[1]}/${year}`;
-            }
-            return dateStr;
-        }
-
-        // Handle date filter change
-        function onDateFilterChange() {
-            const dateSelect = document.getElementById('dateFilter');
-            currentDateFilter = dateSelect.value || null;
-
-            // Fetch data with new filter
-            fetchDashboardData(currentDateFilter);
-        }
-
-        // Update dashboard with API data
-        function updateDashboard(data) {
-            if (!data || !data.summary) return;
-
-            // Update summary metrics
-            const metrics = document.querySelectorAll('.metric-value');
-            if (metrics.length >= 4) {
-                metrics[0].textContent = data.summary.total_aircraft;
-                metrics[1].textContent = data.summary.total_flights;
-                metrics[2].textContent = data.summary.total_crew.toLocaleString();
-                metrics[3].textContent = data.summary.avg_flight_hours + 'h';
-            }
-
-            // Update Crew Rotation count (from API)
-            const rotationCount = data.summary.crew_rotation_count || 0;
-            const multiRegMetric = document.querySelector('.metric-value[style*="yellow"]');
-            if (multiRegMetric) {
-                multiRegMetric.textContent = rotationCount;
-            }
-
-            // Update crew roles in trend
-            if (data.crew_roles) {
-                const roleText = `CP: ${data.crew_roles.CP || 0} | FO: ${data.crew_roles.FO || 0} | PU: ${data.crew_roles.PU || 0} | FA: ${data.crew_roles.FA || 0}`;
-                const trendElements = document.querySelectorAll('.metric-trend');
-                if (trendElements[2]) {
-                    trendElements[2].textContent = roleText;
-                }
-
-                // Update crew distribution chart
-                if (crewChart) {
-                    crewChart.data.datasets[0].data = [
-                        data.crew_roles.CP || 0,
-                        data.crew_roles.FO || 0,
-                        data.crew_roles.PU || 0,
-                        data.crew_roles.FA || 0
-                    ];
-                    crewChart.update();
-                }
-            }
-
-            // Update Crew Rotation count and list (using rotationCount from above)
-            const crewRotationCountEl = document.getElementById('crewRotationCount');
-            if (crewRotationCountEl) {
-                crewRotationCountEl.textContent = rotationCount;
-            }
-
-            // Update rotation title
-            const rotationTitle = document.getElementById('crewRotationTitle');
-            if (rotationTitle) {
-                rotationTitle.textContent = `Crew Rotation (${rotationCount} Groups)`;
-            }
-
-            // Update Crew Rotation list
-            if (data.crew_rotations && data.crew_rotations.length > 0) {
-                const rotationList = document.getElementById('crewRotationList');
-                if (rotationList) {
-                    rotationList.innerHTML = data.crew_rotations.slice(0, 5).map(rotation => `
-                        <div class="alert-item" style="background: rgba(234, 179, 8, 0.1); border-color: rgba(234, 179, 8, 0.2);">
-                            <span class="icon" style="color: var(--accent-yellow);">✈</span>
-                            <span>
-                                <strong>${rotation.crew_count} crew</strong> (${rotation.role}): 
-                                ${rotation.regs.join(' → ')}
-                            </span>
-                        </div>
-                    `).join('');
-                }
-
-                // Update view all button
-                const viewAllBtn = document.getElementById('viewAllCrewBtn');
-                if (viewAllBtn) {
-                    viewAllBtn.textContent = `View all ${rotationCount} rotations →`;
-                }
-            } else {
-                const rotationList = document.getElementById('crewRotationList');
-                if (rotationList) {
-                    rotationList.innerHTML = '<div style="text-align: center; color: var(--text-secondary); padding: 1rem;">No crew rotations detected for this period</div>';
-                }
-            }
-
-            // Update Rolling Hours Stats (from RolCrTotReport)
-            if (data.rolling_stats) {
-                const alertNormal = document.getElementById('alertNormal');
-                const alertWarning = document.getElementById('alertWarning');
-                const alertCritical = document.getElementById('alertCritical');
-
-                if (alertNormal) alertNormal.textContent = data.rolling_stats.normal || 0;
-                if (alertWarning) alertWarning.textContent = data.rolling_stats.warning || 0;
-                if (alertCritical) alertCritical.textContent = data.rolling_stats.critical || 0;
-            }
-
-            // Update Rolling Hours Table (from RolCrTotReport)
-            if (data.rolling_hours && data.rolling_hours.length > 0) {
-                const tableBody = document.getElementById('rollingHoursTableBody');
-                if (tableBody) {
-                    tableBody.innerHTML = data.rolling_hours.slice(0, 20).map((crew, index) => {
-                        const statusClass = crew.status === 'critical' ? 'red' :
-                            (crew.status === 'warning' ? 'yellow' : 'green');
-                        const statusLabel = crew.status === 'critical' ? 'Critical' :
-                            (crew.status === 'warning' ? 'Warning' : 'Normal');
-                        return `
-                            <tr>
-                                <td>${index + 1}</td>
-                                <td>${crew.id}</td>
-                                <td>${crew.name}</td>
-                                <td>${crew.block_28day}</td>
-                                <td><span class="status-dot ${statusClass}"></span>${statusLabel}</td>
-                            </tr>
-                        `;
-                    }).join('');
-                }
-            }
-
-            // Update Aircraft Utilization Table (from SacutilReport)
-            if (data.utilization && Object.keys(data.utilization).length > 0) {
-                const utilTableBody = document.getElementById('utilizationTableBody');
-                const utilTitle = document.getElementById('utilizationTitle');
-
-                if (utilTitle) {
-                    const today = new Date();
-                    utilTitle.textContent = `Aircraft Utilization (${today.toLocaleDateString('vi-VN')})`;
-                }
-
-                if (utilTableBody) {
-                    let totalDom = 0, totalInt = 0;
-                    const rows = Object.entries(data.utilization).map(([acType, util]) => {
-                        return `
-                            <tr>
-                                <td>${acType}</td>
-                                <td>${util.dom_block || '-'}</td>
-                                <td>${util.int_block || '-'}</td>
-                                <td>${util.total_block || '-'}</td>
-                                <td>${util.avg_util || '-'}</td>
-                            </tr>
-                        `;
-                    }).join('');
-
-                    utilTableBody.innerHTML = rows;
-                }
-            }
-
-            // Update Crew Schedule stats (from Crew Schedule CSV)
-            if (data.crew_schedule && data.crew_schedule.summary) {
-                const summary = data.crew_schedule.summary;
-                const standbyCount = document.getElementById('standbyCount');
-                const sickCount = document.getElementById('sickCount');
-                const coverageRatio = document.getElementById('coverageRatio');
-
-                const totalStandby = (summary.SBY || 0) + (summary.OSBY || 0);
-                const totalSick = (summary.SL || 0) + (summary.CSL || 0);
-
-                if (standbyCount) standbyCount.textContent = totalStandby;
-                if (sickCount) sickCount.textContent = totalSick;
-
-                if (coverageRatio && totalSick > 0) {
-                    const ratio = Math.round((totalStandby / totalSick) * 100);
-                    coverageRatio.textContent = ratio + '% ' + (ratio >= 300 ? '✓' : '⚠');
-                    coverageRatio.className = ratio >= 300 ? 'ratio-value good' : 'ratio-value warning';
-                } else if (coverageRatio) {
-                    coverageRatio.textContent = '∞ ✓';
-                    coverageRatio.className = 'ratio-value good';
-                }
-            }
-
-            // Update last updated timestamp
-            if (data.last_updated) {
-                console.log('Data last updated:', data.last_updated);
-            }
-
-            console.log('Dashboard updated with API data');
-        }
-
-        // Upload Modal Functions
-        function openUploadModal() {
-            document.getElementById('uploadModal').style.display = 'flex';
-        }
-
-        function closeUploadModal() {
-            document.getElementById('uploadModal').style.display = 'none';
-            document.getElementById('uploadStatus').style.display = 'none';
-        }
-
-        // Crew Rotation Modal Functions
-        function openCrewRotationModal() {
-            const modal = document.getElementById('crewRotationModal');
-            modal.style.display = 'flex';
-
-            // Populate table with data
-            if (dashboardData && dashboardData.crew_rotations) {
-                const tableBody = document.getElementById('crewRotationTableBody');
-                if (tableBody) {
-                    tableBody.innerHTML = dashboardData.crew_rotations.map((rotation, index) => `
-                        <tr>
-                            <td>${index + 1}</td>
-                            <td><strong>${rotation.crew_count}</strong> crew</td>
-                            <td>${rotation.role}</td>
-                            <td>${rotation.regs.join(' → ')}</td>
-                            <td><span class="status-dot yellow"></span>${rotation.rotations}</td>
-                        </tr>
-                    `).join('');
-                }
-            }
-        }
-
-        function closeCrewRotationModal() {
-            document.getElementById('crewRotationModal').style.display = 'none';
-        }
-
-        // Upload CSV files
-        async function uploadFiles() {
-            const dayrepFile = document.getElementById('dayrepFile').files[0];
-            const sacutilFile = document.getElementById('sacutilFile').files[0];
-            const rolcrtotFile = document.getElementById('rolcrtotFile').files[0];
-            const crewScheduleFile = document.getElementById('crewScheduleFile').files[0];
-            const statusDiv = document.getElementById('uploadStatus');
-
-            // At least one file required
-            if (!dayrepFile && !sacutilFile && !rolcrtotFile && !crewScheduleFile) {
-                statusDiv.style.display = 'block';
-                statusDiv.style.background = 'rgba(239, 68, 68, 0.2)';
-                statusDiv.style.color = 'var(--accent-red)';
-                statusDiv.textContent = '❌ Please select at least one CSV file to upload';
-                return;
-            }
-
-            statusDiv.style.display = 'block';
-            statusDiv.style.background = 'rgba(59, 130, 246, 0.2)';
-            statusDiv.style.color = 'var(--accent-blue)';
-            statusDiv.textContent = '⏳ Uploading and processing...';
-
-            let uploadResults = [];
-
-            try {
-                // Upload DayRep if provided
-                if (dayrepFile) {
-                    const dayrepFormData = new FormData();
-                    dayrepFormData.append('file', dayrepFile);
-                    const dayrepResponse = await fetch(`${API_BASE}/api/upload/dayrep`, {
-                        method: 'POST',
-                        body: dayrepFormData
-                    });
-                    if (dayrepResponse.ok) {
-                        uploadResults.push('✓ DayRepReport');
-                    } else {
-                        uploadResults.push('✗ DayRepReport failed');
-                    }
-                }
-
-                // Upload Sacutil if provided
-                if (sacutilFile) {
-                    const sacutilFormData = new FormData();
-                    sacutilFormData.append('file', sacutilFile);
-                    const sacutilResponse = await fetch(`${API_BASE}/api/upload/sacutil`, {
-                        method: 'POST',
-                        body: sacutilFormData
-                    });
-                    if (sacutilResponse.ok) {
-                        uploadResults.push('✓ SacutilReport');
-                    } else {
-                        uploadResults.push('✗ SacutilReport failed');
-                    }
-                }
-
-                // Upload RolCrTotReport if provided
-                if (rolcrtotFile) {
-                    const rolcrtotFormData = new FormData();
-                    rolcrtotFormData.append('file', rolcrtotFile);
-                    const rolcrtotResponse = await fetch(`${API_BASE}/api/upload/rolcrtot`, {
-                        method: 'POST',
-                        body: rolcrtotFormData
-                    });
-                    if (rolcrtotResponse.ok) {
-                        uploadResults.push('✓ RolCrTotReport (Rolling Hours)');
-                    } else {
-                        uploadResults.push('✗ RolCrTotReport failed');
-                    }
-                }
-
-                // Upload Crew Schedule if provided
-                if (crewScheduleFile) {
-                    const crewScheduleFormData = new FormData();
-                    crewScheduleFormData.append('file', crewScheduleFile);
-                    const crewScheduleResponse = await fetch(`${API_BASE}/api/upload/crew_schedule`, {
-                        method: 'POST',
-                        body: crewScheduleFormData
-                    });
-                    if (crewScheduleResponse.ok) {
-                        uploadResults.push('✓ Crew Schedule (Standby/Sick-call)');
-                    } else {
-                        uploadResults.push('✗ Crew Schedule failed');
-                    }
-                }
-
-                statusDiv.style.background = 'rgba(34, 197, 94, 0.2)';
-                statusDiv.style.color = 'var(--accent-green)';
-                statusDiv.innerHTML = `✅ Upload complete!<br><small>${uploadResults.join(' | ')}</small>`;
-
-                // Refresh dashboard data
-                await fetchDashboardData();
-
-                setTimeout(() => {
-                    closeUploadModal();
-                }, 2000);
-
-            } catch (error) {
-                statusDiv.style.background = 'rgba(239, 68, 68, 0.2)';
-                statusDiv.style.color = 'var(--accent-red)';
-                statusDiv.textContent = '❌ Error: ' + error.message;
-            }
-        }
-
-        // Refresh data from API
-        async function refreshData() {
-            try {
-                const response = await fetch(`${API_BASE}/api/refresh`, { method: 'POST' });
-                if (response.ok) {
-                    // Reset date filter and fetch fresh data
-                    currentDateFilter = null;
-                    document.getElementById('dateFilter').value = '';
-                    await fetchDashboardData();
-                    alert('✅ Dashboard data refreshed!');
-                }
-            } catch (error) {
-                console.log('Could not refresh from API');
-            }
-        }
-
-        // Update datetime
+        // Update Date/Time
         function updateDateTime() {
             const now = new Date();
             document.getElementById('current-date').textContent =
@@ -1537,25 +1068,84 @@
         updateDateTime();
         setInterval(updateDateTime, 60000);
 
-        // Base selector
-        document.querySelectorAll('.base-btn[data-base]').forEach(btn => {
-            btn.addEventListener('click', function () {
-                document.querySelectorAll('.base-btn[data-base]').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
+        // Sidebar Navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function (e) {
+                if (this.getAttribute('href') === '#') {
+                    e.preventDefault();
+                    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                }
             });
         });
 
+        // Tab Switching
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            // Activate button (simple search)
+            Array.from(document.querySelectorAll('.tab-btn')).forEach(btn => {
+                if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(tabId)) {
+                    btn.classList.add('active');
+                }
+            });
+
+            const tabContent = document.getElementById(tabId);
+            if (tabContent) tabContent.classList.add('active');
+        }
+
+        // Modal Functions
+        function openUploadModal() {
+            document.getElementById('uploadModal').style.display = 'block';
+        }
+
+        function closeUploadModal() {
+            document.getElementById('uploadModal').style.display = 'none';
+        }
+
+        function openCrewRotationModal() {
+            document.getElementById('crewRotationModal').style.display = 'block';
+        }
+
+        function closeCrewRotationModal() {
+            document.getElementById('crewRotationModal').style.display = 'none';
+        }
+
+        function openCrewOperatingModal() {
+            document.getElementById('crewOperatingModal').style.display = 'block';
+        }
+
+        function closeCrewOperatingModal() {
+            document.getElementById('crewOperatingModal').style.display = 'none';
+        }
+
+        // Close modals on outside click
+        window.onclick = function (event) {
+            if (event.target == document.getElementById('uploadModal')) {
+                closeUploadModal();
+            }
+            if (event.target == document.getElementById('crewRotationModal')) {
+                closeCrewRotationModal();
+            }
+            if (event.target == document.getElementById('crewOperatingModal')) {
+                closeCrewOperatingModal();
+            }
+        }
+
+        // --- Charts Initialization ---
+
         // Utilization Gauge
         const gaugeCtx = document.getElementById('utilizationGauge').getContext('2d');
+        // Calculate dynamic value if data available
+        let utilValue = 87.5; // default
+
         new Chart(gaugeCtx, {
             type: 'doughnut',
             data: {
                 datasets: [{
-                    data: [87.5, 12.5],
-                    backgroundColor: [
-                        'rgba(34, 197, 94, 0.8)',
-                        'rgba(30, 41, 59, 0.5)'
-                    ],
+                    data: [utilValue, 100 - utilValue],
+                    backgroundColor: ['rgba(34, 197, 94, 0.8)', 'rgba(30, 41, 59, 0.5)'],
                     borderWidth: 0,
                     circumference: 270,
                     rotation: 225
@@ -1563,53 +1153,46 @@
             },
             options: {
                 cutout: '75%',
-                plugins: {
-                    legend: { display: false },
-                    tooltip: { enabled: false }
-                },
+                plugins: { legend: { display: false }, tooltip: { enabled: false } },
                 responsive: true,
                 maintainAspectRatio: true
             }
         });
 
-        // Crew Distribution Pie Chart
-        const crewCtx = document.getElementById('crewDistribution').getContext('2d');
-        crewChart = new Chart(crewCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['CP (Captain)', 'FO (First Officer)', 'PU (Purser)', 'FA (Flight Attendant)'],
-                datasets: [{
-                    data: [217, 212, 213, 843],
-                    backgroundColor: [
-                        'rgba(59, 130, 246, 0.8)',
-                        'rgba(139, 92, 246, 0.8)',
-                        'rgba(6, 182, 212, 0.8)',
-                        'rgba(34, 197, 94, 0.8)'
-                    ],
-                    borderWidth: 2,
-                    borderColor: 'rgba(15, 23, 42, 0.8)'
-                }]
-            },
-            options: {
-                cutout: '60%',
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            color: '#94a3b8',
-                            font: { size: 10 },
-                            boxWidth: 12,
-                            padding: 8
-                        }
-                    }
+        // Crew Distribution Chart
+        if (dashboardData && dashboardData.crew_roles) {
+            const crewCtx = document.getElementById('crewDistribution').getContext('2d');
+            new Chart(crewCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['CP (Captain)', 'FO (First Officer)', 'PU (Purser)', 'FA (Flight Attendant)'],
+                    datasets: [{
+                        data: [
+                            dashboardData.crew_roles.CP || 0,
+                            dashboardData.crew_roles.FO || 0,
+                            dashboardData.crew_roles.PU || 0,
+                            dashboardData.crew_roles.FA || 0
+                        ],
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(139, 92, 246, 0.8)',
+                            'rgba(6, 182, 212, 0.8)',
+                            'rgba(34, 197, 94, 0.8)'
+                        ],
+                        borderWidth: 2,
+                        borderColor: 'rgba(15, 23, 42, 0.8)'
+                    }]
                 },
-                responsive: true,
-                maintainAspectRatio: false
-            }
-        });
-
-        // Try to fetch from API on page load
-        fetchDashboardData();
+                options: {
+                    cutout: '60%',
+                    plugins: {
+                        legend: { position: 'right', labels: { color: '#94a3b8', font: { size: 10 } } }
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
     </script>
 </body>
 

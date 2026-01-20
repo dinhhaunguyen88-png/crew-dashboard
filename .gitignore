@@ -29,3 +29,12 @@ Thumbs.db
 .agent/
 .shared/
 ui-ux-pro-max-skill/
+
+# Binaries
+*.exe
+*.dll
+
+# Temp/Test files
+test_upload.csv
+debug_parser.py
+test_upload.py

@@ -1,0 +1,3135 @@
+{
+  "aircraft": [
+    {
+      "avg_per_flight": 1.5,
+      "flights": 4,
+      "reg": "B-652G",
+      "total_hours": 5.8
+    },
+    {
+      "avg_per_flight": 1.5,
+      "flights": 4,
+      "reg": "B-656E",
+      "total_hours": 5.8
+    },
+    {
+      "avg_per_flight": 1.8,
+      "flights": 8,
+      "reg": "LY-MLI",
+      "total_hours": 14.7
+    },
+    {
+      "avg_per_flight": 1.6,
+      "flights": 8,
+      "reg": "LY-MLN",
+      "total_hours": 12.6
+    },
+    {
+      "avg_per_flight": 1.6,
+      "flights": 8,
+      "reg": "LY-NVE",
+      "total_hours": 12.5
+    },
+    {
+      "avg_per_flight": 1.6,
+      "flights": 6,
+      "reg": "LY-NVG",
+      "total_hours": 9.8
+    },
+    {
+      "avg_per_flight": 2.1,
+      "flights": 5,
+      "reg": "VN-A500",
+      "total_hours": 10.7
+    },
+    {
+      "avg_per_flight": 3.0,
+      "flights": 5,
+      "reg": "VN-A516",
+      "total_hours": 14.8
+    },
+    {
+      "avg_per_flight": 1.6,
+      "flights": 6,
+      "reg": "VN-A522",
+      "total_hours": 9.7
+    },
+    {
+      "avg_per_flight": 3.1,
+      "flights": 3,
+      "reg": "VN-A523",
+      "total_hours": 9.3
+    },
+    {
+      "avg_per_flight": 3.5,
+      "flights": 4,
+      "reg": "VN-A525",
+      "total_hours": 13.9
+    },
+    {
+      "avg_per_flight": 2.6,
+      "flights": 4,
+      "reg": "VN-A526",
+      "total_hours": 10.3
+    },
+    {
+      "avg_per_flight": 3.5,
+      "flights": 4,
+      "reg": "VN-A528",
+      "total_hours": 13.9
+    },
+    {
+      "avg_per_flight": 2.7,
+      "flights": 6,
+      "reg": "VN-A532",
+      "total_hours": 16.3
+    },
+    {
+      "avg_per_flight": 3.6,
+      "flights": 4,
+      "reg": "VN-A534",
+      "total_hours": 14.5
+    },
+    {
+      "avg_per_flight": 1.4,
+      "flights": 6,
+      "reg": "VN-A535",
+      "total_hours": 8.2
+    },
+    {
+      "avg_per_flight": 4.0,
+      "flights": 4,
+      "reg": "VN-A536",
+      "total_hours": 16.2
+    },
+    {
+      "avg_per_flight": 4.7,
+      "flights": 4,
+      "reg": "VN-A537",
+      "total_hours": 18.9
+    },
+    {
+      "avg_per_flight": 2.9,
+      "flights": 7,
+      "reg": "VN-A538",
+      "total_hours": 20.5
+    },
+    {
+      "avg_per_flight": 5.4,
+      "flights": 3,
+      "reg": "VN-A539",
+      "total_hours": 16.1
+    },
+    {
+      "avg_per_flight": 3.3,
+      "flights": 6,
+      "reg": "VN-A542",
+      "total_hours": 19.8
+    },
+    {
+      "avg_per_flight": 2.0,
+      "flights": 5,
+      "reg": "VN-A544",
+      "total_hours": 10.2
+    },
+    {
+      "avg_per_flight": 4.7,
+      "flights": 3,
+      "reg": "VN-A545",
+      "total_hours": 14.2
+    },
+    {
+      "avg_per_flight": 2.9,
+      "flights": 4,
+      "reg": "VN-A546",
+      "total_hours": 11.7
+    },
+    {
+      "avg_per_flight": 3.8,
+      "flights": 4,
+      "reg": "VN-A547",
+      "total_hours": 15.2
+    },
+    {
+      "avg_per_flight": 4.0,
+      "flights": 4,
+      "reg": "VN-A548",
+      "total_hours": 16.0
+    },
+    {
+      "avg_per_flight": 1.9,
+      "flights": 6,
+      "reg": "VN-A549",
+      "total_hours": 11.5
+    },
+    {
+      "avg_per_flight": 2.6,
+      "flights": 6,
+      "reg": "VN-A550",
+      "total_hours": 15.8
+    },
+    {
+      "avg_per_flight": 2.3,
+      "flights": 8,
+      "reg": "VN-A552",
+      "total_hours": 18.1
+    },
+    {
+      "avg_per_flight": 4.1,
+      "flights": 5,
+      "reg": "VN-A553",
+      "total_hours": 20.6
+    },
+    {
+      "avg_per_flight": 2.0,
+      "flights": 5,
+      "reg": "VN-A554",
+      "total_hours": 9.9
+    },
+    {
+      "avg_per_flight": 2.2,
+      "flights": 4,
+      "reg": "VN-A575",
+      "total_hours": 8.9
+    },
+    {
+      "avg_per_flight": 5.0,
+      "flights": 4,
+      "reg": "VN-A578",
+      "total_hours": 19.9
+    },
+    {
+      "avg_per_flight": 3.3,
+      "flights": 4,
+      "reg": "VN-A580",
+      "total_hours": 13.2
+    },
+    {
+      "avg_per_flight": 3.8,
+      "flights": 4,
+      "reg": "VN-A607",
+      "total_hours": 15.2
+    },
+    {
+      "avg_per_flight": 2.4,
+      "flights": 5,
+      "reg": "VN-A630",
+      "total_hours": 11.8
+    },
+    {
+      "avg_per_flight": 1.6,
+      "flights": 6,
+      "reg": "VN-A632",
+      "total_hours": 9.5
+    },
+    {
+      "avg_per_flight": 3.5,
+      "flights": 3,
+      "reg": "VN-A633",
+      "total_hours": 10.5
+    },
+    {
+      "avg_per_flight": 3.3,
+      "flights": 4,
+      "reg": "VN-A634",
+      "total_hours": 13.2
+    },
+    {
+      "avg_per_flight": 1.7,
+      "flights": 6,
+      "reg": "VN-A635",
+      "total_hours": 10.2
+    },
+    {
+      "avg_per_flight": 2.0,
+      "flights": 7,
+      "reg": "VN-A636",
+      "total_hours": 13.7
+    },
+    {
+      "avg_per_flight": 1.5,
+      "flights": 7,
+      "reg": "VN-A637",
+      "total_hours": 10.3
+    },
+    {
+      "avg_per_flight": 1.4,
+      "flights": 7,
+      "reg": "VN-A639",
+      "total_hours": 9.9
+    },
+    {
+      "avg_per_flight": 4.0,
+      "flights": 2,
+      "reg": "VN-A640",
+      "total_hours": 7.9
+    },
+    {
+      "avg_per_flight": 1.2,
+      "flights": 8,
+      "reg": "VN-A641",
+      "total_hours": 9.8
+    },
+    {
+      "avg_per_flight": 1.9,
+      "flights": 6,
+      "reg": "VN-A643",
+      "total_hours": 11.4
+    },
+    {
+      "avg_per_flight": 1.7,
+      "flights": 5,
+      "reg": "VN-A644",
+      "total_hours": 8.5
+    },
+    {
+      "avg_per_flight": 2.1,
+      "flights": 8,
+      "reg": "VN-A645",
+      "total_hours": 16.8
+    },
+    {
+      "avg_per_flight": 5.1,
+      "flights": 3,
+      "reg": "VN-A646",
+      "total_hours": 15.3
+    },
+    {
+      "avg_per_flight": 3.9,
+      "flights": 3,
+      "reg": "VN-A647",
+      "total_hours": 11.8
+    },
+    {
+      "avg_per_flight": 3.7,
+      "flights": 4,
+      "reg": "VN-A648",
+      "total_hours": 14.7
+    },
+    {
+      "avg_per_flight": 1.9,
+      "flights": 5,
+      "reg": "VN-A649",
+      "total_hours": 9.5
+    },
+    {
+      "avg_per_flight": 1.5,
+      "flights": 8,
+      "reg": "VN-A650",
+      "total_hours": 11.7
+    },
+    {
+      "avg_per_flight": 3.3,
+      "flights": 5,
+      "reg": "VN-A651",
+      "total_hours": 16.6
+    },
+    {
+      "avg_per_flight": 6.0,
+      "flights": 3,
+      "reg": "VN-A653",
+      "total_hours": 18.1
+    },
+    {
+      "avg_per_flight": 1.5,
+      "flights": 8,
+      "reg": "VN-A655",
+      "total_hours": 12.1
+    },
+    {
+      "avg_per_flight": 2.0,
+      "flights": 8,
+      "reg": "VN-A657",
+      "total_hours": 15.7
+    },
+    {
+      "avg_per_flight": 3.0,
+      "flights": 6,
+      "reg": "VN-A658",
+      "total_hours": 18.2
+    },
+    {
+      "avg_per_flight": 4.8,
+      "flights": 4,
+      "reg": "VN-A662",
+      "total_hours": 19.2
+    },
+    {
+      "avg_per_flight": 4.5,
+      "flights": 4,
+      "reg": "VN-A663",
+      "total_hours": 18.1
+    },
+    {
+      "avg_per_flight": 1.8,
+      "flights": 8,
+      "reg": "VN-A667",
+      "total_hours": 14.4
+    },
+    {
+      "avg_per_flight": 2.2,
+      "flights": 8,
+      "reg": "VN-A668",
+      "total_hours": 17.2
+    },
+    {
+      "avg_per_flight": 2.4,
+      "flights": 6,
+      "reg": "VN-A669",
+      "total_hours": 14.2
+    },
+    {
+      "avg_per_flight": 1.4,
+      "flights": 9,
+      "reg": "VN-A670",
+      "total_hours": 12.9
+    },
+    {
+      "avg_per_flight": 2.4,
+      "flights": 3,
+      "reg": "VN-A671",
+      "total_hours": 7.1
+    },
+    {
+      "avg_per_flight": 1.9,
+      "flights": 4,
+      "reg": "VN-A672",
+      "total_hours": 7.7
+    },
+    {
+      "avg_per_flight": 2.5,
+      "flights": 5,
+      "reg": "VN-A673",
+      "total_hours": 12.7
+    },
+    {
+      "avg_per_flight": 3.4,
+      "flights": 3,
+      "reg": "VN-A674",
+      "total_hours": 10.2
+    },
+    {
+      "avg_per_flight": 4.0,
+      "flights": 4,
+      "reg": "VN-A675",
+      "total_hours": 16.1
+    },
+    {
+      "avg_per_flight": 3.2,
+      "flights": 4,
+      "reg": "VN-A676",
+      "total_hours": 12.9
+    },
+    {
+      "avg_per_flight": 3.1,
+      "flights": 5,
+      "reg": "VN-A677",
+      "total_hours": 15.7
+    },
+    {
+      "avg_per_flight": 2.0,
+      "flights": 5,
+      "reg": "VN-A684",
+      "total_hours": 10.2
+    },
+    {
+      "avg_per_flight": 2.9,
+      "flights": 6,
+      "reg": "VN-A687",
+      "total_hours": 17.2
+    },
+    {
+      "avg_per_flight": 2.7,
+      "flights": 6,
+      "reg": "VN-A689",
+      "total_hours": 16.3
+    },
+    {
+      "avg_per_flight": 2.5,
+      "flights": 7,
+      "reg": "VN-A693",
+      "total_hours": 17.4
+    },
+    {
+      "avg_per_flight": 2.7,
+      "flights": 6,
+      "reg": "VN-A697",
+      "total_hours": 16.2
+    },
+    {
+      "avg_per_flight": 3.7,
+      "flights": 4,
+      "reg": "VN-A698",
+      "total_hours": 14.7
+    },
+    {
+      "avg_per_flight": 5.9,
+      "flights": 3,
+      "reg": "VN-A810",
+      "total_hours": 17.6
+    },
+    {
+      "avg_per_flight": 8.5,
+      "flights": 2,
+      "reg": "VN-A811",
+      "total_hours": 16.9
+    },
+    {
+      "avg_per_flight": 8.6,
+      "flights": 2,
+      "reg": "VN-A812",
+      "total_hours": 17.2
+    },
+    {
+      "avg_per_flight": 6.4,
+      "flights": 3,
+      "reg": "VN-A814",
+      "total_hours": 19.1
+    },
+    {
+      "avg_per_flight": 2.2,
+      "flights": 5,
+      "reg": "VN-A815",
+      "total_hours": 10.9
+    },
+    {
+      "avg_per_flight": 5.4,
+      "flights": 3,
+      "reg": "VN-A816",
+      "total_hours": 16.2
+    },
+    {
+      "avg_per_flight": 3.7,
+      "flights": 3,
+      "reg": "VN-A817",
+      "total_hours": 11.2
+    }
+  ],
+  "crew_roles": {
+    "CP": 217,
+    "FA": 843,
+    "FO": 212,
+    "PU": 213,
+    "TV": 10
+  },
+  "crew_schedule": {
+    "fatigue": [
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 CP",
+        "id": "16254",
+        "index": "3",
+        "name": "DORMOND ESTRADA ERIC",
+        "position": "CP",
+        "status": "Call Sick Leave",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FO",
+        "id": "6062",
+        "index": "77",
+        "name": "VU MINH HIEN",
+        "position": "FO",
+        "status": "Call Sick Leave",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "5568",
+        "index": "92",
+        "name": "ANH 49 TRAN TUAN",
+        "position": "FA",
+        "status": "Call Sick Leave",
+        "totals": "1 day / 1 "
+      }
+    ],
+    "office_standby": [
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 PU",
+        "id": "415",
+        "index": "23",
+        "name": "HAN 2 LE NGOC",
+        "position": "PU",
+        "status": "Office Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 PU",
+        "id": "6093",
+        "index": "24",
+        "name": "HOANG 12 NGUYEN NGOC",
+        "position": "PU",
+        "status": "Office Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 PU",
+        "id": "1911",
+        "index": "25",
+        "name": "KHOA 1 LE DINH",
+        "position": "PU",
+        "status": "Office Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 PU",
+        "id": "2988",
+        "index": "35",
+        "name": "TRANG 23 VU THI THU",
+        "position": "PU",
+        "status": "Office Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FA",
+        "id": "11673",
+        "index": "44",
+        "name": "HUONG 37 NGUYEN THI",
+        "position": "FA",
+        "status": "Office Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FA",
+        "id": "14448",
+        "index": "46",
+        "name": "KHIET 2 NGUYEN THANH",
+        "position": "FA",
+        "status": "Office Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FA",
+        "id": "10125",
+        "index": "48",
+        "name": "LINH 88 DANG THI HUY",
+        "position": "FA",
+        "status": "Office Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FA",
+        "id": "14980",
+        "index": "54",
+        "name": "NHU 19 HO THI QUYNH",
+        "position": "FA",
+        "status": "Office Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FA",
+        "id": "13746",
+        "index": "55",
+        "name": "NHUNG 29 NGUYEN THI",
+        "position": "FA",
+        "status": "Office Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FA",
+        "id": "8614",
+        "index": "56",
+        "name": "PHONG 8 PHAM THANH",
+        "position": "FA",
+        "status": "Office Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FA",
+        "id": "11807",
+        "index": "58",
+        "name": "TINH 2 DUONG TRUNG",
+        "position": "FA",
+        "status": "Office Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FA",
+        "id": "7270",
+        "index": "63",
+        "name": "VY 28 NGUYEN MAI THA",
+        "position": "FA",
+        "status": "Office Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FA",
+        "id": "8097",
+        "index": "65",
+        "name": "XUAN 2 TRUONG THI TH",
+        "position": "FA",
+        "status": "Office Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 PU",
+        "id": "2936",
+        "index": "85",
+        "name": "VINH 2 NGO THE",
+        "position": "PU",
+        "status": "Office Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "10284",
+        "index": "90",
+        "name": "ANH 149 DINH THE",
+        "position": "FA",
+        "status": "Office Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "13720",
+        "index": "94",
+        "name": "BICH 6 BUI THI NGOC",
+        "position": "FA",
+        "status": "Office Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "10265",
+        "index": "95",
+        "name": "CHI 19 LE HA",
+        "position": "FA",
+        "status": "Office Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "15337",
+        "index": "104",
+        "name": "HOANG 30 NGUYEN LE",
+        "position": "FA",
+        "status": "Office Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "6957",
+        "index": "106",
+        "name": "HUYEN 20 NGUYEN THI",
+        "position": "FA",
+        "status": "Office Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "10174",
+        "index": "109",
+        "name": "LE 9 LOC HOA",
+        "position": "FA",
+        "status": "Office Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "9283",
+        "index": "110",
+        "name": "LINH 71 LE THUY",
+        "position": "FA",
+        "status": "Office Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "11855",
+        "index": "114",
+        "name": "MI 33 DANG THI KIEU",
+        "position": "FA",
+        "status": "Office Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "7149",
+        "index": "115",
+        "name": "MY 15 DO GIANG",
+        "position": "FA",
+        "status": "Office Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "10199",
+        "index": "119",
+        "name": "NHUNG 19 NGUYEN THI",
+        "position": "FA",
+        "status": "Office Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "12673",
+        "index": "120",
+        "name": "NHUNG 25 NGUYEN NGOC",
+        "position": "FA",
+        "status": "Office Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "6462",
+        "index": "122",
+        "name": "PHYU PHYU SINT",
+        "position": "FA",
+        "status": "Office Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "14336",
+        "index": "124",
+        "name": "THAO 101 TRAN PHUONG",
+        "position": "FA",
+        "status": "Office Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "13407",
+        "index": "127",
+        "name": "THUY 45 PHAM THANH",
+        "position": "FA",
+        "status": "Office Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "9542",
+        "index": "130",
+        "name": "VU 16 PHAM LONG",
+        "position": "FA",
+        "status": "Office Standby",
+        "totals": "1 day / 1 "
+      }
+    ],
+    "sick_call": [
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 CP",
+        "id": "15402",
+        "index": "2",
+        "name": "DONALD MAJANJARA MSI",
+        "position": "CP",
+        "status": "Sick Leave",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FA",
+        "id": "7255",
+        "index": "38",
+        "name": "DOANH 1 TRINH QUANG",
+        "position": "FA",
+        "status": "Sick Leave",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FA",
+        "id": "8439",
+        "index": "45",
+        "name": "HUY 29 NGUYEN DUC",
+        "position": "FA",
+        "status": "Sick Leave",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 CP",
+        "id": "15855",
+        "index": "68",
+        "name": "SILVA YONMEREGNGNA S",
+        "position": "CP",
+        "status": "Sick Leave",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 PU",
+        "id": "6476",
+        "index": "82",
+        "name": "HOANG 14 NGUYEN QUAN",
+        "position": "PU",
+        "status": "Sick Leave",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 PU",
+        "id": "8380",
+        "index": "83",
+        "name": "THUY 29 NGUYEN NGOC",
+        "position": "PU",
+        "status": "Sick Leave",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "7308",
+        "index": "100",
+        "name": "GIANG 11 LE HOANG",
+        "position": "FA",
+        "status": "Sick Leave",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "5969",
+        "index": "118",
+        "name": "NAM 8 LE HOANG",
+        "position": "FA",
+        "status": "Sick Leave",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "15346",
+        "index": "128",
+        "name": "TRINH 20 NGUYEN THI",
+        "position": "FA",
+        "status": "Sick Leave",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "13413",
+        "index": "131",
+        "name": "VY 56 DUONG THAO",
+        "position": "FA",
+        "status": "Sick Leave",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "CXR",
+        "base_ac_pos": "CXR 320 FA",
+        "id": "12481",
+        "index": "145",
+        "name": "DUNG 40 DUONG VAN NG",
+        "position": "FA",
+        "status": "Sick Leave",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "CXR",
+        "base_ac_pos": "CXR 320 FA",
+        "id": "12059",
+        "index": "147",
+        "name": "HOA 16 NGUYEN HONG",
+        "position": "FA",
+        "status": "Sick Leave",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "DAD",
+        "base_ac_pos": "DAD 320 FA",
+        "id": "1448",
+        "index": "165",
+        "name": "KIEM 1 PHAM HUU",
+        "position": "FA",
+        "status": "Sick Leave",
+        "totals": "1 day / 1 "
+      }
+    ],
+    "standby": [
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 CP",
+        "id": "11762",
+        "index": "1",
+        "name": "BABIC MLADEN",
+        "position": "CP",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 CP",
+        "id": "1608",
+        "index": "4",
+        "name": "IOANNIS CHRISTAKIS",
+        "position": "CP",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 CP",
+        "id": "12906",
+        "index": "5",
+        "name": "JACOB OEHLENSCHLAEGE",
+        "position": "CP",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 CP",
+        "id": "16104",
+        "index": "6",
+        "name": "LEONID CIARICU",
+        "position": "CP",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 CP",
+        "id": "1973",
+        "index": "7",
+        "name": "RAFAEL BARRETO PLASE",
+        "position": "CP",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 CP",
+        "id": "3797",
+        "index": "8",
+        "name": "RAMON CARLO LIM BAQU",
+        "position": "CP",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "330",
+        "base": "SGN",
+        "base_ac_pos": "SGN 330 CP",
+        "id": "3527",
+        "index": "9",
+        "name": "NGUYEN THANH HAI",
+        "position": "CP",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FO",
+        "id": "6070",
+        "index": "10",
+        "name": "NGUYEN LE THANG",
+        "position": "FO",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FO",
+        "id": "13947",
+        "index": "11",
+        "name": "NGUYEN LUONG THIEN",
+        "position": "FO",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FO",
+        "id": "11597",
+        "index": "12",
+        "name": "NGUYEN NHA UYEN",
+        "position": "FO",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FO",
+        "id": "9763",
+        "index": "13",
+        "name": "PENGAL DENIS",
+        "position": "FO",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FO",
+        "id": "13022",
+        "index": "14",
+        "name": "PHAM ANH TU",
+        "position": "FO",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FO",
+        "id": "9745",
+        "index": "15",
+        "name": "VO TRAN QUOC TUAN",
+        "position": "FO",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "330",
+        "base": "SGN",
+        "base_ac_pos": "SGN 330 FO",
+        "id": "8763",
+        "index": "16",
+        "name": "IVAN LLOYD APOSTOL G",
+        "position": "FO",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "330",
+        "base": "SGN",
+        "base_ac_pos": "SGN 330 FO",
+        "id": "7393",
+        "index": "17",
+        "name": "NGUYEN DUY PHUONG",
+        "position": "FO",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "330",
+        "base": "SGN",
+        "base_ac_pos": "SGN 330 FO",
+        "id": "9697",
+        "index": "18",
+        "name": "NGUYEN PHAN ANH",
+        "position": "FO",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "330",
+        "base": "SGN",
+        "base_ac_pos": "SGN 330 FO",
+        "id": "8924",
+        "index": "19",
+        "name": "PHAM DUC HOANG",
+        "position": "FO",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "330",
+        "base": "SGN",
+        "base_ac_pos": "SGN 330 FO",
+        "id": "6063",
+        "index": "20",
+        "name": "PHAN TUAN DAT",
+        "position": "FO",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "330",
+        "base": "SGN",
+        "base_ac_pos": "SGN 330 FO",
+        "id": "7379",
+        "index": "21",
+        "name": "TRAN VU MANH",
+        "position": "FO",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "330",
+        "base": "SGN",
+        "base_ac_pos": "SGN 330 FO",
+        "id": "7410",
+        "index": "22",
+        "name": "VO VIET BACH",
+        "position": "FO",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 PU",
+        "id": "3930",
+        "index": "26",
+        "name": "KIM YOUNA",
+        "position": "PU",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 PU",
+        "id": "2573",
+        "index": "27",
+        "name": "NGA 3 LU THI NGOC",
+        "position": "PU",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 PU",
+        "id": "730",
+        "index": "28",
+        "name": "NGOC 4 VO HOANG NHU",
+        "position": "PU",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 PU",
+        "id": "4506",
+        "index": "29",
+        "name": "NHI 5 HA TRAN TUYET",
+        "position": "PU",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 PU",
+        "id": "3692",
+        "index": "30",
+        "name": "PHUONG 11 NGUYEN THI",
+        "position": "PU",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 PU",
+        "id": "8006",
+        "index": "31",
+        "name": "QUI 5 LE HUYNH",
+        "position": "PU",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 PU",
+        "id": "7006",
+        "index": "32",
+        "name": "SON 10 NGUYEN ANH",
+        "position": "PU",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 PU",
+        "id": "2570",
+        "index": "33",
+        "name": "THANG 3 VO HOANG",
+        "position": "PU",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 PU",
+        "id": "2117",
+        "index": "34",
+        "name": "THONG 2 NGUYEN CANH",
+        "position": "PU",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 PU",
+        "id": "6692",
+        "index": "36",
+        "name": "TUYEN 4 TRAN PHUONG",
+        "position": "PU",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 PU",
+        "id": "97",
+        "index": "37",
+        "name": "VY 1 LY DAC",
+        "position": "PU",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FA",
+        "id": "10350",
+        "index": "39",
+        "name": "DONG 8 VUONG THANH",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FA",
+        "id": "8204",
+        "index": "40",
+        "name": "DUNG 31 TRUONG THI",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FA",
+        "id": "9031",
+        "index": "41",
+        "name": "GAM 1 VU THI",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FA",
+        "id": "9277",
+        "index": "42",
+        "name": "HA 31 NGUYEN THANH N",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FA",
+        "id": "6677",
+        "index": "43",
+        "name": "HONG 7 TRAN THI",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FA",
+        "id": "8949",
+        "index": "47",
+        "name": "LINH 66 NGUYEN ANH",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FA",
+        "id": "7715",
+        "index": "49",
+        "name": "LY 14 NGUYEN THI THA",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FA",
+        "id": "13740",
+        "index": "50",
+        "name": "LY 24 PHAN HO THI TR",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FA",
+        "id": "8045",
+        "index": "51",
+        "name": "NGAN 14 NGUYEN BICH",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FA",
+        "id": "13591",
+        "index": "52",
+        "name": "NGAN 25 VO HUYNH THA",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FA",
+        "id": "5570",
+        "index": "53",
+        "name": "NHI 7 TRAN THI YEN",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FA",
+        "id": "9928",
+        "index": "57",
+        "name": "SON 20 NGUYEN DUC",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FA",
+        "id": "9623",
+        "index": "59",
+        "name": "TRAM 23 NGUYEN THAI",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FA",
+        "id": "8094",
+        "index": "60",
+        "name": "TRANG 60 TRAN THI TH",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FA",
+        "id": "13509",
+        "index": "61",
+        "name": "UYEN 26 LE THI KIM",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FA",
+        "id": "8784",
+        "index": "62",
+        "name": "VI 36 DO HA",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "SGN",
+        "base_ac_pos": "SGN 320 FA",
+        "id": "9237",
+        "index": "64",
+        "name": "VY 43 HOANG THAO",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 CP",
+        "id": "13333",
+        "index": "66",
+        "name": "MRIDUL KUMAR",
+        "position": "CP",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 CP",
+        "id": "2888",
+        "index": "67",
+        "name": "OLIVER CONRAD DE GRA",
+        "position": "CP",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FO",
+        "id": "13908",
+        "index": "69",
+        "name": "BUI THANH HA",
+        "position": "FO",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FO",
+        "id": "2064",
+        "index": "70",
+        "name": "CAO MINH TUAN",
+        "position": "FO",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FO",
+        "id": "4884",
+        "index": "71",
+        "name": "LE NAM LONG",
+        "position": "FO",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FO",
+        "id": "9736",
+        "index": "72",
+        "name": "NGUYEN ANH TUAN",
+        "position": "FO",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FO",
+        "id": "14871",
+        "index": "73",
+        "name": "PHAM DUY PHUONG",
+        "position": "FO",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FO",
+        "id": "7390",
+        "index": "74",
+        "name": "PHAM TIEN DAT",
+        "position": "FO",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FO",
+        "id": "9744",
+        "index": "75",
+        "name": "TRAN TUAN ANH",
+        "position": "FO",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FO",
+        "id": "7380",
+        "index": "76",
+        "name": "TRAN VAN PHUC",
+        "position": "FO",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "330",
+        "base": "HAN",
+        "base_ac_pos": "HAN 330 FO",
+        "id": "7373",
+        "index": "78",
+        "name": "LE BAO HOANG NAM",
+        "position": "FO",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "330",
+        "base": "HAN",
+        "base_ac_pos": "HAN 330 FO",
+        "id": "6171",
+        "index": "79",
+        "name": "NGUYEN DUC LONG",
+        "position": "FO",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "330",
+        "base": "HAN",
+        "base_ac_pos": "HAN 330 FO",
+        "id": "13290",
+        "index": "80",
+        "name": "SUTHIPONG KULYINGWAT",
+        "position": "FO",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "330",
+        "base": "HAN",
+        "base_ac_pos": "HAN 330 FO",
+        "id": "7389",
+        "index": "81",
+        "name": "THAI NGOC ANH",
+        "position": "FO",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 PU",
+        "id": "14274",
+        "index": "84",
+        "name": "TUNG 25 NGUYEN VU",
+        "position": "PU",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "7842",
+        "index": "86",
+        "name": "ANH 106 NGUYEN PHUON",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "8147",
+        "index": "87",
+        "name": "ANH 110 NGHIEM MAI",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "8268",
+        "index": "88",
+        "name": "ANH 111 CAN NGOC",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "9771",
+        "index": "89",
+        "name": "ANH 138 NGUYEN THI K",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "13575",
+        "index": "91",
+        "name": "ANH 189 DO HOANG",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "5758",
+        "index": "93",
+        "name": "ANH 51 BUI VIET",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "13721",
+        "index": "96",
+        "name": "CUONG 18 NGUYEN DUC",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "9103",
+        "index": "97",
+        "name": "DAT 18 DO THANH",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "7895",
+        "index": "98",
+        "name": "DUC 20 VU HUY",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "15430",
+        "index": "99",
+        "name": "DUNG 49 DUONG TUAN",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "14951",
+        "index": "101",
+        "name": "HA 49 NGUYEN THI NGO",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "13829",
+        "index": "102",
+        "name": "HOA 20 LUONG KHANH",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "13830",
+        "index": "103",
+        "name": "HOAI 3 DANG THI",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "12733",
+        "index": "105",
+        "name": "HUONG 39 VU QUYNH",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "11843",
+        "index": "107",
+        "name": "HUYEN 38 DO THI NGOC",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "7946",
+        "index": "108",
+        "name": "KY 1 CHU QUOC",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "13091",
+        "index": "111",
+        "name": "LONG 28 NONG HOANG N",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "13093",
+        "index": "112",
+        "name": "LUONG 2 HA DUC",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "13588",
+        "index": "113",
+        "name": "MANH 8 VU DUC",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "10578",
+        "index": "116",
+        "name": "NAM 22 VI VAN",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "12065",
+        "index": "117",
+        "name": "NAM 27 NGUYEN TRUONG",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "14982",
+        "index": "121",
+        "name": "NHUNG 34 NGUYEN THI",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "15473",
+        "index": "123",
+        "name": "QUYNH 36 CAO THI DIE",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "11890",
+        "index": "125",
+        "name": "THAO 89 NGUYEN TRINH",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "15603",
+        "index": "126",
+        "name": "THOM 1 BUI THI",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "13854",
+        "index": "129",
+        "name": "VAN 34 DINH VU HONG",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "HAN",
+        "base_ac_pos": "HAN 320 FA",
+        "id": "13855",
+        "index": "132",
+        "name": "YEN 39 NGUYEN HAI",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "CXR",
+        "base_ac_pos": "CXR 320 CP",
+        "id": "9793",
+        "index": "133",
+        "name": "ALEXANDER KUZMIN",
+        "position": "CP",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "CXR",
+        "base_ac_pos": "CXR 320 CP",
+        "id": "8246",
+        "index": "134",
+        "name": "EVGENII MOLKOV",
+        "position": "CP",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "CXR",
+        "base_ac_pos": "CXR 320 CP",
+        "id": "8560",
+        "index": "135",
+        "name": "IGOR MONAKHOV",
+        "position": "CP",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "CXR",
+        "base_ac_pos": "CXR 320 CP",
+        "id": "1927",
+        "index": "136",
+        "name": "LAM NGOC VU",
+        "position": "CP",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "CXR",
+        "base_ac_pos": "CXR 320 CP",
+        "id": "3971",
+        "index": "137",
+        "name": "VADIM BORISOV",
+        "position": "CP",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "CXR",
+        "base_ac_pos": "CXR 320 FO",
+        "id": "9505",
+        "index": "138",
+        "name": "ASHISH MEHTA",
+        "position": "FO",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "330",
+        "base": "CXR",
+        "base_ac_pos": "CXR 330 FO",
+        "id": "8868",
+        "index": "139",
+        "name": "DENJOSCAR RODRIGUEZ",
+        "position": "FO",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "CXR",
+        "base_ac_pos": "CXR 320 PU",
+        "id": "6743",
+        "index": "140",
+        "name": "LINH 41 HOANG KHANH",
+        "position": "PU",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "CXR",
+        "base_ac_pos": "CXR 320 PU",
+        "id": "8612",
+        "index": "141",
+        "name": "NGOC 36 LE THI BICH",
+        "position": "PU",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "CXR",
+        "base_ac_pos": "CXR 320 PU",
+        "id": "7662",
+        "index": "142",
+        "name": "THIEN 4 PHAM THANH",
+        "position": "PU",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "CXR",
+        "base_ac_pos": "CXR 320 FA",
+        "id": "12479",
+        "index": "143",
+        "name": "ANH 164 NGUYEN THI N",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "CXR",
+        "base_ac_pos": "CXR 320 FA",
+        "id": "11825",
+        "index": "144",
+        "name": "BI 1 HUYNH VAN",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "CXR",
+        "base_ac_pos": "CXR 320 FA",
+        "id": "13084",
+        "index": "146",
+        "name": "GIANG 24 TRINH THI",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "CXR",
+        "base_ac_pos": "CXR 320 FA",
+        "id": "12734",
+        "index": "148",
+        "name": "HUY 46 NGUYEN QUANG",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "CXR",
+        "base_ac_pos": "CXR 320 FA",
+        "id": "13590",
+        "index": "149",
+        "name": "NGAN 24 VAN THI KIM",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "CXR",
+        "base_ac_pos": "CXR 320 FA",
+        "id": "11863",
+        "index": "150",
+        "name": "NGOC 54 CAO BICH",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "CXR",
+        "base_ac_pos": "CXR 320 FA",
+        "id": "12741",
+        "index": "151",
+        "name": "NHI 32 NGUYEN NGOC T",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "CXR",
+        "base_ac_pos": "CXR 320 FA",
+        "id": "11802",
+        "index": "152",
+        "name": "PHUNG 5 HUYNH NHU",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "CXR",
+        "base_ac_pos": "CXR 320 FA",
+        "id": "12076",
+        "index": "153",
+        "name": "TRUONG 16 TRUONG QUA",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "CXR",
+        "base_ac_pos": "CXR 320 FA",
+        "id": "13102",
+        "index": "154",
+        "name": "TUNG 22 LE MANH",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "CXR",
+        "base_ac_pos": "CXR 320 FA",
+        "id": "12758",
+        "index": "155",
+        "name": "TUYET 7 CAO THI",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "DAD",
+        "base_ac_pos": "DAD 320 CP",
+        "id": "3806",
+        "index": "156",
+        "name": "HA QUYET TIEN",
+        "position": "CP",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "DAD",
+        "base_ac_pos": "DAD 320 CP",
+        "id": "15091",
+        "index": "157",
+        "name": "PODDUBNY PAVEL",
+        "position": "CP",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "DAD",
+        "base_ac_pos": "DAD 320 CP",
+        "id": "14908",
+        "index": "158",
+        "name": "ZANARDI TARDIN ALEXA",
+        "position": "CP",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "DAD",
+        "base_ac_pos": "DAD 320 FO",
+        "id": "15947",
+        "index": "159",
+        "name": "LE VU NGUYEN BAO",
+        "position": "FO",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "DAD",
+        "base_ac_pos": "DAD 320 FO",
+        "id": "4940",
+        "index": "160",
+        "name": "LOK KAN CHANG",
+        "position": "FO",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "DAD",
+        "base_ac_pos": "DAD 320 PU",
+        "id": "7511",
+        "index": "161",
+        "name": "CHUC 1 NGO TRAN KHAN",
+        "position": "PU",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "DAD",
+        "base_ac_pos": "DAD 320 PU",
+        "id": "2007",
+        "index": "162",
+        "name": "HUE 1 NGUYEN THI",
+        "position": "PU",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "DAD",
+        "base_ac_pos": "DAD 320 PU",
+        "id": "6385",
+        "index": "163",
+        "name": "NHI 8 TRUONG THI PHU",
+        "position": "PU",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "DAD",
+        "base_ac_pos": "DAD 320 PU",
+        "id": "5774",
+        "index": "164",
+        "name": "TRINH 6 LE TUYEN",
+        "position": "PU",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "DAD",
+        "base_ac_pos": "DAD 320 FA",
+        "id": "13404",
+        "index": "166",
+        "name": "QUANG 16 NGUYEN MINH",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "DAD",
+        "base_ac_pos": "DAD 320 FA",
+        "id": "10029",
+        "index": "167",
+        "name": "THANH 29 LE THI THAN",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      },
+      {
+        "aircraft": "320",
+        "base": "DAD",
+        "base_ac_pos": "DAD 320 FA",
+        "id": "11719",
+        "index": "168",
+        "name": "TRUNG 32 NGUYEN BAO",
+        "position": "FA",
+        "status": "Standby",
+        "totals": "1 day / 1 "
+      }
+    ],
+    "summary": {
+      "CSL": 3,
+      "OSBY": 29,
+      "SBY": 123,
+      "SL": 13
+    }
+  },
+  "last_updated": "2026-01-16T16:54:49.639606",
+  "multi_reg_crew": [
+    {
+      "id": "18708",
+      "regs": [
+        "VN-A526",
+        "VN-A671"
+      ],
+      "role": "CP"
+    },
+    {
+      "id": "7433",
+      "regs": [
+        "VN-A526",
+        "VN-A671"
+      ],
+      "role": "FO"
+    },
+    {
+      "id": "15335",
+      "regs": [
+        "VN-A526",
+        "VN-A671"
+      ],
+      "role": "PU"
+    },
+    {
+      "id": "15423",
+      "regs": [
+        "VN-A526",
+        "VN-A671"
+      ],
+      "role": "FA"
+    },
+    {
+      "id": "17796",
+      "regs": [
+        "VN-A526",
+        "VN-A671"
+      ],
+      "role": "FA"
+    },
+    {
+      "id": "18147",
+      "regs": [
+        "VN-A526",
+        "VN-A671"
+      ],
+      "role": "FA"
+    },
+    {
+      "id": "13678",
+      "regs": [
+        "VN-A532",
+        "VN-A535"
+      ],
+      "role": "CP"
+    },
+    {
+      "id": "13915",
+      "regs": [
+        "VN-A532",
+        "VN-A535"
+      ],
+      "role": "FO"
+    },
+    {
+      "id": "4766",
+      "regs": [
+        "VN-A532",
+        "VN-A535"
+      ],
+      "role": "PU"
+    },
+    {
+      "id": "14444",
+      "regs": [
+        "VN-A532",
+        "VN-A535"
+      ],
+      "role": "FA"
+    },
+    {
+      "id": "11686",
+      "regs": [
+        "VN-A532",
+        "VN-A535"
+      ],
+      "role": "FA"
+    },
+    {
+      "id": "11687",
+      "regs": [
+        "VN-A532",
+        "VN-A535"
+      ],
+      "role": "FA"
+    },
+    {
+      "id": "10133",
+      "regs": [
+        "VN-A532",
+        "VN-A535"
+      ],
+      "role": "FA"
+    },
+    {
+      "id": "14204",
+      "regs": [
+        "VN-A535",
+        "VN-A687"
+      ],
+      "role": "CP"
+    },
+    {
+      "id": "13939",
+      "regs": [
+        "VN-A535",
+        "VN-A687"
+      ],
+      "role": "FO"
+    },
+    {
+      "id": "9394",
+      "regs": [
+        "VN-A535",
+        "VN-A687"
+      ],
+      "role": "PU"
+    },
+    {
+      "id": "14561",
+      "regs": [
+        "VN-A535",
+        "VN-A687"
+      ],
+      "role": "FA"
+    },
+    {
+      "id": "8056",
+      "regs": [
+        "VN-A535",
+        "VN-A687"
+      ],
+      "role": "FA"
+    },
+    {
+      "id": "13826",
+      "regs": [
+        "VN-A535",
+        "VN-A687"
+      ],
+      "role": "FA"
+    },
+    {
+      "id": "12732",
+      "regs": [
+        "VN-A535",
+        "VN-A687"
+      ],
+      "role": "FA"
+    }
+  ],
+  "rolling_hours": [
+    {
+      "block_12month": "928:10",
+      "block_28day": "98:12",
+      "hours_12month": 928.17,
+      "hours_28day": 98.2,
+      "id": "7386",
+      "name": "NGUYEN HUU DIEN",
+      "percentage": 98.2,
+      "seniority": "0",
+      "status": "critical"
+    },
+    {
+      "block_12month": "130:25",
+      "block_28day": "96:54",
+      "hours_12month": 130.42,
+      "hours_28day": 96.9,
+      "id": "18573",
+      "name": "GUND DHRUV",
+      "percentage": 96.9,
+      "seniority": "0",
+      "status": "critical"
+    },
+    {
+      "block_12month": "308:30",
+      "block_28day": "96:31",
+      "hours_12month": 308.5,
+      "hours_28day": 96.52,
+      "id": "18159",
+      "name": "AKBAR MUHAMMAD ALVIN",
+      "percentage": 96.5,
+      "seniority": "0",
+      "status": "critical"
+    },
+    {
+      "block_12month": "929:12",
+      "block_28day": "96:27",
+      "hours_12month": 929.2,
+      "hours_28day": 96.45,
+      "id": "12295",
+      "name": "PUTRA DIMAS SULISTYA",
+      "percentage": 96.5,
+      "seniority": "0",
+      "status": "critical"
+    },
+    {
+      "block_12month": "820:02",
+      "block_28day": "96:12",
+      "hours_12month": 820.03,
+      "hours_28day": 96.2,
+      "id": "9739",
+      "name": "NGUYEN TRAN NAM",
+      "percentage": 96.2,
+      "seniority": "0",
+      "status": "critical"
+    },
+    {
+      "block_12month": "220:42",
+      "block_28day": "96:02",
+      "hours_12month": 220.7,
+      "hours_28day": 96.03,
+      "id": "18253",
+      "name": "GAMULIN MAXIM",
+      "percentage": 96.0,
+      "seniority": "0",
+      "status": "critical"
+    },
+    {
+      "block_12month": "490:39",
+      "block_28day": "95:14",
+      "hours_12month": 490.65,
+      "hours_28day": 95.23,
+      "id": "17864",
+      "name": "HUYNH THE NGHIA",
+      "percentage": 95.2,
+      "seniority": "0",
+      "status": "critical"
+    },
+    {
+      "block_12month": "952:17",
+      "block_28day": "95:04",
+      "hours_12month": 952.28,
+      "hours_28day": 95.07,
+      "id": "15946",
+      "name": "NGUYEN QUANG HUY",
+      "percentage": 95.1,
+      "seniority": "0",
+      "status": "critical"
+    },
+    {
+      "block_12month": "896:07",
+      "block_28day": "94:45",
+      "hours_12month": 896.12,
+      "hours_28day": 94.75,
+      "id": "6798",
+      "name": "ROMIT SANJAY ARTE",
+      "percentage": 94.8,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "781:33",
+      "block_28day": "94:16",
+      "hours_12month": 781.55,
+      "hours_28day": 94.27,
+      "id": "1927",
+      "name": "LAM NGOC VU",
+      "percentage": 94.3,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "927:25",
+      "block_28day": "93:22",
+      "hours_12month": 927.42,
+      "hours_28day": 93.37,
+      "id": "14404",
+      "name": "PHAM DANG QUANG",
+      "percentage": 93.4,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "764:43",
+      "block_28day": "92:55",
+      "hours_12month": 764.72,
+      "hours_28day": 92.92,
+      "id": "9060",
+      "name": "ALEX YUNIAR CHAERUDIN",
+      "percentage": 92.9,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "404:35",
+      "block_28day": "92:46",
+      "hours_12month": 404.58,
+      "hours_28day": 92.77,
+      "id": "17863",
+      "name": "NGUYEN BA LUAT",
+      "percentage": 92.8,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "683:16",
+      "block_28day": "92:42",
+      "hours_12month": 683.27,
+      "hours_28day": 92.7,
+      "id": "7371",
+      "name": "NGUYEN LINH AN",
+      "percentage": 92.7,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "900:44",
+      "block_28day": "92:32",
+      "hours_12month": 900.73,
+      "hours_28day": 92.53,
+      "id": "6078",
+      "name": "VU MINH THONG",
+      "percentage": 92.5,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "874:45",
+      "block_28day": "92:30",
+      "hours_12month": 874.75,
+      "hours_28day": 92.5,
+      "id": "6198",
+      "name": "YUDHIE HARIANTO",
+      "percentage": 92.5,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "868:31",
+      "block_28day": "91:21",
+      "hours_12month": 868.52,
+      "hours_28day": 91.35,
+      "id": "6051",
+      "name": "GAURAV DHAKA",
+      "percentage": 91.3,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "327:26",
+      "block_28day": "90:47",
+      "hours_12month": 327.43,
+      "hours_28day": 90.78,
+      "id": "2072",
+      "name": "KIM NGOC HAI",
+      "percentage": 90.8,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "931:37",
+      "block_28day": "90:42",
+      "hours_12month": 931.62,
+      "hours_28day": 90.7,
+      "id": "12175",
+      "name": "SUDARSHAN SIMHAN",
+      "percentage": 90.7,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "796:58",
+      "block_28day": "90:37",
+      "hours_12month": 796.97,
+      "hours_28day": 90.62,
+      "id": "7251",
+      "name": "LUONG QUOC HUY",
+      "percentage": 90.6,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "880:51",
+      "block_28day": "90:18",
+      "hours_12month": 880.85,
+      "hours_28day": 90.3,
+      "id": "15237",
+      "name": "BUDIADI AVIANTARA DANA",
+      "percentage": 90.3,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "730:21",
+      "block_28day": "90:14",
+      "hours_12month": 730.35,
+      "hours_28day": 90.23,
+      "id": "9062",
+      "name": "GRIVTSOV OLEG",
+      "percentage": 90.2,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "849:03",
+      "block_28day": "89:51",
+      "hours_12month": 849.05,
+      "hours_28day": 89.85,
+      "id": "14907",
+      "name": "LE HOANG MINH",
+      "percentage": 89.8,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "656:15",
+      "block_28day": "89:40",
+      "hours_12month": 656.25,
+      "hours_28day": 89.67,
+      "id": "15640",
+      "name": "ALEXEY KOCHETKOV",
+      "percentage": 89.7,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "871:28",
+      "block_28day": "89:22",
+      "hours_12month": 871.47,
+      "hours_28day": 89.37,
+      "id": "16104",
+      "name": "LEONID CIARICU",
+      "percentage": 89.4,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "918:26",
+      "block_28day": "89:19",
+      "hours_12month": 918.43,
+      "hours_28day": 89.32,
+      "id": "13910",
+      "name": "NGUYEN DUC LOC",
+      "percentage": 89.3,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "833:05",
+      "block_28day": "89:04",
+      "hours_12month": 833.08,
+      "hours_28day": 89.07,
+      "id": "15244",
+      "name": "AVETISOV DMITRII",
+      "percentage": 89.1,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "730:57",
+      "block_28day": "88:50",
+      "hours_12month": 730.95,
+      "hours_28day": 88.83,
+      "id": "7692",
+      "name": "MOCHAMAD THAMRIN",
+      "percentage": 88.8,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "925:11",
+      "block_28day": "88:50",
+      "hours_12month": 925.18,
+      "hours_28day": 88.83,
+      "id": "13911",
+      "name": "NGUYEN HUU HOANG NAM",
+      "percentage": 88.8,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "931:53",
+      "block_28day": "88:37",
+      "hours_12month": 931.88,
+      "hours_28day": 88.62,
+      "id": "13905",
+      "name": "NGUYEN DINH BA",
+      "percentage": 88.6,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "958:31",
+      "block_28day": "88:30",
+      "hours_12month": 958.52,
+      "hours_28day": 88.5,
+      "id": "16138",
+      "name": "DO HUY THONG",
+      "percentage": 88.5,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "942:32",
+      "block_28day": "88:22",
+      "hours_12month": 942.53,
+      "hours_28day": 88.37,
+      "id": "15232",
+      "name": "SZABELA MIROSLAW JERZY",
+      "percentage": 88.4,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "571:07",
+      "block_28day": "88:13",
+      "hours_12month": 571.12,
+      "hours_28day": 88.22,
+      "id": "17428",
+      "name": "MOHD SHIRAS BIN ANUAR",
+      "percentage": 88.2,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "781:44",
+      "block_28day": "88:12",
+      "hours_12month": 781.73,
+      "hours_28day": 88.2,
+      "id": "14204",
+      "name": "KORDIANIN IVAN",
+      "percentage": 88.2,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "775:37",
+      "block_28day": "87:58",
+      "hours_12month": 775.62,
+      "hours_28day": 87.97,
+      "id": "7416",
+      "name": "HOANG VIET DUNG",
+      "percentage": 88.0,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "882:54",
+      "block_28day": "87:36",
+      "hours_12month": 882.9,
+      "hours_28day": 87.6,
+      "id": "15714",
+      "name": "DO DAI DUONG",
+      "percentage": 87.6,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "827:59",
+      "block_28day": "87:24",
+      "hours_12month": 827.98,
+      "hours_28day": 87.4,
+      "id": "13053",
+      "name": "NGUYEN VU HOAI TRUNG",
+      "percentage": 87.4,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "543:34",
+      "block_28day": "87:24",
+      "hours_12month": 543.57,
+      "hours_28day": 87.4,
+      "id": "17435",
+      "name": "MUHAMMAD BASNAN",
+      "percentage": 87.4,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "750:01",
+      "block_28day": "87:13",
+      "hours_12month": 750.02,
+      "hours_28day": 87.22,
+      "id": "7603",
+      "name": "NGO TRUNG HIEU",
+      "percentage": 87.2,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "875:46",
+      "block_28day": "87:05",
+      "hours_12month": 875.77,
+      "hours_28day": 87.08,
+      "id": "7412",
+      "name": "LUONG DAI NGHIA",
+      "percentage": 87.1,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "904:54",
+      "block_28day": "87:01",
+      "hours_12month": 904.9,
+      "hours_28day": 87.02,
+      "id": "6164",
+      "name": "SOLIMAN SALEH MANLALANGIT WADY",
+      "percentage": 87.0,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "902:15",
+      "block_28day": "86:58",
+      "hours_12month": 902.25,
+      "hours_28day": 86.97,
+      "id": "9703",
+      "name": "SEOK ILJIN",
+      "percentage": 87.0,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "838:13",
+      "block_28day": "86:31",
+      "hours_12month": 838.22,
+      "hours_28day": 86.52,
+      "id": "11428",
+      "name": "SUDJATMIKO",
+      "percentage": 86.5,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "118:06",
+      "block_28day": "86:24",
+      "hours_12month": 118.1,
+      "hours_28day": 86.4,
+      "id": "18574",
+      "name": "CHRISTOPHER",
+      "percentage": 86.4,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "913:02",
+      "block_28day": "86:22",
+      "hours_12month": 913.03,
+      "hours_28day": 86.37,
+      "id": "7544",
+      "name": "NGUYEN NGOC ANH",
+      "percentage": 86.4,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "901:12",
+      "block_28day": "86:22",
+      "hours_12month": 901.2,
+      "hours_28day": 86.37,
+      "id": "9736",
+      "name": "NGUYEN ANH TUAN",
+      "percentage": 86.4,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "873:59",
+      "block_28day": "86:16",
+      "hours_12month": 873.98,
+      "hours_28day": 86.27,
+      "id": "6166",
+      "name": "YI CHEN SUNG",
+      "percentage": 86.3,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "889:55",
+      "block_28day": "86:06",
+      "hours_12month": 889.92,
+      "hours_28day": 86.1,
+      "id": "5982",
+      "name": "NEEPUN SALARIA",
+      "percentage": 86.1,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "764:37",
+      "block_28day": "86:01",
+      "hours_12month": 764.62,
+      "hours_28day": 86.02,
+      "id": "4948",
+      "name": "SUNG HWA JUNG",
+      "percentage": 86.0,
+      "seniority": "0",
+      "status": "warning"
+    },
+    {
+      "block_12month": "846:57",
+      "block_28day": "85:58",
+      "hours_12month": 846.95,
+      "hours_28day": 85.97,
+      "id": "13029",
+      "name": "DO THANH TUNG",
+      "percentage": 86.0,
+      "seniority": "0",
+      "status": "warning"
+    }
+  ],
+  "rolling_stats": {
+    "critical": 8,
+    "normal": 982,
+    "warning": 50
+  },
+  "summary": {
+    "avg_flight_hours": 13.6,
+    "multi_reg_count": 113,
+    "total_aircraft": 84,
+    "total_crew": 1495,
+    "total_flights": 424
+  },
+  "utilization": {
+    "320": {
+      "avg_util": "11:03",
+      "dom_block": "65:45",
+      "dom_cycles": "38",
+      "int_block": "100:00",
+      "int_cycles": "25",
+      "total_block": "165:45",
+      "total_cycles": "63"
+    },
+    "321": {
+      "avg_util": "12:40",
+      "dom_block": "240:50",
+      "dom_cycles": "151",
+      "int_block": "570:40",
+      "int_cycles": "153",
+      "total_block": "811:30",
+      "total_cycles": "304"
+    },
+    "330": {
+      "avg_util": "13:30",
+      "dom_block": "16:00",
+      "dom_cycles": "8",
+      "int_block": "92:05",
+      "int_cycles": "13",
+      "total_block": "108:05",
+      "total_cycles": "21"
+    }
+  }
+}
