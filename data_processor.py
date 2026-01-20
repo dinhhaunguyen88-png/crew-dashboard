@@ -1246,21 +1246,30 @@ def get_processor():
         _processor = DataProcessor(Path(__file__).parent)
         # Load default data
         try:
-            _processor.process_dayrep_csv()
-            _processor.process_sacutil_csv()
-            _processor.process_rolcrtot_csv()
-            _processor.process_crew_schedule_csv()
+            if db.is_connected():
+                print("Initial load from Supabase...")
+                _processor.load_from_supabase()
+            else:
+                _processor.process_dayrep_csv()
+                _processor.process_sacutil_csv()
+                _processor.process_rolcrtot_csv()
+                _processor.process_crew_schedule_csv()
         except Exception as e:
             print(f"Warning: Could not load default data: {e}")
     return _processor
 
 def refresh_data():
-    """Refresh data from default CSV files"""
+    """Refresh data from Supabase if available, otherwise from default CSV files"""
     processor = get_processor()
-    processor.process_dayrep_csv()
-    processor.process_sacutil_csv()
-    processor.process_rolcrtot_csv()
-    processor.process_crew_schedule_csv()
+    if db.is_connected():
+        print("Refreshing data from Supabase...")
+        processor.load_from_supabase()
+    else:
+        print("Refreshing data from local CSVs...")
+        processor.process_dayrep_csv()
+        processor.process_sacutil_csv()
+        processor.process_rolcrtot_csv()
+        processor.process_crew_schedule_csv()
     return processor.get_dashboard_data()
 
 
