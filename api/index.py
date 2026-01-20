@@ -1,49 +1,71 @@
 """
 Vercel Serverless Function Handler for Crew Management Dashboard
-With Supabase Database Integration
+With Supabase Database Integration and Robust Error Handling
 """
 
-from flask import Flask, request, render_template, redirect, url_for, flash
+from flask import Flask, request, render_template, redirect, url_for, flash, jsonify
 import os
 import sys
 import re
+import traceback
 from pathlib import Path
 
 # Add the parent directory to sys.path
 root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(root_dir)
+sys.path.insert(0, root_dir)
 
 # Initialize Flask with correct template folder
 app = Flask(__name__, template_folder=root_dir, static_folder=os.path.join(root_dir, 'static'))
 app.secret_key = os.environ.get('SECRET_KEY', 'crew-dashboard-secret-key-2026')
 
-# Import modules after path is set
+# ==================== SUPABASE INITIALIZATION ====================
+# Check environment variables first
+SUPABASE_URL = os.environ.get('SUPABASE_URL')
+SUPABASE_KEY = os.environ.get('SUPABASE_KEY')
+
+# Log environment status
+if not SUPABASE_URL:
+    print("[ERROR] SUPABASE_URL environment variable is not set!")
+if not SUPABASE_KEY:
+    print("[ERROR] SUPABASE_KEY environment variable is not set!")
+
+# Try to import modules with error handling
+MODULES_LOADED = False
+db = None
+processor = None
+supabase_connected = False
+supabase_msg = "Not initialized"
+
 try:
     from data_processor import DataProcessor
-    import supabase_client as db
+    processor = DataProcessor(data_dir=root_dir)
     MODULES_LOADED = True
+    print("[OK] DataProcessor loaded successfully")
 except ImportError as e:
-    print(f"Module import error: {e}")
-    MODULES_LOADED = False
-    db = None
+    print(f"[ERROR] Failed to import DataProcessor: {e}")
+except Exception as e:
+    print(f"[ERROR] DataProcessor initialization failed: {e}")
 
-# Initialize DataProcessor
-processor = DataProcessor(data_dir=root_dir) if MODULES_LOADED else None
-
-# Check Supabase connection
-if MODULES_LOADED and db:
+# Only try to import supabase_client if credentials are configured
+if SUPABASE_URL and SUPABASE_KEY:
     try:
+        import supabase_client as db
         supabase_connected, supabase_msg = db.check_connection()
-        print(f"Supabase: {supabase_msg}")
+        print(f"[SUPABASE] {supabase_msg}")
+    except ImportError as e:
+        print(f"[ERROR] Failed to import supabase_client: {e}")
+        db = None
+        supabase_msg = f"Import error: {e}"
     except Exception as e:
+        print(f"[ERROR] Supabase connection check failed: {e}")
         supabase_connected = False
-        supabase_msg = str(e)
-        print(f"Supabase error: {e}")
+        supabase_msg = f"Connection error: {e}"
 else:
-    supabase_connected = False
-    supabase_msg = "Modules not loaded"
+    print("[INFO] Supabase credentials not configured - using local CSV files")
+    supabase_msg = "Credentials not configured"
 
 
+# ==================== DEFAULT DATA STRUCTURE ====================
 def get_default_data():
     """Return default empty data structure to prevent template errors"""
     return {
@@ -68,69 +90,96 @@ def get_default_data():
     }
 
 
+# ==================== DATA LOADING FUNCTIONS ====================
 def load_data_from_supabase(filter_date=None):
-    """Load all data from Supabase and process metrics"""
+    """Load all data from Supabase and process metrics - with full error handling"""
+    default_data = get_default_data()
+    
     if not db or not supabase_connected:
-        return get_default_data(), []
+        print("[INFO] Supabase not available, returning default data")
+        return default_data, []
     
     try:
         # Get flights from Supabase
-        flights = db.get_flights(filter_date)
-        available_dates = db.get_available_dates()
+        flights = db.get_flights(filter_date) or []
+        available_dates = db.get_available_dates() or []
         
         if not flights:
-            return get_default_data(), available_dates
+            print("[INFO] No flights found in Supabase")
+            return default_data, available_dates
         
-        # Get other data
-        rolling_hours = db.get_rolling_hours()
-        crew_schedule_summary = db.get_crew_schedule_summary(filter_date)
-        ac_utilization = db.get_ac_utilization(filter_date)
+        # Get other data with individual error handling
+        try:
+            rolling_hours = db.get_rolling_hours() or []
+        except Exception as e:
+            print(f"[WARN] Failed to get rolling_hours: {e}")
+            rolling_hours = []
         
-        # Process flights to calculate metrics
-        processor.flights = flights
-        processor.available_dates = available_dates
+        try:
+            crew_schedule_summary = db.get_crew_schedule_summary(filter_date) or {'SL': 0, 'CSL': 0, 'SBY': 0, 'OSBY': 0}
+        except Exception as e:
+            print(f"[WARN] Failed to get crew_schedule_summary: {e}")
+            crew_schedule_summary = {'SL': 0, 'CSL': 0, 'SBY': 0, 'OSBY': 0}
         
-        # Re-populate internal data structures from flights
-        processor.crew_to_regs.clear()
-        processor.reg_flight_hours.clear()
-        processor.reg_flight_count.clear()
+        try:
+            ac_utilization = db.get_ac_utilization(filter_date) or []
+        except Exception as e:
+            print(f"[WARN] Failed to get ac_utilization: {e}")
+            ac_utilization = []
         
-        for flight in flights:
-            reg = flight.get('reg', '')
-            crew_string = flight.get('crew', '')
-            std = flight.get('std', '')
-            sta = flight.get('sta', '')
+        # Process flights to calculate metrics if processor is available
+        if processor:
+            processor.flights = flights
+            processor.available_dates = available_dates
             
-            # Calculate flight hours
-            if std and sta and ':' in str(std) and ':' in str(sta):
+            # Re-populate internal data structures from flights
+            processor.crew_to_regs.clear()
+            processor.reg_flight_hours.clear()
+            processor.reg_flight_count.clear()
+            
+            for flight in flights:
                 try:
-                    std_parts = str(std).split(':')
-                    sta_parts = str(sta).split(':')
-                    std_min = int(std_parts[0]) * 60 + int(std_parts[1])
-                    sta_min = int(sta_parts[0]) * 60 + int(sta_parts[1])
-                    duration = sta_min - std_min
-                    if duration < 0:
-                        duration += 24 * 60
-                    hours = duration / 60
-                    processor.reg_flight_hours[reg] += hours
-                    processor.reg_flight_count[reg] += 1
-                except:
-                    pass
+                    reg = flight.get('reg', '')
+                    crew_string = flight.get('crew', '')
+                    std = flight.get('std', '')
+                    sta = flight.get('sta', '')
+                    
+                    # Calculate flight hours
+                    if std and sta and ':' in str(std) and ':' in str(sta):
+                        std_parts = str(std).split(':')
+                        sta_parts = str(sta).split(':')
+                        std_min = int(std_parts[0]) * 60 + int(std_parts[1])
+                        sta_min = int(sta_parts[0]) * 60 + int(sta_parts[1])
+                        duration = sta_min - std_min
+                        if duration < 0:
+                            duration += 24 * 60
+                        hours = duration / 60
+                        processor.reg_flight_hours[reg] += hours
+                        processor.reg_flight_count[reg] += 1
+                    
+                    # Extract crew
+                    if crew_string:
+                        pattern = r'\(([A-Z]{2})\)\s*(\d+)'
+                        matches = re.findall(pattern, str(crew_string))
+                        for role, crew_id in matches:
+                            processor.crew_to_regs[crew_id].add(reg)
+                            processor.crew_roles[crew_id] = role
+                except Exception as e:
+                    print(f"[WARN] Error processing flight: {e}")
+                    continue
             
-            # Extract crew
-            if crew_string:
-                pattern = r'\(([A-Z]{2})\)\s*(\d+)'
-                matches = re.findall(pattern, str(crew_string))
-                for role, crew_id in matches:
-                    processor.crew_to_regs[crew_id].add(reg)
-                    processor.crew_roles[crew_id] = role
-        
-        # Calculate metrics
-        metrics = processor.calculate_metrics(filter_date)
+            # Calculate metrics
+            try:
+                metrics = processor.calculate_metrics(filter_date)
+            except Exception as e:
+                print(f"[WARN] calculate_metrics failed: {e}")
+                metrics = default_data
+        else:
+            metrics = default_data
         
         # Override with Supabase data
         metrics['rolling_hours'] = rolling_hours[:20] if rolling_hours else []
-        metrics['crew_schedule'] = crew_schedule_summary or {'SL': 0, 'CSL': 0, 'SBY': 0, 'OSBY': 0}
+        metrics['crew_schedule'] = crew_schedule_summary
         
         # Process rolling hours stats
         normal_count = len([r for r in rolling_hours if r.get('status') == 'normal'])
@@ -161,48 +210,62 @@ def load_data_from_supabase(filter_date=None):
         return metrics, available_dates
         
     except Exception as e:
-        print(f"Error loading from Supabase: {e}")
-        return get_default_data(), []
+        print(f"[ERROR] load_data_from_supabase failed: {e}")
+        traceback.print_exc()
+        return default_data, []
 
 
 def fallback_to_local():
     """Fallback to local CSV files if Supabase not available"""
     if not processor:
-        return
+        print("[WARN] Processor not available for local fallback")
+        return False
+    
     try:
         processor.process_dayrep_csv()
         processor.process_sacutil_csv()
         processor.process_rolcrtot_csv()
         processor.process_crew_schedule_csv()
+        print("[OK] Local CSV files loaded successfully")
+        return True
     except Exception as e:
-        print(f"Error loading local files: {e}")
+        print(f"[ERROR] Failed to load local CSV files: {e}")
+        traceback.print_exc()
+        return False
 
 
+# ==================== ROUTES ====================
 @app.route('/', methods=['GET'])
 def index():
-    """Render the dashboard with data"""
+    """Render the dashboard with data - with comprehensive error handling"""
     filter_date = request.args.get('date', None)
     
-    # Start with default data
+    # Always start with default data to ensure template never crashes
     data = get_default_data()
     available_dates = []
     
     try:
-        # Try Supabase first, fallback to local
+        # Try Supabase first
         if supabase_connected and db:
+            print("[INFO] Loading data from Supabase...")
             metrics_data, available_dates = load_data_from_supabase(filter_date)
         else:
-            fallback_to_local()
-            if processor:
-                metrics_data = processor.calculate_metrics(filter_date)
-                available_dates = processor.available_dates
+            # Fallback to local CSV files
+            print("[INFO] Falling back to local CSV files...")
+            if fallback_to_local() and processor:
+                try:
+                    metrics_data = processor.calculate_metrics(filter_date)
+                    available_dates = processor.available_dates or []
+                except Exception as e:
+                    print(f"[ERROR] calculate_metrics failed: {e}")
+                    metrics_data = get_default_data()
             else:
                 metrics_data = get_default_data()
         
-        # Build data structure for template with safe defaults
+        # Build final data structure with safe access
         data = {
             'summary': metrics_data.get('summary', data['summary']),
-            'aircraft': list(processor.reg_flight_hours.keys()) if processor else [],
+            'aircraft': list(processor.reg_flight_hours.keys()) if processor and hasattr(processor, 'reg_flight_hours') else [],
             'crew_roles': metrics_data.get('crew_roles', data['crew_roles']),
             'crew_rotations': metrics_data.get('crew_rotations', []),
             'available_dates': available_dates or [],
@@ -212,18 +275,25 @@ def index():
             'rolling_stats': metrics_data.get('rolling_stats', data['rolling_stats']),
             'crew_schedule': metrics_data.get('crew_schedule', data['crew_schedule'])
         }
+        
     except Exception as e:
-        print(f"Error in index route: {e}")
-        # Keep default data on error
+        print(f"[ERROR] Index route failed: {e}")
+        traceback.print_exc()
+        # Keep default data on error - template will still render
     
-    return render_template('crew_dashboard.html', data=data, filter_date=filter_date)
+    try:
+        return render_template('crew_dashboard.html', data=data, filter_date=filter_date)
+    except Exception as e:
+        print(f"[ERROR] Template render failed: {e}")
+        traceback.print_exc()
+        return f"<h1>Dashboard Error</h1><p>Failed to render template: {str(e)}</p><p>Please check server logs.</p>", 500
 
 
 @app.route('/upload', methods=['POST'])
 def upload_files():
     """Handle CSV file uploads and save to Supabase"""
     if not supabase_connected or not db:
-        flash('Supabase not connected. Please configure credentials.')
+        flash('Supabase not connected. Please configure environment variables.')
         return redirect(url_for('index'))
     
     try:
@@ -234,7 +304,6 @@ def upload_files():
                 content = file.read()
                 processor.process_dayrep_csv(file_content=content)
                 
-                # Prepare data for Supabase
                 flights_data = []
                 for flight in processor.flights:
                     flights_data.append({
@@ -319,7 +388,8 @@ def upload_files():
         flash('Data uploaded successfully to Supabase!')
         
     except Exception as e:
-        print(f"Upload error: {e}")
+        print(f"[ERROR] Upload failed: {e}")
+        traceback.print_exc()
         flash(f'Upload error: {str(e)}')
     
     return redirect(url_for('index'))
@@ -330,18 +400,30 @@ def api_status():
     """Check system status including Supabase connection"""
     status = {
         'modules_loaded': MODULES_LOADED,
+        'processor_available': processor is not None,
+        'supabase_url_configured': SUPABASE_URL is not None,
+        'supabase_key_configured': SUPABASE_KEY is not None,
         'supabase_connected': supabase_connected,
         'supabase_message': supabase_msg
     }
     
     if db:
-        status['supabase_details'] = db.get_connection_status()
+        try:
+            status['supabase_details'] = db.get_connection_status()
+        except Exception as e:
+            status['supabase_details'] = {'error': str(e)}
     
-    return status
+    return jsonify(status)
 
 
-# Vercel looks for 'app' or 'handler' in the module
-# Expose Flask app as the handler for Vercel
+@app.route('/api/health', methods=['GET'])
+def health_check():
+    """Simple health check endpoint"""
+    return jsonify({'status': 'ok', 'message': 'Crew Dashboard is running'})
+
+
+# Vercel handler - export as 'app' (Flask convention)
+# Vercel Python runtime looks for 'app' or 'handler'
 handler = app
 
 # For local testing
