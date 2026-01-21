@@ -158,6 +158,13 @@ def index():
         else:
             metrics, available_dates = load_local_data()
         
+        # Calculate compliance rate from rolling stats
+        rolling_stats = metrics.get('rolling_stats', {'normal': 0, 'warning': 0, 'critical': 0})
+        total_crew = rolling_stats.get('normal', 0) + rolling_stats.get('warning', 0) + rolling_stats.get('critical', 0)
+        compliance_rate = 100.0
+        if total_crew > 0:
+            compliance_rate = round((rolling_stats.get('normal', 0) / total_crew) * 100, 1)
+        
         data = {
             'summary': metrics.get('summary', data['summary']),
             'aircraft': list(processor.reg_flight_hours.keys()) if processor else [],
@@ -168,7 +175,8 @@ def index():
             'utilization': metrics.get('utilization', {}),
             'rolling_hours': metrics.get('rolling_hours', []),
             'rolling_stats': metrics.get('rolling_stats', data['rolling_stats']),
-            'crew_schedule': metrics.get('crew_schedule', data['crew_schedule'])
+            'crew_schedule': metrics.get('crew_schedule', data['crew_schedule']),
+            'compliance_rate': compliance_rate
         }
     except Exception as e:
         print(f"[ERROR] Index: {e}")
