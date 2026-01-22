@@ -1160,28 +1160,65 @@
                 </div>
             </div>
 
-            <!-- Standby/Sick Ratio -->
+            <!-- Crew Status Cards (SBY, OSBY, SL, CSL) -->
             <div class="card" style="margin-top: 1.5rem;">
-                <h4 style="margin-bottom: 1rem; color: var(--text-secondary); font-size: 0.875rem;">Standby /
-                    Sick-Call Ratio</h4>
-                <div class="ratio-card">
-                    <div>
-                        <div class="ratio-label">Standby Available</div>
-                        <div style="font-size: 0.75rem; color: var(--text-secondary);">SBY + OSBY</div>
+                <h4 style="margin-bottom: 1rem; color: var(--text-secondary); font-size: 0.875rem;">
+                    👥 Crew Status ({{ filter_date if filter_date else 'All Dates' }})
+                </h4>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
+                    <!-- SBY -->
+                    <div
+                        style="text-align: center; padding: 1.25rem 1rem; background: rgba(34, 197, 94, 0.1); border-radius: 12px; border: 1px solid rgba(34, 197, 94, 0.3);">
+                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-green);">{{
+                            data.crew_schedule.summary.SBY }}</div>
+                        <div style="font-size: 0.9rem; color: var(--text-secondary); font-weight: 600;">SBY</div>
+                        <div style="font-size: 0.7rem; color: var(--text-secondary);">Standby</div>
                     </div>
-                    <div class="ratio-value good" id="standbyCount">{{ data.crew_schedule.summary.SBY +
-                        data.crew_schedule.summary.OSBY }}</div>
-                </div>
-                <div class="ratio-card">
-                    <div>
-                        <div class="ratio-label">Sick / Call-Sick</div>
-                        <div style="font-size: 0.75rem; color: var(--text-secondary);">SL + CSL</div>
+                    <!-- OSBY -->
+                    <div
+                        style="text-align: center; padding: 1.25rem 1rem; background: rgba(59, 130, 246, 0.1); border-radius: 12px; border: 1px solid rgba(59, 130, 246, 0.3);">
+                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-blue);">{{
+                            data.crew_schedule.summary.OSBY }}</div>
+                        <div style="font-size: 0.9rem; color: var(--text-secondary); font-weight: 600;">OSBY</div>
+                        <div style="font-size: 0.7rem; color: var(--text-secondary);">Office Standby</div>
                     </div>
-                    <div class="ratio-value warning" id="sickCount">{{ data.crew_schedule.summary.SL +
-                        data.crew_schedule.summary.CSL }}</div>
+                    <!-- SL -->
+                    <div
+                        style="text-align: center; padding: 1.25rem 1rem; background: rgba(251, 191, 36, 0.1); border-radius: 12px; border: 1px solid rgba(251, 191, 36, 0.3);">
+                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-yellow);">{{
+                            data.crew_schedule.summary.SL }}</div>
+                        <div style="font-size: 0.9rem; color: var(--text-secondary); font-weight: 600;">SL</div>
+                        <div style="font-size: 0.7rem; color: var(--text-secondary);">Sick Leave</div>
+                    </div>
+                    <!-- CSL -->
+                    <div
+                        style="text-align: center; padding: 1.25rem 1rem; background: rgba(239, 68, 68, 0.1); border-radius: 12px; border: 1px solid rgba(239, 68, 68, 0.3);">
+                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-red);">{{
+                            data.crew_schedule.summary.CSL }}</div>
+                        <div style="font-size: 0.9rem; color: var(--text-secondary); font-weight: 600;">CSL</div>
+                        <div style="font-size: 0.7rem; color: var(--text-secondary);">Call-Sick</div>
+                    </div>
                 </div>
-
+                <!-- Totals Row -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                    <div
+                        style="display: flex; justify-content: space-between; padding: 0.75rem 1rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                        <span style="color: var(--text-secondary); font-size: 0.85rem;">✅ Total Available (SBY +
+                            OSBY)</span>
+                        <span style="font-weight: 700; font-size: 1.1rem; color: var(--accent-green);">{{
+                            data.crew_schedule.summary.SBY + data.crew_schedule.summary.OSBY }}</span>
+                    </div>
+                    <div
+                        style="display: flex; justify-content: space-between; padding: 0.75rem 1rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
+                        <span style="color: var(--text-secondary); font-size: 0.85rem;">⚠️ Total Absent (SL +
+                            CSL)</span>
+                        <span style="font-weight: 700; font-size: 1.1rem; color: var(--accent-red);">{{
+                            data.crew_schedule.summary.SL + data.crew_schedule.summary.CSL }}</span>
+                    </div>
+                </div>
             </div>
+
+
 
 
 
