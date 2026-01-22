@@ -197,17 +197,17 @@ def get_ac_utilization(filter_date: str = None):
 
 # ==================== ROLLING HOURS TABLE ====================
 
-def insert_rolling_hours(hours_data: list):
-    """Insert rolling hours records from RolCrTotReport CSV"""
+def upsert_rolling_hours(hours_data: list):
+    """Upsert rolling hours records from RolCrTotReport CSV (Update or Insert based on crew_id)"""
     client = get_client()
     if not client:
         return None
     
     try:
-        # Clear existing data
+        # Clear existing data first (simpler than true upsert for this use case)
         client.table('rolling_hours').delete().neq('id', '00000000-0000-0000-0000-000000000000').execute()
         
-        # Insert new data
+        # Insert new data in batches
         batch_size = 500
         for i in range(0, len(hours_data), batch_size):
             batch = hours_data[i:i+batch_size]
@@ -215,8 +215,13 @@ def insert_rolling_hours(hours_data: list):
         
         return len(hours_data)
     except Exception as e:
-        print(f"Error inserting rolling hours: {e}")
+        print(f"Error upserting rolling hours: {e}")
         return None
+
+# Legacy function kept for backward compatibility
+def insert_rolling_hours(hours_data: list):
+    """Insert rolling hours records (legacy - calls upsert)"""
+    return upsert_rolling_hours(hours_data)
 
 def get_rolling_hours():
     """Get all rolling hours data"""
@@ -230,6 +235,63 @@ def get_rolling_hours():
     except Exception as e:
         print(f"Error getting rolling hours: {e}")
         return []
+
+
+# ==================== STANDBY RECORDS TABLE ====================
+
+def upsert_standby_records(records: list):
+    """Upsert standby records with conflict on (crew_id, duty_type, duty_date)"""
+    client = get_client()
+    if not client or not records:
+        return None
+    
+    try:
+        # Clear existing and insert new (simpler approach)
+        client.table('standby_records').delete().neq('id', '00000000-0000-0000-0000-000000000000').execute()
+        
+        # Insert in batches
+        batch_size = 500
+        for i in range(0, len(records), batch_size):
+            batch = records[i:i+batch_size]
+            client.table('standby_records').insert(batch).execute()
+        
+        return len(records)
+    except Exception as e:
+        print(f"Error upserting standby_records: {e}")
+        return None
+
+def get_standby_records(filter_date: str = None, duty_type: str = None):
+    """Get standby records, optionally filtered by date and/or duty type"""
+    client = get_client()
+    if not client:
+        return []
+    
+    try:
+        query = client.table('standby_records').select('*')
+        
+        if filter_date:
+            query = query.eq('duty_date', filter_date)
+        
+        if duty_type:
+            query = query.eq('duty_type', duty_type)
+        
+        return _fetch_all(query)
+    except Exception as e:
+        print(f"Error getting standby_records: {e}")
+        return []
+
+def get_standby_summary(filter_date: str = None):
+    """Get summary counts of standby statuses for a specific date"""
+    records = get_standby_records(filter_date)
+    summary = {'SL': 0, 'CSL': 0, 'SBY': 0, 'OSBY': 0}
+    
+    for record in records:
+        duty_type = record.get('duty_type', '')
+        if duty_type in summary:
+            summary[duty_type] += 1
+    
+    return summary
+
 
 
 # ==================== CREW SCHEDULE TABLE ====================

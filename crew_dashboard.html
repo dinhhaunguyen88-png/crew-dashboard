@@ -1068,90 +1068,152 @@
                         </tbody>
                     </table>
                 </div>
+
+                <!-- 12-Month Flight Hour Limits -->
+                <div class="card" style="margin-top: 1.5rem;">
+                    <h4 style="margin-bottom: 1rem; color: var(--text-secondary); font-size: 0.875rem;">12-Month Flight
+                        Hour Limits (1000h max)</h4>
+
+                    {% set sorted_12m = data.rolling_hours|sort(attribute='hours_12month', reverse=true) %}
+                    {% for crew in sorted_12m %}
+                    {% if loop.index <= 5 %} <div class="progress-item">
+                        <div class="progress-header">
+                            <span>{{ crew.name }}</span>
+                            <span
+                                style="color: {% if crew.hours_12month > 950 %}var(--accent-red){% elif crew.hours_12month > 850 %}var(--accent-yellow){% else %}var(--accent-green){% endif %};">{{
+                                crew.block_12month }} / 1000h ({{ (crew.hours_12month / 10)|round(1) }}%)</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill {% if crew.hours_12month > 950 %}red{% elif crew.hours_12month > 850 %}yellow{% else %}green{% endif %}"
+                                style="width: {{ [(crew.hours_12month / 10), 100] | min }}%"></div>
+                        </div>
+                </div>
+                {% endif %}
+                {% endfor %}
             </div>
 
-            <!-- Operational Agility -->
-            <div>
-                <section class="section-title">Operational Agility</section>
-                <div class="card" style="display: none !important;">
-                    <h4 style="margin-bottom: 1rem; color: var(--text-secondary); font-size: 0.875rem;">Base Status
-                        Heatmap</h4>
-                    <div class="base-heatmap">
-                        <div class="heatmap-item high">
-                            <div class="heatmap-code">SGN</div>
-                            <div class="heatmap-value">65</div>
-                            <div class="heatmap-detail">Active Crew</div>
-                            <div class="heatmap-detail">SBY: 36 | Sick: 2</div>
-                        </div>
-                        <div class="heatmap-item high">
-                            <div class="heatmap-code">HAN</div>
-                            <div class="heatmap-value">67</div>
-                            <div class="heatmap-detail">Active Crew</div>
-                            <div class="heatmap-detail">SBY: 56 | Sick: 1</div>
-                        </div>
-                        <div class="heatmap-item medium">
-                            <div class="heatmap-code">DAD</div>
-                            <div class="heatmap-value">14</div>
-                            <div class="heatmap-detail">Active Crew</div>
-                            <div class="heatmap-detail">SBY: 12 | Sick: 1</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Standby/Sick Ratio -->
-                <div class="card" style="margin-top: 1.5rem;">
-                    <h4 style="margin-bottom: 1rem; color: var(--text-secondary); font-size: 0.875rem;">Standby /
-                        Sick-Call Ratio</h4>
-                    <div class="ratio-card">
-                        <div>
-                            <div class="ratio-label">Standby Available</div>
-                            <div style="font-size: 0.75rem; color: var(--text-secondary);">SBY + OSBY</div>
-                        </div>
-                        <div class="ratio-value good" id="standbyCount">{{ data.crew_schedule.summary.SBY +
-                            data.crew_schedule.summary.OSBY }}</div>
-                    </div>
-                    <div class="ratio-card">
-                        <div>
-                            <div class="ratio-label">Sick / Call-Sick</div>
-                            <div style="font-size: 0.75rem; color: var(--text-secondary);">SL + CSL</div>
-                        </div>
-                        <div class="ratio-value warning" id="sickCount">{{ data.crew_schedule.summary.SL +
-                            data.crew_schedule.summary.CSL }}</div>
-                    </div>
-
-                </div>
-
-
-
-                <!-- Aircraft Utilization -->
-                <div class="card" style="margin-top: 1.5rem;">
-                    <h4 style="margin-bottom: 1rem; color: var(--text-secondary); font-size: 0.875rem;"
-                        id="utilizationTitle">Aircraft
-                        Utilization ({{ filter_date if filter_date else 'All Dates' }})</h4>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Aircraft</th>
-                                <th>Dom Block</th>
-                                <th>Int Block</th>
-                                <th>Total</th>
-                                <th>Avg Util</th>
+            <!-- Top 20 High-Intensity Crew (12-Month) -->
+            <div class="card" style="margin-top: 1.5rem;">
+                <h4 style="margin-bottom: 1rem; color: var(--text-secondary); font-size: 0.875rem;">Top 20
+                    High-Intensity Crew (Rolling 12 Months)</h4>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>12-Month Hours</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% set sorted_12m_table = data.rolling_hours|sort(attribute='hours_12month', reverse=true) %}
+                        {% for crew in sorted_12m_table %}
+                        {% if loop.index <= 20 %} <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ crew.crew_id }}</td>
+                            <td>{{ crew.name }}</td>
+                            <td>{{ crew.block_12month }}</td>
+                            <td>
+                                {% if crew.hours_12month > 950 %}
+                                <span class="status-dot red"></span>Critical
+                                {% elif crew.hours_12month > 850 %}
+                                <span class="status-dot yellow"></span>Warning
+                                {% else %}
+                                <span class="status-dot green"></span>Normal
+                                {% endif %}
+                            </td>
                             </tr>
-                        </thead>
-                        <tbody id="utilizationTableBody">
-                            {% for ac_type, stats in data.utilization.items() %}
-                            <tr>
-                                <td>{{ ac_type }}</td>
-                                <td>{{ stats.dom_block }}</td>
-                                <td>{{ stats.int_block }}</td>
-                                <td>{{ stats.total_block }}</td>
-                                <td>{{ stats.avg_util }}</td>
-                            </tr>
+                            {% endif %}
                             {% endfor %}
-                        </tbody>
-                    </table>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <!-- Operational Agility -->
+        <div>
+            <section class="section-title">Operational Agility</section>
+            <div class="card" style="display: none !important;">
+                <h4 style="margin-bottom: 1rem; color: var(--text-secondary); font-size: 0.875rem;">Base Status
+                    Heatmap</h4>
+                <div class="base-heatmap">
+                    <div class="heatmap-item high">
+                        <div class="heatmap-code">SGN</div>
+                        <div class="heatmap-value">65</div>
+                        <div class="heatmap-detail">Active Crew</div>
+                        <div class="heatmap-detail">SBY: 36 | Sick: 2</div>
+                    </div>
+                    <div class="heatmap-item high">
+                        <div class="heatmap-code">HAN</div>
+                        <div class="heatmap-value">67</div>
+                        <div class="heatmap-detail">Active Crew</div>
+                        <div class="heatmap-detail">SBY: 56 | Sick: 1</div>
+                    </div>
+                    <div class="heatmap-item medium">
+                        <div class="heatmap-code">DAD</div>
+                        <div class="heatmap-value">14</div>
+                        <div class="heatmap-detail">Active Crew</div>
+                        <div class="heatmap-detail">SBY: 12 | Sick: 1</div>
+                    </div>
                 </div>
             </div>
+
+            <!-- Standby/Sick Ratio -->
+            <div class="card" style="margin-top: 1.5rem;">
+                <h4 style="margin-bottom: 1rem; color: var(--text-secondary); font-size: 0.875rem;">Standby /
+                    Sick-Call Ratio</h4>
+                <div class="ratio-card">
+                    <div>
+                        <div class="ratio-label">Standby Available</div>
+                        <div style="font-size: 0.75rem; color: var(--text-secondary);">SBY + OSBY</div>
+                    </div>
+                    <div class="ratio-value good" id="standbyCount">{{ data.crew_schedule.summary.SBY +
+                        data.crew_schedule.summary.OSBY }}</div>
+                </div>
+                <div class="ratio-card">
+                    <div>
+                        <div class="ratio-label">Sick / Call-Sick</div>
+                        <div style="font-size: 0.75rem; color: var(--text-secondary);">SL + CSL</div>
+                    </div>
+                    <div class="ratio-value warning" id="sickCount">{{ data.crew_schedule.summary.SL +
+                        data.crew_schedule.summary.CSL }}</div>
+                </div>
+
+            </div>
+
+
+
+            <!-- Aircraft Utilization -->
+            <div class="card" style="margin-top: 1.5rem;">
+                <h4 style="margin-bottom: 1rem; color: var(--text-secondary); font-size: 0.875rem;"
+                    id="utilizationTitle">Aircraft
+                    Utilization ({{ filter_date if filter_date else 'All Dates' }})</h4>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Aircraft</th>
+                            <th>Dom Block</th>
+                            <th>Int Block</th>
+                            <th>Total</th>
+                            <th>Avg Util</th>
+                        </tr>
+                    </thead>
+                    <tbody id="utilizationTableBody">
+                        {% for ac_type, stats in data.utilization.items() %}
+                        <tr>
+                            <td>{{ ac_type }}</td>
+                            <td>{{ stats.dom_block }}</td>
+                            <td>{{ stats.int_block }}</td>
+                            <td>{{ stats.total_block }}</td>
+                            <td>{{ stats.avg_util }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
         </div>
     </main>
 
