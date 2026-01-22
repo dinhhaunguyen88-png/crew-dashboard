@@ -840,18 +840,38 @@ class DataProcessor:
             
             if uploaded_path.exists():
                 file_path = uploaded_path
-            elif has_uploads:
-                return 0
+            elif has_uploads and (uploads_dir / 'CrewSchedule.csv').exists():
+                 file_path = uploads_dir / 'CrewSchedule.csv'
             else:
-                file_path = self.data_dir / 'Crew schedule 15Jan(standby,callsick, fatigue).csv'
+                # Look for Crew Schedule files in root data dir
+                # Prioritize Feb2026 specific file, otherwise find any "Crew schedule*.csv"
+                feb_file = self.data_dir / 'Crew schedule Feb2026.csv'
+                
+                if feb_file.exists():
+                    file_path = feb_file
+                    print(f"DEBUG: Selected specific file: {file_path}")
+                else:
+                    # Find all matching files
+                    candidates = list(self.data_dir.glob('Crew schedule*.csv'))
+                    if candidates:
+                        # Sort by modification time (newest first) or name
+                        # Let's verify if we have the Jan file and maybe others
+                        candidates.sort(key=lambda x: x.stat().st_mtime, reverse=True)
+                        file_path = candidates[0]
+                        print(f"DEBUG: Selected latest file: {file_path}")
+                    else:
+                        file_path = self.data_dir / 'Crew schedule 15Jan(standby,callsick, fatigue).csv'
             
             try:
                 if file_path and file_path.exists():
+                    print(f"Loading Crew Schedule from: {file_path.name}")
                     content = self._read_file_safe(file_path)
                     if content is None: return 0
                 else:
+                    print("No Crew Schedule file found.")
                     return 0
-            except Exception:
+            except Exception as e:
+                print(f"Error reading file {file_path}: {e}")
                 return 0
         
         # Reset data
