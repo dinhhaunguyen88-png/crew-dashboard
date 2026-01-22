@@ -870,9 +870,23 @@ class DataProcessor:
         report_month = datetime.now().month
         report_year = datetime.now().year
         
-        # 1. Try to detect Report Month/Year from first few lines (e.g. "Mon, 19 Jan 2026")
+        # 1. Try to detect Report Month/Year from first few lines
         for i in range(min(5, len(rows))):
             line_str = ",".join(rows[i])
+            
+            # Try Pattern: "Period: DD/MM/YYYY-DD/MM/YYYY" (e.g., "01/02/2025-28/02/2025")
+            period_match = re.search(r'Period[:\s]+(\d{1,2})/(\d{1,2})/(\d{4})', line_str)
+            if period_match:
+                try:
+                    d_day, d_month, d_year = period_match.groups()
+                    report_month = int(d_month)
+                    report_year = int(d_year)
+                    print(f"DEBUG: Parsed Period - Month={report_month}, Year={report_year}")
+                    break
+                except:
+                    pass
+            
+            # Try Pattern: "DD Mon YYYY" (e.g., "19 Jan 2026")
             date_match = re.search(r'(\d{1,2})\s+([A-Za-z]{3})\s+(\d{4})', line_str)
             if date_match:
                 try:
@@ -883,6 +897,7 @@ class DataProcessor:
                     break
                 except:
                     pass
+
 
         # 2. Detect columns (Standard vs Matrix)
         is_matrix = False
