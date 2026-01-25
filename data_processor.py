@@ -206,7 +206,7 @@ class DataProcessor:
         try:
             parts = time_str.split(':')
             return int(parts[0]) * 60 + int(parts[1])
-        except:
+        except (ValueError, TypeError, IndexError):
             return None
     
     def get_operating_date(self, calendar_date, time_str):
@@ -237,7 +237,7 @@ class DataProcessor:
                 prev_date = current_date - timedelta(days=1)
                 
                 return f"{prev_date.day:02d}/{prev_date.month:02d}/{str(prev_date.year)[-2:]}"
-            except:
+            except (ValueError, TypeError, IndexError):
                 return calendar_date
         
         return calendar_date
@@ -476,7 +476,7 @@ class DataProcessor:
             month = int(parts[1])
             year = int(parts[2]) + 2000 if int(parts[2]) < 100 else int(parts[2])
             return (year, month, day)
-        except:
+        except (ValueError, TypeError, IndexError, AttributeError):
             return (9999, 99, 99)
     
     def process_sacutil_csv(self, file_path=None, file_content=None, sync_db=True):
@@ -517,13 +517,13 @@ class DataProcessor:
                     h, m = time_str.split(':')
                     return int(h) * 60 + int(m)
                 return 0
-            except:
+            except (ValueError, TypeError, AttributeError):
                 return 0
         
         def parse_int(val):
             try:
                 return int(val)
-            except:
+            except (ValueError, TypeError):
                 return 0
         
         def min_to_time(minutes):
@@ -579,7 +579,7 @@ class DataProcessor:
                 month = int(month)
                 # Construct date string in DD/MM/YY format (same as DayRep/CrewSchedule)
                 date_str = f"{day:02d}/{month:02d}/{str(report_year)[-2:]}"
-            except:
+            except (ValueError, TypeError, IndexError):
                 continue
                 
             # Get AC type - handle formats like "320", "321", "330", "A320", etc.
@@ -760,7 +760,7 @@ class DataProcessor:
                             h, m = time_str.split(':')
                             return float(h) + float(m) / 60
                         return 0.0
-                    except:
+                    except (ValueError, TypeError, AttributeError):
                         return 0.0
                 
                 hours_28day = parse_hours(b28)
@@ -903,7 +903,7 @@ class DataProcessor:
                     report_year = int(d_year)
                     print(f"DEBUG: Parsed Period - Month={report_month}, Year={report_year}")
                     break
-                except:
+                except (ValueError, TypeError):
                     pass
             
             # Try Pattern: "DD Mon YYYY" (e.g., "19 Jan 2026")
@@ -915,7 +915,7 @@ class DataProcessor:
                     report_year = int(d_year)
                     report_month = int(d_month)
                     break
-                except:
+                except (ValueError, TypeError):
                     pass
 
 
@@ -1025,7 +1025,7 @@ class DataProcessor:
                                      'duty_type': duty_type,
                                      'duty_date': date_str
                                  })
-                except:
+                except (KeyError, IndexError, ValueError, TypeError):
                     continue
             else:
                 # STANDARD LIST MODE - create records for each duty type marked
@@ -1295,7 +1295,7 @@ class DataProcessor:
             try:
                 parts = d.split('/')
                 return (int(parts[2]), int(parts[1]), int(parts[0]))
-            except:
+            except (ValueError, TypeError, IndexError, AttributeError):
                 return (0, 0, 0)
         merged_available_dates = sorted(list(all_dates), key=parse_date)
         

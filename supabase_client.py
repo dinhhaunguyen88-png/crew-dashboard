@@ -146,7 +146,7 @@ def get_available_dates():
             # Sort dates chronologically
             try:
                 dates.sort(key=lambda d: tuple(map(int, d.split('/')[::-1])))
-            except:
+            except (ValueError, TypeError):
                 dates.sort()
             return dates
         return []
@@ -381,8 +381,8 @@ def clear_all_data():
     for table in tables:
         try:
             client.table(table).delete().neq('id', '00000000-0000-0000-0000-000000000000').execute()
-        except:
-            pass
+        except Exception as e:
+            print(f"Warning: Could not clear table {table}: {e}")
     return True
 
 
@@ -409,7 +409,8 @@ def upsert_fact_actuals(records: list):
                 batch = records[i:i+100]
                 client.table('fact_actuals').insert(batch).execute()
             return len(records)
-        except:
+        except Exception as e:
+            print(f"Error in batch insert: {e}")
             return None
 
 def upsert_dim_crew(records: list):

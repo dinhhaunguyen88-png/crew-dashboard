@@ -113,7 +113,7 @@ def load_supabase_data(filter_date=None):
                     for role, crew_id in re.findall(r'\(([A-Z]{2})\)\s*(\d+)', str(crew_string)):
                         processor.crew_to_regs[crew_id].add(reg)
                         processor.crew_roles[crew_id] = role
-            except:
+            except (ValueError, TypeError, KeyError):
                 continue
         
         metrics = processor.calculate_metrics(filter_date)

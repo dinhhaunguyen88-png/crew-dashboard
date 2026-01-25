@@ -1,7 +1,7 @@
 """
 Flask Server for Crew Management Dashboard (SSR Version)
 Renders the dashboard directly using Jinja2 templates.
-Features: Auto-reload on CSV changes, improved error handling
+Features: Auto-reload on CSV changes, improved error handling, centralized middleware
 """
 
 from flask import Flask, request, render_template, redirect, url_for, jsonify
@@ -21,8 +21,22 @@ except ImportError:
     print("⚠️  Warning: watchdog not installed. Auto-reload disabled.")
     print("   Install with: pip install watchdog>=3.0.0")
 
+# Import error handler middleware (with fallback)
+try:
+    from api.middleware.error_handler import setup_error_handlers, setup_request_logging
+    ERROR_HANDLER_AVAILABLE = True
+except ImportError:
+    ERROR_HANDLER_AVAILABLE = False
+    print("⚠️  Warning: Error handler middleware not found.")
+
 app = Flask(__name__, template_folder='.')  # Look for templates in current dir
 app.secret_key = 'crew-dashboard-secret'  # Required for sessions if needed
+
+# Setup error handlers
+if ERROR_HANDLER_AVAILABLE:
+    setup_error_handlers(app)
+    # Uncomment for request logging:
+    # setup_request_logging(app)
 
 # Configuration
 UPLOAD_FOLDER = Path(__file__).parent / 'uploads'
