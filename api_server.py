@@ -27,7 +27,19 @@ try:
     ERROR_HANDLER_AVAILABLE = True
 except ImportError:
     ERROR_HANDLER_AVAILABLE = False
+    ERROR_HANDLER_AVAILABLE = True
+except ImportError:
+    ERROR_HANDLER_AVAILABLE = False
     print("Warning: Error handler middleware not found.")
+
+# Import ETL Scheduler (with fallback)
+try:
+    from etl_scheduler import get_scheduler
+    from aims_soap_client import is_aims_available
+    ETL_AVAILABLE = True
+except ImportError:
+    ETL_AVAILABLE = False
+    print("Warning: ETL Scheduler modules not found.")
 
 app = Flask(__name__, template_folder='.')  # Look for templates in current dir
 app.secret_key = 'crew-dashboard-secret'  # Required for sessions if needed
@@ -114,13 +126,27 @@ def index():
     # Get upload context from session
     date_context = session.get('upload_date_context')
     
+    # Get data source (csv or aims)
+    source = request.args.get('source', 'csv')
+
     # If no filter date provided, try to use default from context
-    if not filter_date and date_context and isinstance(date_context, dict):
+    # FIX: Do not use default date if source is AIMS, to avoid masking live data with old CSV dates
+    if source != 'aims' and not filter_date and date_context and isinstance(date_context, dict):
         filter_date = date_context.get('default_date')
         print(f"Using default date from session context: {filter_date}")
     
+    # SAFETY CHECK: If source is AIMS, check if the filter_date is valid for AIMS data
+    # If the date from the URL (likely from CSV context) is not in AIMS data, clear it.
+    if source == 'aims' and filter_date:
+        if filter_date not in processor.aims_available_dates:
+             print(f"DEBUG: Filter date {filter_date} not found in AIMS dates. Clearing filter to show all data.")
+             filter_date = None
+    
+    # FIX: Ignore the stale CSV date context when viewing AIMS data
+    effective_date_context = date_context if source != 'aims' else None
+
     # Get data
-    data = processor.get_dashboard_data(filter_date, date_context)
+    data = processor.get_dashboard_data(filter_date, effective_date_context, source=source)
     
     # Calculate compliance rate from rolling_hours
     compliance_stats = processor.calculate_rolling_28day_stats()
@@ -267,7 +293,34 @@ if __name__ == '__main__':
     # Start file watcher in a separate thread
     if FILE_WATCHER_AVAILABLE:
         watcher_thread = threading.Thread(target=start_file_watcher, daemon=True)
+        watcher_thread = threading.Thread(target=start_file_watcher, daemon=True)
         watcher_thread.start()
+
+    # Start ETL Scheduler if AIMS is enabled
+    if ETL_AVAILABLE and is_aims_available():
+        try:
+            scheduler = get_scheduler()
+            
+            # Add callback to trigger front-end refresh on sync success
+            def trigger_refresh():
+                global pending_refresh, last_update_time
+                try:
+                    # Reload data into memory from Supabase
+                    proc = get_processor()
+                    print("!!! Sync success - Reloading data from Supabase into memory...")
+                    proc.load_from_supabase()
+                    
+                    pending_refresh = True
+                    last_update_time = datetime.now()
+                    print(f"!!! ETL Sync success - Refresh triggered at {last_update_time} !!!", flush=True)
+                except Exception as e:
+                    print(f"Error in refresh callback: {e}")
+            
+            scheduler.on_success = trigger_refresh
+            scheduler.start()
+            print(f"Auto-sync enabled - AIMS ETL Scheduler started (Interval: {scheduler.interval_minutes}m)")
+        except Exception as e:
+            print(f"Failed to start ETL Scheduler: {e}")
     
     print("============================================================")
     print("Crew Management Dashboard (SSR Version)")

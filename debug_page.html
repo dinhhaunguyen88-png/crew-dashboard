@@ -146,21 +146,30 @@
 
         .date-filter-select {
             padding: 8px 12px;
-            background: #1e293b !important;
-            /* Force solid dark background */
+            background: var(--glass-bg);
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            color: #ffffff !important;
-            /* Force white text */
+            color: var(--text-primary);
             font-size: 0.875rem;
             cursor: pointer;
             min-width: 140px;
             transition: all 0.3s ease;
         }
 
+        .date-filter-select:hover {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
+        }
+
+        .date-filter-select:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+        }
+
         .date-filter-select option {
-            background-color: #1e293b !important;
-            color: #ffffff !important;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
         }
 
         .date-indicator {
@@ -649,22 +658,146 @@
                 <span class="date-filter-label">📡 Source:</span>
                 <select id="dataSourceToggle" class="date-filter-select" style="min-width: 100px;"
                     onchange="toggleDataSource(this.value)">
-                    <option value="csv" {% if not data.is_aims_source %}selected{% endif %}>CSV Upload</option>
-                    <option value="aims" {% if data.is_aims_source %}selected{% endif %}>AIMS API</option>
+                    <option value="csv" >CSV Upload</option>
+                    <option value="aims" selected>AIMS API</option>
                 </select>
                 <span id="aimsIndicator" class="date-indicator"
-                    style="{% if not aims_enabled %}display: none;{% endif %} background: linear-gradient(135deg, #06b6d4, #22c55e);">
+                    style=" background: linear-gradient(135deg, #06b6d4, #22c55e);">
                     🔴 Live
                 </span>
             </div>
+            <!-- Date Filter -->
             <div class="date-filter-container">
-                <span class="date-filter-label">📅 Filter Date ({{ data.available_dates|length }}):</span>
-                <select id="dateFilter" class="date-filter-select"
-                    onchange="window.location.href='/?source={{ 'aims' if data.is_aims_source else 'csv' }}&date='+this.value">
+                <span class="date-filter-label">📅 Filter Date:</span>
+                <select id="dateFilter" class="date-filter-select" onchange="window.location.href='/?date='+this.value">
                     <option value="">All Dates</option>
-                    {% for date in data.available_dates %}
-                    <option value="{{ date }}" {% if filter_date==date %}selected{% endif %}>{{ date }}</option>
-                    {% endfor %}
+                    
+                    <option value="29/12/25" >29/12/25</option>
+                    
+                    <option value="30/12/25" >30/12/25</option>
+                    
+                    <option value="31/12/25" >31/12/25</option>
+                    
+                    <option value="01/01/26" >01/01/26</option>
+                    
+                    <option value="02/01/26" >02/01/26</option>
+                    
+                    <option value="03/01/26" >03/01/26</option>
+                    
+                    <option value="04/01/26" >04/01/26</option>
+                    
+                    <option value="05/01/26" >05/01/26</option>
+                    
+                    <option value="06/01/26" >06/01/26</option>
+                    
+                    <option value="07/01/26" >07/01/26</option>
+                    
+                    <option value="08/01/26" >08/01/26</option>
+                    
+                    <option value="09/01/26" >09/01/26</option>
+                    
+                    <option value="10/01/26" >10/01/26</option>
+                    
+                    <option value="11/01/26" >11/01/26</option>
+                    
+                    <option value="12/01/26" >12/01/26</option>
+                    
+                    <option value="13/01/26" >13/01/26</option>
+                    
+                    <option value="14/01/26" >14/01/26</option>
+                    
+                    <option value="15/01/26" >15/01/26</option>
+                    
+                    <option value="16/01/26" >16/01/26</option>
+                    
+                    <option value="17/01/26" >17/01/26</option>
+                    
+                    <option value="18/01/26" >18/01/26</option>
+                    
+                    <option value="19/01/26" >19/01/26</option>
+                    
+                    <option value="20/01/26" >20/01/26</option>
+                    
+                    <option value="21/01/26" >21/01/26</option>
+                    
+                    <option value="22/01/26" >22/01/26</option>
+                    
+                    <option value="23/01/26" >23/01/26</option>
+                    
+                    <option value="24/01/26" >24/01/26</option>
+                    
+                    <option value="25/01/26" >25/01/26</option>
+                    
+                    <option value="26/01/26" >26/01/26</option>
+                    
+                    <option value="27/01/26" >27/01/26</option>
+                    
+                    <option value="28/01/26" >28/01/26</option>
+                    
+                    <option value="29/01/26" >29/01/26</option>
+                    
+                    <option value="30/01/26" >30/01/26</option>
+                    
+                    <option value="31/01/26" >31/01/26</option>
+                    
+                    <option value="01/02/26" >01/02/26</option>
+                    
+                    <option value="02/02/26" >02/02/26</option>
+                    
+                    <option value="03/02/26" >03/02/26</option>
+                    
+                    <option value="04/02/26" >04/02/26</option>
+                    
+                    <option value="05/02/26" >05/02/26</option>
+                    
+                    <option value="06/02/26" >06/02/26</option>
+                    
+                    <option value="07/02/26" >07/02/26</option>
+                    
+                    <option value="08/02/26" >08/02/26</option>
+                    
+                    <option value="09/02/26" >09/02/26</option>
+                    
+                    <option value="10/02/26" >10/02/26</option>
+                    
+                    <option value="11/02/26" >11/02/26</option>
+                    
+                    <option value="12/02/26" >12/02/26</option>
+                    
+                    <option value="13/02/26" >13/02/26</option>
+                    
+                    <option value="14/02/26" >14/02/26</option>
+                    
+                    <option value="15/02/26" >15/02/26</option>
+                    
+                    <option value="16/02/26" >16/02/26</option>
+                    
+                    <option value="17/02/26" >17/02/26</option>
+                    
+                    <option value="18/02/26" >18/02/26</option>
+                    
+                    <option value="19/02/26" >19/02/26</option>
+                    
+                    <option value="20/02/26" >20/02/26</option>
+                    
+                    <option value="21/02/26" >21/02/26</option>
+                    
+                    <option value="22/02/26" >22/02/26</option>
+                    
+                    <option value="23/02/26" >23/02/26</option>
+                    
+                    <option value="24/02/26" >24/02/26</option>
+                    
+                    <option value="25/02/26" >25/02/26</option>
+                    
+                    <option value="26/02/26" >26/02/26</option>
+                    
+                    <option value="27/02/26" >27/02/26</option>
+                    
+                    <option value="28/02/26" >28/02/26</option>
+                    
+                    <option value="2026/01/29" >2026/01/29</option>
+                    
                 </select>
                 <span id="dateIndicator" class="date-indicator" style="display: none;">Filtered</span>
             </div>
@@ -677,10 +810,10 @@
             <!-- DB Status Indicator -->
             <div
                 style="padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; gap: 6px; 
-                 {% if db_connected %}background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3);{% else %}background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3);{% endif %}">
+                 background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3);">
                 <span
-                    style="width: 8px; height: 8px; border-radius: 50%; {% if db_connected %}background: #4ade80;{% else %}background: #f87171;{% endif %}"></span>
-                {% if db_connected %}DB Connected{% else %}Demo Mode (No DB){% endif %}
+                    style="width: 8px; height: 8px; border-radius: 50%; background: #4ade80;"></span>
+                DB Connected
             </div>
             <div class="datetime">
                 <div id="current-date">15/01/2026</div>
@@ -802,16 +935,7 @@
                     </tr>
                 </thead>
                 <tbody id="crewRotationTableBody">
-                    {% for rotation in data.crew_rotations %}
-                    <tr>
-                        <td>{{ loop.index }}</td>
-                        <td>{{ rotation.crew_count }}</td>
-                        <td>{{ rotation.role }}</td>
-                        <td>{{ rotation.regs | join(', ') }}</td>
-                        <td>{{ rotation.flights | join(', ') }}</td>
-                        <td>{{ rotation.rotations }}</td>
-                    </tr>
-                    {% endfor %}
+                    
                 </tbody>
             </table>
         </div>
@@ -829,7 +953,7 @@
             </div>
 
             <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1rem;">
-                List of all crew members operating on {{ filter_date or 'selected date' }}.
+                List of all crew members operating on selected date.
                 Sorted by Role and Name.
             </p>
 
@@ -844,17 +968,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for crew in data.operating_crew %}
-                    <tr>
-                        <td>{{ loop.index }}</td>
-                        <td>{{ crew.id }}</td>
-                        <td>{{ crew.name }}</td>
-                        <td><span
-                                class="status-dot {% if crew.role == 'CP' %}blue{% elif crew.role == 'FO' %}purple{% elif crew.role == 'PU' %}cyan{% else %}green{% endif %}"></span>{{
-                            crew.role }}</td>
-                        <td>Active</td>
-                    </tr>
-                    {% endfor %}
+                    
                 </tbody>
             </table>
         </div>
@@ -931,54 +1045,43 @@
         <section class="section-title">Executive Summary</section>
         <div class="executive-grid">
             <div class="card metric-card" onclick="openAircraftFlyingModal()" style="cursor: pointer;">
-                <div class="metric-value">{{ data.summary.total_aircraft }}</div>
+                <div class="metric-value">97</div>
                 <div class="metric-label">Total Aircraft Flying</div>
                 <span class="metric-trend up">REGs operating today (Click to view)</span>
             </div>
             <div class="card metric-card">
-                <div class="metric-value">{{ data.summary.total_flights }}</div>
+                <div class="metric-value">29298</div>
                 <div class="metric-label">Total Flights</div>
-                {% if data.summary.flight_trend_direction == 'up' %}
-                <span class="metric-trend up">▲ +{{ "{:.1f}".format(data.summary.flight_trend) }}% vs yesterday</span>
-                {% elif data.summary.flight_trend_direction == 'down' %}
-                <span class="metric-trend down">▼ {{ "{:.1f}".format(data.summary.flight_trend) }}% vs yesterday</span>
-                {% else %}
+                
                 <span class="metric-trend">No change vs yesterday</span>
-                {% endif %}
+                
             </div>
             <div class="card metric-card" onclick="openCrewOperatingModal()" style="cursor: pointer;">
-                <div class="metric-value">{{ "{:,}".format(data.summary.total_crew) }}</div>
+                <div class="metric-value">0</div>
                 <div class="metric-label">Total Crew Operating</div>
-                {% if data.summary.total_crew == 0 and data.summary.total_flights > 0 %}
+                
                 <span class="metric-trend" style="color: var(--accent-red); font-weight: bold;">⚠ No 'Crew' column in
                     CSV</span>
-                {% else %}
-                <span class="metric-trend">CP: {{ data.crew_roles.CP }} | FO: {{ data.crew_roles.FO }} | PU: {{
-                    data.crew_roles.PU }} | FA: {{ data.crew_roles.FA }} (Click to view)</span>
-                {% endif %}
+                
             </div>
             <div class="card metric-card">
-                <div class="metric-value">{{ data.summary.avg_flight_hours }}h</div>
+                <div class="metric-value">730.9h</div>
                 <div class="metric-label">Avg Flight Hours/Aircraft</div>
-                <span class="metric-trend up">Total: {{ "{:,.0f}h".format(data.summary.total_block_hours) }}</span>
+                <span class="metric-trend up">Total: 70,900h</span>
             </div>
         </div>
 
         <!-- Second Row - Charts (Simplified) -->
         <div class="executive-grid" style="margin-top: 1.5rem;">
             <div class="card metric-card" onclick="openCrewRotationModal()" style="cursor: pointer;">
-                <div class="metric-value" id="crewRotationCount" style="color: var(--accent-yellow);">{{
-                    data.summary.crew_rotation_count }}</div>
+                <div class="metric-value" id="crewRotationCount" style="color: var(--accent-yellow);">0</div>
                 <div class="metric-label">Crew Rotation</div>
-                {% if data.summary.crew_rotation_count == 0 and data.summary.total_flights > 0 and
-                data.summary.total_crew == 0 %}
+                
                 <span class="metric-trend" style="color: var(--accent-red);">⚠ Missing Crew Data</span>
-                {% else %}
-                <span class="metric-trend">Groups changing aircraft (Click to view)</span>
-                {% endif %}
+                
             </div>
             <div class="card metric-card">
-                <div class="metric-value" id="totalBlockHours">{{ "{:,.0f}h".format(data.summary.total_block_hours) }}
+                <div class="metric-value" id="totalBlockHours">70,900h
                 </div>
                 <div class="metric-label">COM Block Hour</div>
                 <span class="metric-trend up">Based on filtered flights</span>
@@ -994,15 +1097,15 @@
                     <!-- Alert Summary -->
                     <div class="alert-grid" id="alertGrid">
                         <div class="alert-badge green">
-                            <div class="alert-count" id="alertNormal">{{ data.rolling_stats.normal }}</div>
+                            <div class="alert-count" id="alertNormal">0</div>
                             <div class="alert-label">Normal</div>
                         </div>
                         <div class="alert-badge yellow">
-                            <div class="alert-count" id="alertWarning">{{ data.rolling_stats.warning }}</div>
+                            <div class="alert-count" id="alertWarning">0</div>
                             <div class="alert-label">Warning >85%</div>
                         </div>
                         <div class="alert-badge red">
-                            <div class="alert-count" id="alertCritical">{{ data.rolling_stats.critical }}</div>
+                            <div class="alert-count" id="alertCritical">0</div>
                             <div class="alert-label">Critical >95%</div>
                         </div>
                     </div>
@@ -1014,8 +1117,8 @@
                             <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
                                 COMPLIANCE RATE</div>
                             <div
-                                style="font-size: 2rem; font-weight: 700; color: {% if data.compliance_rate >= 90 %}var(--accent-green){% elif data.compliance_rate >= 70 %}var(--accent-yellow){% else %}var(--accent-red){% endif %};">
-                                {{ data.compliance_rate|default(0, true)|round(1) }}%
+                                style="font-size: 2rem; font-weight: 700; color: var(--accent-green);">
+                                100.0%
                             </div>
                             <div style="font-size: 0.75rem; color: var(--text-secondary);">Crew within safe limits</div>
                         </div>
@@ -1028,20 +1131,7 @@
                     <h4 style="margin-bottom: 1rem; color: var(--text-secondary); font-size: 0.875rem;">28-Day Flight
                         Hour Limits</h4>
 
-                    {% for crew in data.rolling_hours[:5] %}
-                    <div class="progress-item">
-                        <div class="progress-header">
-                            <span>{{ crew.name }}</span>
-                            <span
-                                style="color: {% if crew.status == 'critical' %}var(--accent-red){% elif crew.status == 'warning' %}var(--accent-yellow){% else %}var(--accent-green){% endif %};">{{
-                                crew.block_28day }} / 100h ({{ crew.percentage }}%)</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill {% if crew.status == 'critical' %}red{% elif crew.status == 'warning' %}yellow{% else %}green{% endif %}"
-                                style="width: {{ [crew.percentage, 100] | min }}%"></div>
-                        </div>
-                    </div>
-                    {% endfor %}
+                    
                 </div>
 
                 <!-- Top 20 High-Intensity Crew -->
@@ -1059,23 +1149,7 @@
                             </tr>
                         </thead>
                         <tbody id="rollingHoursTableBody">
-                            {% for crew in data.rolling_hours[:20] %}
-                            <tr>
-                                <td>{{ loop.index }}</td>
-                                <td>{{ crew.crew_id }}</td>
-                                <td>{{ crew.name }}</td>
-                                <td>{{ crew.block_28day }}</td>
-                                <td>
-                                    {% if crew.status == 'critical' %}
-                                    <span class="status-dot red"></span>Critical
-                                    {% elif crew.status == 'warning' %}
-                                    <span class="status-dot yellow"></span>Warning
-                                    {% else %}
-                                    <span class="status-dot green"></span>Normal
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% endfor %}
+                            
                         </tbody>
                     </table>
                 </div>
@@ -1085,22 +1159,8 @@
                     <h4 style="margin-bottom: 1rem; color: var(--text-secondary); font-size: 0.875rem;">12-Month Flight
                         Hour Limits (1000h max)</h4>
 
-                    {% set sorted_12m = data.rolling_hours|sort(attribute='hours_12month', reverse=true) %}
-                    {% for crew in sorted_12m %}
-                    {% if loop.index <= 5 %} <div class="progress-item">
-                        <div class="progress-header">
-                            <span>{{ crew.name }}</span>
-                            <span
-                                style="color: {% if crew.hours_12month > 950 %}var(--accent-red){% elif crew.hours_12month > 850 %}var(--accent-yellow){% else %}var(--accent-green){% endif %};">{{
-                                crew.block_12month }} / 1000h ({{ (crew.hours_12month / 10)|round(1) }}%)</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill {% if crew.hours_12month > 950 %}red{% elif crew.hours_12month > 850 %}yellow{% else %}green{% endif %}"
-                                style="width: {{ [(crew.hours_12month / 10), 100] | min }}%"></div>
-                        </div>
-                </div>
-                {% endif %}
-                {% endfor %}
+                    
+                    
             </div>
 
             <!-- Top 20 High-Intensity Crew (12-Month) -->
@@ -1118,25 +1178,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% set sorted_12m_table = data.rolling_hours|sort(attribute='hours_12month', reverse=true) %}
-                        {% for crew in sorted_12m_table %}
-                        {% if loop.index <= 20 %} <tr>
-                            <td>{{ loop.index }}</td>
-                            <td>{{ crew.crew_id }}</td>
-                            <td>{{ crew.name }}</td>
-                            <td>{{ crew.block_12month }}</td>
-                            <td>
-                                {% if crew.hours_12month > 950 %}
-                                <span class="status-dot red"></span>Critical
-                                {% elif crew.hours_12month > 850 %}
-                                <span class="status-dot yellow"></span>Warning
-                                {% else %}
-                                <span class="status-dot green"></span>Normal
-                                {% endif %}
-                            </td>
-                            </tr>
-                            {% endif %}
-                            {% endfor %}
+                        
+                        
                     </tbody>
                 </table>
             </div>
@@ -1174,38 +1217,34 @@
             <!-- Crew Status Cards (SBY, OSBY, SL, CSL) -->
             <div class="card" style="margin-top: 1.5rem;">
                 <h4 style="margin-bottom: 1rem; color: var(--text-secondary); font-size: 0.875rem;">
-                    👥 Crew Status ({{ filter_date if filter_date else 'All Dates' }})
+                    👥 Crew Status (All Dates)
                 </h4>
                 <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
                     <!-- SBY -->
                     <div
                         style="text-align: center; padding: 1.25rem 1rem; background: rgba(34, 197, 94, 0.1); border-radius: 12px; border: 1px solid rgba(34, 197, 94, 0.3);">
-                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-green);">{{
-                            data.crew_schedule.summary.SBY }}</div>
+                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-green);">24</div>
                         <div style="font-size: 0.9rem; color: var(--text-secondary); font-weight: 600;">SBY</div>
                         <div style="font-size: 0.7rem; color: var(--text-secondary);">Standby</div>
                     </div>
                     <!-- OSBY -->
                     <div
                         style="text-align: center; padding: 1.25rem 1rem; background: rgba(59, 130, 246, 0.1); border-radius: 12px; border: 1px solid rgba(59, 130, 246, 0.3);">
-                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-blue);">{{
-                            data.crew_schedule.summary.OSBY }}</div>
+                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-blue);">2</div>
                         <div style="font-size: 0.9rem; color: var(--text-secondary); font-weight: 600;">OSBY</div>
                         <div style="font-size: 0.7rem; color: var(--text-secondary);">Office Standby</div>
                     </div>
                     <!-- SL -->
                     <div
                         style="text-align: center; padding: 1.25rem 1rem; background: rgba(251, 191, 36, 0.1); border-radius: 12px; border: 1px solid rgba(251, 191, 36, 0.3);">
-                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-yellow);">{{
-                            data.crew_schedule.summary.SL }}</div>
+                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-yellow);">2</div>
                         <div style="font-size: 0.9rem; color: var(--text-secondary); font-weight: 600;">SL</div>
                         <div style="font-size: 0.7rem; color: var(--text-secondary);">Sick Leave</div>
                     </div>
                     <!-- CSL -->
                     <div
                         style="text-align: center; padding: 1.25rem 1rem; background: rgba(239, 68, 68, 0.1); border-radius: 12px; border: 1px solid rgba(239, 68, 68, 0.3);">
-                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-red);">{{
-                            data.crew_schedule.summary.CSL }}</div>
+                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-red);">1</div>
                         <div style="font-size: 0.9rem; color: var(--text-secondary); font-weight: 600;">CSL</div>
                         <div style="font-size: 0.7rem; color: var(--text-secondary);">Call-Sick</div>
                     </div>
@@ -1216,15 +1255,13 @@
                         style="display: flex; justify-content: space-between; padding: 0.75rem 1rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
                         <span style="color: var(--text-secondary); font-size: 0.85rem;">✅ Total Available (SBY +
                             OSBY)</span>
-                        <span style="font-weight: 700; font-size: 1.1rem; color: var(--accent-green);">{{
-                            data.crew_schedule.summary.SBY + data.crew_schedule.summary.OSBY }}</span>
+                        <span style="font-weight: 700; font-size: 1.1rem; color: var(--accent-green);">26</span>
                     </div>
                     <div
                         style="display: flex; justify-content: space-between; padding: 0.75rem 1rem; background: var(--glass-bg); border-radius: 8px; border: 1px solid var(--border-color);">
                         <span style="color: var(--text-secondary); font-size: 0.85rem;">⚠️ Total Absent (SL +
                             CSL)</span>
-                        <span style="font-weight: 700; font-size: 1.1rem; color: var(--accent-red);">{{
-                            data.crew_schedule.summary.SL + data.crew_schedule.summary.CSL }}</span>
+                        <span style="font-weight: 700; font-size: 1.1rem; color: var(--accent-red);">3</span>
                     </div>
                 </div>
             </div>
@@ -1237,7 +1274,7 @@
             <div class="card" style="margin-top: 1.5rem;">
                 <h4 style="margin-bottom: 1rem; color: var(--text-secondary); font-size: 0.875rem;"
                     id="utilizationTitle">Aircraft
-                    Utilization ({{ filter_date if filter_date else 'All Dates' }})</h4>
+                    Utilization (All Dates)</h4>
                 <table class="data-table">
                     <thead>
                         <tr>
@@ -1249,15 +1286,15 @@
                         </tr>
                     </thead>
                     <tbody id="utilizationTableBody">
-                        {% for ac_type, stats in data.utilization.items() %}
+                        
                         <tr>
-                            <td>{{ ac_type }}</td>
-                            <td>{{ stats.dom_block }}</td>
-                            <td>{{ stats.int_block }}</td>
-                            <td>{{ stats.total_block }}</td>
-                            <td>{{ stats.avg_util }}</td>
+                            <td>320</td>
+                            <td>70900:32</td>
+                            <td>00:00</td>
+                            <td>70900:32</td>
+                            <td>-</td>
                         </tr>
-                        {% endfor %}
+                        
                     </tbody>
                 </table>
             </div>
@@ -1267,8 +1304,8 @@
 
     <script>
         // Inject Data from Server
-        const dashboardData = {{ data | tojson | safe }};
-        const filterDate = "{{ filter_date or '' }}";
+        const dashboardData = {"aircraft": [{"avg_per_flight": 1.5, "flights": 245, "reg": "B-652G", "total_hours": 358.0}, {"avg_per_flight": 1.5, "flights": 156, "reg": "B-656E", "total_hours": 227.5}, {"avg_per_flight": 1.7, "flights": 467, "reg": "LY-MLI", "total_hours": 791.1}, {"avg_per_flight": 1.7, "flights": 469, "reg": "LY-MLN", "total_hours": 786.2}, {"avg_per_flight": 1.7, "flights": 467, "reg": "LY-NVE", "total_hours": 784.6}, {"avg_per_flight": 1.6, "flights": 451, "reg": "LY-NVG", "total_hours": 713.5}, {"avg_per_flight": 2.0, "flights": 1, "reg": "TEST-JET", "total_hours": 2.0}, {"avg_per_flight": 2.8, "flights": 299, "reg": "VN-A500", "total_hours": 823.8}, {"avg_per_flight": 2.9, "flights": 268, "reg": "VN-A516", "total_hours": 767.5}, {"avg_per_flight": 2.7, "flights": 307, "reg": "VN-A522", "total_hours": 841.3}, {"avg_per_flight": 2.8, "flights": 278, "reg": "VN-A523", "total_hours": 790.9}, {"avg_per_flight": 2.6, "flights": 330, "reg": "VN-A525", "total_hours": 849.8}, {"avg_per_flight": 2.8, "flights": 294, "reg": "VN-A526", "total_hours": 833.4}, {"avg_per_flight": 2.2, "flights": 1, "reg": "VN-A527", "total_hours": 2.2}, {"avg_per_flight": 2.8, "flights": 312, "reg": "VN-A528", "total_hours": 867.0}, {"avg_per_flight": 2.2, "flights": 2, "reg": "VN-A531", "total_hours": 4.4}, {"avg_per_flight": 3.0, "flights": 278, "reg": "VN-A532", "total_hours": 833.8}, {"avg_per_flight": 2.7, "flights": 300, "reg": "VN-A534", "total_hours": 813.2}, {"avg_per_flight": 2.6, "flights": 310, "reg": "VN-A535", "total_hours": 805.3}, {"avg_per_flight": 3.8, "flights": 240, "reg": "VN-A536", "total_hours": 912.4}, {"avg_per_flight": 2.7, "flights": 297, "reg": "VN-A537", "total_hours": 788.1}, {"avg_per_flight": 3.0, "flights": 275, "reg": "VN-A538", "total_hours": 811.7}, {"avg_per_flight": 3.0, "flights": 261, "reg": "VN-A539", "total_hours": 771.5}, {"avg_per_flight": 2.2, "flights": 1, "reg": "VN-A540", "total_hours": 2.2}, {"avg_per_flight": 3.1, "flights": 277, "reg": "VN-A542", "total_hours": 850.5}, {"avg_per_flight": 2.5, "flights": 306, "reg": "VN-A544", "total_hours": 771.3}, {"avg_per_flight": 3.2, "flights": 281, "reg": "VN-A545", "total_hours": 889.1}, {"avg_per_flight": 2.9, "flights": 290, "reg": "VN-A546", "total_hours": 833.1}, {"avg_per_flight": 2.8, "flights": 304, "reg": "VN-A547", "total_hours": 859.3}, {"avg_per_flight": 3.0, "flights": 266, "reg": "VN-A548", "total_hours": 805.6}, {"avg_per_flight": 3.5, "flights": 237, "reg": "VN-A549", "total_hours": 834.6}, {"avg_per_flight": 3.2, "flights": 249, "reg": "VN-A550", "total_hours": 790.6}, {"avg_per_flight": 2.9, "flights": 298, "reg": "VN-A552", "total_hours": 873.3}, {"avg_per_flight": 1.7, "flights": 239, "reg": "VN-A553", "total_hours": 404.0}, {"avg_per_flight": 1.7, "flights": 225, "reg": "VN-A554", "total_hours": 380.2}, {"avg_per_flight": 1.8, "flights": 218, "reg": "VN-A575", "total_hours": 381.8}, {"avg_per_flight": 3.2, "flights": 267, "reg": "VN-A578", "total_hours": 850.5}, {"avg_per_flight": 2.6, "flights": 277, "reg": "VN-A580", "total_hours": 720.7}, {"avg_per_flight": 3.8, "flights": 248, "reg": "VN-A607", "total_hours": 937.3}, {"avg_per_flight": 2.8, "flights": 242, "reg": "VN-A629", "total_hours": 676.6}, {"avg_per_flight": 2.8, "flights": 289, "reg": "VN-A630", "total_hours": 821.0}, {"avg_per_flight": 1.7, "flights": 364, "reg": "VN-A632", "total_hours": 608.5}, {"avg_per_flight": 2.5, "flights": 331, "reg": "VN-A633", "total_hours": 835.1}, {"avg_per_flight": 2.9, "flights": 274, "reg": "VN-A634", "total_hours": 798.1}, {"avg_per_flight": 1.7, "flights": 384, "reg": "VN-A635", "total_hours": 648.8}, {"avg_per_flight": 2.8, "flights": 287, "reg": "VN-A636", "total_hours": 793.7}, {"avg_per_flight": 1.7, "flights": 366, "reg": "VN-A637", "total_hours": 609.3}, {"avg_per_flight": 1.7, "flights": 360, "reg": "VN-A639", "total_hours": 595.4}, {"avg_per_flight": 2.6, "flights": 307, "reg": "VN-A640", "total_hours": 786.0}, {"avg_per_flight": 2.4, "flights": 306, "reg": "VN-A641", "total_hours": 724.6}, {"avg_per_flight": 1.6, "flights": 392, "reg": "VN-A642", "total_hours": 645.3}, {"avg_per_flight": 1.5, "flights": 408, "reg": "VN-A643", "total_hours": 619.1}, {"avg_per_flight": 1.7, "flights": 325, "reg": "VN-A644", "total_hours": 556.1}, {"avg_per_flight": 2.7, "flights": 300, "reg": "VN-A645", "total_hours": 800.8}, {"avg_per_flight": 3.8, "flights": 219, "reg": "VN-A646", "total_hours": 839.0}, {"avg_per_flight": 2.6, "flights": 248, "reg": "VN-A647", "total_hours": 646.2}, {"avg_per_flight": 2.9, "flights": 295, "reg": "VN-A648", "total_hours": 841.8}, {"avg_per_flight": 2.9, "flights": 265, "reg": "VN-A649", "total_hours": 758.1}, {"avg_per_flight": 2.0, "flights": 374, "reg": "VN-A650", "total_hours": 747.6}, {"avg_per_flight": 3.0, "flights": 287, "reg": "VN-A651", "total_hours": 853.0}, {"avg_per_flight": 3.8, "flights": 242, "reg": "VN-A653", "total_hours": 925.2}, {"avg_per_flight": 1.9, "flights": 355, "reg": "VN-A655", "total_hours": 687.6}, {"avg_per_flight": 2.2, "flights": 351, "reg": "VN-A656", "total_hours": 779.0}, {"avg_per_flight": 2.8, "flights": 296, "reg": "VN-A657", "total_hours": 826.3}, {"avg_per_flight": 3.2, "flights": 349, "reg": "VN-A658", "total_hours": 1104.1}, {"avg_per_flight": 2.5, "flights": 234, "reg": "VN-A661", "total_hours": 596.6}, {"avg_per_flight": 2.2, "flights": 358, "reg": "VN-A662", "total_hours": 802.5}, {"avg_per_flight": 2.1, "flights": 310, "reg": "VN-A663", "total_hours": 659.4}, {"avg_per_flight": 2.3, "flights": 218, "reg": "VN-A666", "total_hours": 495.5}, {"avg_per_flight": 2.9, "flights": 275, "reg": "VN-A667", "total_hours": 803.8}, {"avg_per_flight": 2.4, "flights": 363, "reg": "VN-A668", "total_hours": 886.6}, {"avg_per_flight": 2.3, "flights": 348, "reg": "VN-A669", "total_hours": 800.8}, {"avg_per_flight": 2.7, "flights": 248, "reg": "VN-A670", "total_hours": 664.0}, {"avg_per_flight": 2.3, "flights": 368, "reg": "VN-A671", "total_hours": 845.2}, {"avg_per_flight": 2.4, "flights": 347, "reg": "VN-A672", "total_hours": 844.3}, {"avg_per_flight": 2.7, "flights": 276, "reg": "VN-A673", "total_hours": 757.4}, {"avg_per_flight": 3.1, "flights": 270, "reg": "VN-A674", "total_hours": 835.0}, {"avg_per_flight": 2.3, "flights": 379, "reg": "VN-A675", "total_hours": 861.0}, {"avg_per_flight": 2.4, "flights": 331, "reg": "VN-A676", "total_hours": 803.8}, {"avg_per_flight": 2.4, "flights": 301, "reg": "VN-A677", "total_hours": 727.8}, {"avg_per_flight": 2.9, "flights": 196, "reg": "VN-A683", "total_hours": 573.1}, {"avg_per_flight": 3.0, "flights": 205, "reg": "VN-A684", "total_hours": 617.6}, {"avg_per_flight": 1.7, "flights": 323, "reg": "VN-A685", "total_hours": 546.0}, {"avg_per_flight": 2.8, "flights": 269, "reg": "VN-A687", "total_hours": 761.0}, {"avg_per_flight": 2.3, "flights": 344, "reg": "VN-A689", "total_hours": 807.5}, {"avg_per_flight": 2.9, "flights": 295, "reg": "VN-A693", "total_hours": 855.9}, {"avg_per_flight": 2.8, "flights": 332, "reg": "VN-A697", "total_hours": 931.7}, {"avg_per_flight": 2.8, "flights": 276, "reg": "VN-A698", "total_hours": 764.7}, {"avg_per_flight": 4.5, "flights": 222, "reg": "VN-A699", "total_hours": 999.4}, {"avg_per_flight": 5.4, "flights": 175, "reg": "VN-A810", "total_hours": 938.4}, {"avg_per_flight": 4.2, "flights": 177, "reg": "VN-A811", "total_hours": 748.9}, {"avg_per_flight": 4.4, "flights": 189, "reg": "VN-A812", "total_hours": 823.8}, {"avg_per_flight": 5.9, "flights": 153, "reg": "VN-A814", "total_hours": 905.3}, {"avg_per_flight": 5.0, "flights": 174, "reg": "VN-A815", "total_hours": 869.2}, {"avg_per_flight": 4.8, "flights": 194, "reg": "VN-A816", "total_hours": 930.7}, {"avg_per_flight": 4.3, "flights": 184, "reg": "VN-A817", "total_hours": 783.7}, {"avg_per_flight": 4.2, "flights": 185, "reg": "VN-A820", "total_hours": 770.5}], "available_dates": ["29/12/25", "30/12/25", "31/12/25", "01/01/26", "02/01/26", "03/01/26", "04/01/26", "05/01/26", "06/01/26", "07/01/26", "08/01/26", "09/01/26", "10/01/26", "11/01/26", "12/01/26", "13/01/26", "14/01/26", "15/01/26", "16/01/26", "17/01/26", "18/01/26", "19/01/26", "20/01/26", "21/01/26", "22/01/26", "23/01/26", "24/01/26", "25/01/26", "26/01/26", "27/01/26", "28/01/26", "29/01/26", "30/01/26", "31/01/26", "01/02/26", "02/02/26", "03/02/26", "04/02/26", "05/02/26", "06/02/26", "07/02/26", "08/02/26", "09/02/26", "10/02/26", "11/02/26", "12/02/26", "13/02/26", "14/02/26", "15/02/26", "16/02/26", "17/02/26", "18/02/26", "19/02/26", "20/02/26", "21/02/26", "22/02/26", "23/02/26", "24/02/26", "25/02/26", "26/02/26", "27/02/26", "28/02/26", "2026/01/29"], "compliance_rate": 100.0, "crew_roles": {}, "crew_rotations": [], "crew_schedule": {"fatigue": [], "office_standby": [], "sick_call": [], "standby": [], "summary": {"CSL": 1, "FGT": 0, "NO_DUTY": 6, "OFF": 0, "OSBY": 2, "SBY": 24, "SL": 2}}, "current_filter_date": null, "is_aims_source": true, "last_updated": "2026-01-29 02:02:55", "operating_crew": [], "rolling_hours": [], "rolling_stats": {"critical": 0, "normal": 0, "warning": 0}, "standby_records": [{"ac_type": "320", "base": "SGN", "crew_id": "3529", "crew_name": "ABDUL RA", "duty_date": "08/02/26", "duty_type": "SBY", "long_format": true, "position": "C"}, {"ac_type": "320", "base": "SGN", "crew_id": "7534", "crew_name": "AKASH KA", "duty_date": "15/02/26", "duty_type": "SBY", "long_format": true, "position": "C"}, {"ac_type": "320", "base": "SGN", "crew_id": "15244", "crew_name": "AVETISOV", "duty_date": "16/02/26", "duty_type": "SBY", "long_format": true, "position": "C"}, {"ac_type": "320", "base": "SGN", "crew_id": "16868", "crew_name": "BUI CONG", "duty_date": "02/02/26", "duty_type": "SBY", "long_format": true, "position": "C"}, {"ac_type": "320", "base": "SGN", "crew_id": "16868", "crew_name": "BUI CONG", "duty_date": "05/02/26", "duty_type": "SBY", "long_format": true, "position": "C"}, {"ac_type": "320", "base": "SGN", "crew_id": "2916", "crew_name": "BUI MINH", "duty_date": "03/02/26", "duty_type": "SBY", "long_format": true, "position": "C"}, {"ac_type": "320", "base": "SGN", "crew_id": "2916", "crew_name": "BUI MINH", "duty_date": "08/02/26", "duty_type": "SBY", "long_format": true, "position": "C"}, {"ac_type": "320", "base": "SGN", "crew_id": "14935", "crew_name": "CRUZ MEN", "duty_date": "01/02/26", "duty_type": "SBY", "long_format": true, "position": "C"}, {"ac_type": "320", "base": "SGN", "crew_id": "14935", "crew_name": "CRUZ MEN", "duty_date": "14/02/26", "duty_type": "SBY", "long_format": true, "position": "C"}, {"ac_type": "320", "base": "SGN", "crew_id": "15402", "crew_name": "DONALD M", "duty_date": "03/02/26", "duty_type": "SBY", "long_format": true, "position": "C"}, {"ac_type": "320", "base": "SGN", "crew_id": "16121", "crew_name": "GUZ YURY", "duty_date": "12/02/26", "duty_type": "SBY", "long_format": true, "position": "C"}, {"ac_type": "320", "base": "SGN", "crew_id": "16121", "crew_name": "GUZ YURY", "duty_date": "14/02/26", "duty_type": "SBY", "long_format": true, "position": "C"}, {"ac_type": "320", "base": "SGN", "crew_id": "2070", "crew_name": "JOSE ALVI", "duty_date": "14/02/26", "duty_type": "SBY", "long_format": true, "position": "C"}, {"ac_type": "320", "base": "SGN", "crew_id": "3568", "crew_name": "KENNY TIE", "duty_date": "01/02/26", "duty_type": "SBY", "long_format": true, "position": "C"}, {"ac_type": "320", "base": "SGN", "crew_id": "3568", "crew_name": "KENNY TIE", "duty_date": "03/02/26", "duty_type": "SBY", "long_format": true, "position": "C"}, {"ac_type": "320", "base": "SGN", "crew_id": "3568", "crew_name": "KENNY TIE", "duty_date": "05/02/26", "duty_type": "SBY", "long_format": true, "position": "C"}, {"ac_type": "320", "base": "SGN", "crew_id": "1001", "crew_name": "TEST CP1", "duty_date": "07/02/26", "duty_type": "SBY", "long_format": true, "position": "CP"}, {"ac_type": "320", "base": "SGN", "crew_id": "1002", "crew_name": "TEST CP2", "duty_date": "07/02/26", "duty_type": "SBY", "long_format": true, "position": "CP"}, {"ac_type": "320", "base": "SGN", "crew_id": "1003", "crew_name": "TEST FO1", "duty_date": "07/02/26", "duty_type": "SBY", "long_format": true, "position": "FO"}, {"ac_type": "320", "base": "SGN", "crew_id": "1004", "crew_name": "TEST FO2", "duty_date": "07/02/26", "duty_type": "SBY", "long_format": true, "position": "FO"}, {"ac_type": "320", "base": "SGN", "crew_id": "1005", "crew_name": "TEST PU1", "duty_date": "07/02/26", "duty_type": "SBY", "long_format": true, "position": "PU"}, {"ac_type": "320", "base": "SGN", "crew_id": "1006", "crew_name": "TEST FA1", "duty_date": "07/02/26", "duty_type": "SBY", "long_format": true, "position": "FA"}, {"ac_type": "320", "base": "SGN", "crew_id": "1007", "crew_name": "TEST FA2", "duty_date": "07/02/26", "duty_type": "SBY", "long_format": true, "position": "FA"}, {"ac_type": "320", "base": "SGN", "crew_id": "1008", "crew_name": "TEST FA3", "duty_date": "07/02/26", "duty_type": "SBY", "long_format": true, "position": "FA"}, {"ac_type": "320", "base": "SGN", "crew_id": "2001", "crew_name": "SICK1", "duty_date": "07/02/26", "duty_type": "SL", "long_format": true, "position": "CP"}, {"ac_type": "320", "base": "SGN", "crew_id": "2002", "crew_name": "SICK2", "duty_date": "07/02/26", "duty_type": "SL", "long_format": true, "position": "FO"}, {"ac_type": "320", "base": "SGN", "crew_id": "3001", "crew_name": "CALLSICK1", "duty_date": "07/02/26", "duty_type": "CSL", "long_format": true, "position": "CP"}, {"ac_type": "320", "base": "SGN", "crew_id": "4001", "crew_name": "OSBY1", "duty_date": "07/02/26", "duty_type": "OSBY", "long_format": true, "position": "PU"}, {"ac_type": "320", "base": "SGN", "crew_id": "4002", "crew_name": "OSBY2", "duty_date": "07/02/26", "duty_type": "OSBY", "long_format": true, "position": "FA"}], "summary": {"avg_flight_hours": 730.9, "crew_rotation_count": 0, "flight_trend": 0, "flight_trend_direction": "neutral", "total_aircraft": 97, "total_block_hours": 70900.5, "total_crew": 0, "total_flights": 29298}, "utilization": {"320": {"avg_util": "-", "dom_block": "70900:32", "int_block": "00:00", "total_block": "70900:32", "total_cycles": "27026"}}};
+        const filterDate = "";
 
         // Update Date/Time
         function updateDateTime() {
@@ -1391,8 +1428,15 @@
 
         // Data Source Toggle Function
         function toggleDataSource(source) {
-            // When switching sources, we CLEAR the date filter to avoid range mismatches
-            window.location.href = '/?source=' + source;
+            const indicator = document.getElementById('aimsIndicator');
+            if (source === 'aims') {
+                indicator.style.display = 'inline-flex';
+                // Reload with AIMS source parameter
+                window.location.href = '/?source=aims' + (filterDate ? '&date=' + filterDate : '');
+            } else {
+                indicator.style.display = 'none';
+                window.location.href = '/?source=csv' + (filterDate ? '&date=' + filterDate : '');
+            }
         }
 
         // File label update
@@ -1578,7 +1622,7 @@
                     onclick="closeAircraftFlyingModal()">&times;</span>
             </div>
             <div class="modal-body">
-                {% if data.aircraft %}
+                
                 <table class="data-table">
                     <thead>
                         <tr>
@@ -1588,19 +1632,592 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for ac in data.aircraft %}
+                        
                         <tr>
-                            <td>{{ ac.reg }}</td>
-                            <td>{{ ac.total_hours }}</td>
-                            <td>{{ ac.flights }}</td>
+                            <td>B-652G</td>
+                            <td>358.0</td>
+                            <td>245</td>
                         </tr>
-                        {% endfor %}
+                        
+                        <tr>
+                            <td>B-656E</td>
+                            <td>227.5</td>
+                            <td>156</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>LY-MLI</td>
+                            <td>791.1</td>
+                            <td>467</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>LY-MLN</td>
+                            <td>786.2</td>
+                            <td>469</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>LY-NVE</td>
+                            <td>784.6</td>
+                            <td>467</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>LY-NVG</td>
+                            <td>713.5</td>
+                            <td>451</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>TEST-JET</td>
+                            <td>2.0</td>
+                            <td>1</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A500</td>
+                            <td>823.8</td>
+                            <td>299</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A516</td>
+                            <td>767.5</td>
+                            <td>268</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A522</td>
+                            <td>841.3</td>
+                            <td>307</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A523</td>
+                            <td>790.9</td>
+                            <td>278</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A525</td>
+                            <td>849.8</td>
+                            <td>330</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A526</td>
+                            <td>833.4</td>
+                            <td>294</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A527</td>
+                            <td>2.2</td>
+                            <td>1</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A528</td>
+                            <td>867.0</td>
+                            <td>312</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A531</td>
+                            <td>4.4</td>
+                            <td>2</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A532</td>
+                            <td>833.8</td>
+                            <td>278</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A534</td>
+                            <td>813.2</td>
+                            <td>300</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A535</td>
+                            <td>805.3</td>
+                            <td>310</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A536</td>
+                            <td>912.4</td>
+                            <td>240</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A537</td>
+                            <td>788.1</td>
+                            <td>297</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A538</td>
+                            <td>811.7</td>
+                            <td>275</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A539</td>
+                            <td>771.5</td>
+                            <td>261</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A540</td>
+                            <td>2.2</td>
+                            <td>1</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A542</td>
+                            <td>850.5</td>
+                            <td>277</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A544</td>
+                            <td>771.3</td>
+                            <td>306</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A545</td>
+                            <td>889.1</td>
+                            <td>281</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A546</td>
+                            <td>833.1</td>
+                            <td>290</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A547</td>
+                            <td>859.3</td>
+                            <td>304</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A548</td>
+                            <td>805.6</td>
+                            <td>266</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A549</td>
+                            <td>834.6</td>
+                            <td>237</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A550</td>
+                            <td>790.6</td>
+                            <td>249</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A552</td>
+                            <td>873.3</td>
+                            <td>298</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A553</td>
+                            <td>404.0</td>
+                            <td>239</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A554</td>
+                            <td>380.2</td>
+                            <td>225</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A575</td>
+                            <td>381.8</td>
+                            <td>218</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A578</td>
+                            <td>850.5</td>
+                            <td>267</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A580</td>
+                            <td>720.7</td>
+                            <td>277</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A607</td>
+                            <td>937.3</td>
+                            <td>248</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A629</td>
+                            <td>676.6</td>
+                            <td>242</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A630</td>
+                            <td>821.0</td>
+                            <td>289</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A632</td>
+                            <td>608.5</td>
+                            <td>364</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A633</td>
+                            <td>835.1</td>
+                            <td>331</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A634</td>
+                            <td>798.1</td>
+                            <td>274</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A635</td>
+                            <td>648.8</td>
+                            <td>384</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A636</td>
+                            <td>793.7</td>
+                            <td>287</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A637</td>
+                            <td>609.3</td>
+                            <td>366</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A639</td>
+                            <td>595.4</td>
+                            <td>360</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A640</td>
+                            <td>786.0</td>
+                            <td>307</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A641</td>
+                            <td>724.6</td>
+                            <td>306</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A642</td>
+                            <td>645.3</td>
+                            <td>392</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A643</td>
+                            <td>619.1</td>
+                            <td>408</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A644</td>
+                            <td>556.1</td>
+                            <td>325</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A645</td>
+                            <td>800.8</td>
+                            <td>300</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A646</td>
+                            <td>839.0</td>
+                            <td>219</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A647</td>
+                            <td>646.2</td>
+                            <td>248</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A648</td>
+                            <td>841.8</td>
+                            <td>295</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A649</td>
+                            <td>758.1</td>
+                            <td>265</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A650</td>
+                            <td>747.6</td>
+                            <td>374</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A651</td>
+                            <td>853.0</td>
+                            <td>287</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A653</td>
+                            <td>925.2</td>
+                            <td>242</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A655</td>
+                            <td>687.6</td>
+                            <td>355</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A656</td>
+                            <td>779.0</td>
+                            <td>351</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A657</td>
+                            <td>826.3</td>
+                            <td>296</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A658</td>
+                            <td>1104.1</td>
+                            <td>349</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A661</td>
+                            <td>596.6</td>
+                            <td>234</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A662</td>
+                            <td>802.5</td>
+                            <td>358</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A663</td>
+                            <td>659.4</td>
+                            <td>310</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A666</td>
+                            <td>495.5</td>
+                            <td>218</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A667</td>
+                            <td>803.8</td>
+                            <td>275</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A668</td>
+                            <td>886.6</td>
+                            <td>363</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A669</td>
+                            <td>800.8</td>
+                            <td>348</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A670</td>
+                            <td>664.0</td>
+                            <td>248</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A671</td>
+                            <td>845.2</td>
+                            <td>368</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A672</td>
+                            <td>844.3</td>
+                            <td>347</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A673</td>
+                            <td>757.4</td>
+                            <td>276</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A674</td>
+                            <td>835.0</td>
+                            <td>270</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A675</td>
+                            <td>861.0</td>
+                            <td>379</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A676</td>
+                            <td>803.8</td>
+                            <td>331</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A677</td>
+                            <td>727.8</td>
+                            <td>301</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A683</td>
+                            <td>573.1</td>
+                            <td>196</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A684</td>
+                            <td>617.6</td>
+                            <td>205</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A685</td>
+                            <td>546.0</td>
+                            <td>323</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A687</td>
+                            <td>761.0</td>
+                            <td>269</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A689</td>
+                            <td>807.5</td>
+                            <td>344</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A693</td>
+                            <td>855.9</td>
+                            <td>295</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A697</td>
+                            <td>931.7</td>
+                            <td>332</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A698</td>
+                            <td>764.7</td>
+                            <td>276</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A699</td>
+                            <td>999.4</td>
+                            <td>222</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A810</td>
+                            <td>938.4</td>
+                            <td>175</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A811</td>
+                            <td>748.9</td>
+                            <td>177</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A812</td>
+                            <td>823.8</td>
+                            <td>189</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A814</td>
+                            <td>905.3</td>
+                            <td>153</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A815</td>
+                            <td>869.2</td>
+                            <td>174</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A816</td>
+                            <td>930.7</td>
+                            <td>194</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A817</td>
+                            <td>783.7</td>
+                            <td>184</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>VN-A820</td>
+                            <td>770.5</td>
+                            <td>185</td>
+                        </tr>
+                        
                     </tbody>
                 </table>
-                {% else %}
-                <p style="text-align: center; color: var(--text-secondary); padding: 1rem;">No aircraft data available
-                    for this date.</p>
-                {% endif %}
+                
             </div>
         </div>
     </div>

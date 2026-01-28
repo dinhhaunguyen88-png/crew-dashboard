@@ -122,7 +122,21 @@ class AIMSSoapClient:
                 transport = Transport(session=session, timeout=self.timeout)
                 
                 self._client = Client(self.wsdl_url, transport=transport)
-                self._service = self._client.service
+                
+                # Override service address if needed (fix for internal IP in WSDL)
+                # The WSDL returns 10.x.x.x which is not accessible. Force usage of the public URL.
+                if 'aimswebservice' in self.wsdl_url:
+                    endpoint = self.wsdl_url.split('?')[0]
+                    # Get the default binding (usually the first one)
+                    service = list(self._client.wsdl.services.values())[0]
+                    port = list(service.ports.values())[0]
+                    binding_name = port.binding.name
+                    
+                    self._service = self._client.create_service(binding_name, endpoint)
+                    logger.info(f"Forced service endpoint to: {endpoint}")
+                else:
+                    self._service = self._client.service
+                    
                 logger.info(f"AIMS SOAP Client initialized: {self.wsdl_url}")
             except Exception as e:
                 logger.error(f"Failed to initialize AIMS client: {e}")

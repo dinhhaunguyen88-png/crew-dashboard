@@ -43,6 +43,11 @@ class DataProcessor:
         self.crew_group_rotations = defaultdict(list)  # crew_set -> list of REGs
         self.crew_group_rotations_by_date = defaultdict(lambda: defaultdict(list))  # date -> crew_set_key -> list of REGs
         
+        # AIMS specific data
+        self.aims_flights = []
+        self.aims_flights_by_date = defaultdict(list)
+        self.aims_available_dates = []
+        
         # Upload date context for dynamic date filtering
         self.upload_date_context = {'min_date': None, 'max_date': None, 'default_date': None}
         
@@ -112,6 +117,42 @@ class DataProcessor:
             
             self.available_dates = sorted(list(unique_dates), key=lambda d: self._parse_date_for_sort(d))
             print(f"Loaded {len(self.flights)} flights from Supabase")
+        
+        # 6. AIMS Fact Actuals
+        db_aims = db.get_fact_actuals()
+        if db_aims:
+            self.aims_flights = db_aims
+            # Normalize and prepare AIMS flights
+            for flight in self.aims_flights:
+                f_date = flight.get('flight_date')
+                if f_date:
+                    # FIX: Explicitly handle YYYY-MM-DD format from AIMS
+                    if '-' in f_date and len(f_date) == 10:
+                        try:
+                            parts = f_date.split('-')
+                            # YYYY-MM-DD -> DD/MM/YY
+                            norm_date = f"{parts[2]}/{parts[1]}/{parts[0][2:]}"
+                        except:
+                            norm_date = self.normalize_date(f_date)
+                    else:
+                        norm_date = self.normalize_date(f_date.replace('-', '/'))
+                        
+                    flight['date'] = norm_date
+                    flight['reg'] = flight.get('ac_reg')
+                    flight['flt'] = flight.get('flight_no')
+                    flight['dep'] = flight.get('departure')
+                    flight['arr'] = flight.get('arrival')
+            
+            # Pre-calculate maps for AIMS
+            self.aims_flights_by_date, self.aims_available_dates, self.aims_reg_flight_hours, \
+            self.aims_reg_flight_count, self.aims_crew_to_regs, self.aims_crew_to_regs_by_date, \
+            self.aims_reg_flight_hours_by_date, self.aims_reg_flight_count_by_date, \
+            self.aims_crew_group_rotations, self.aims_crew_group_rotations_by_date = \
+                self._calculate_kpi_maps(self.aims_flights)
+            
+            print(f"DEBUG: Loaded {len(self.aims_flights)} AIMS flights from Supabase. Available dates: {len(self.aims_available_dates)}")
+        else:
+            print("DEBUG: db.get_fact_actuals() returned empty/None.")
 
         # 2. AC Utilization
         db_util = db.get_ac_utilization()
@@ -174,6 +215,33 @@ class DataProcessor:
             print("Standby records table empty/missing. Loading from local CSV...")
             self.process_crew_schedule_csv(sync_db=False)  # Don't sync back to DB
             print(f"Loaded {len(self.standby_records)} standby records from local CSV")
+        
+        # 6. AIMS Fact Actuals
+        db_aims = db.get_fact_actuals()
+        if db_aims:
+            self.aims_flights = db_aims
+            self.aims_flights_by_date = defaultdict(list)
+            aims_unique_dates = set()
+            for flight in self.aims_flights:
+                # Map AIMS schema to internal schema
+                # Internal schema: date, reg, flt, dep, arr, std, sta, crew
+                # AIMS schema: flight_date, ac_reg, flight_no, departure, arrival, std, sta, status, ...
+                f_date = flight.get('flight_date')
+                if f_date:
+                    # Convert YYYY-MM-DD to DD/MM/YY for consistency in UI if needed
+                    # Actually let's keep it as is or normalize
+                    norm_date = self.normalize_date(f_date.replace('-', '/'))
+                    flight['date'] = norm_date
+                    flight['reg'] = flight.get('ac_reg')
+                    flight['flt'] = flight.get('flight_no')
+                    flight['dep'] = flight.get('departure')
+                    flight['arr'] = flight.get('arrival')
+                    
+                    self.aims_flights_by_date[norm_date].append(flight)
+                    aims_unique_dates.add(norm_date)
+            
+            self.aims_available_dates = sorted(list(aims_unique_dates), key=lambda d: self._parse_date_for_sort(d))
+            print(f"Loaded {len(self.aims_flights)} AIMS flights from Supabase")
         
     def _read_file_safe(self, file_path):
         """Read file with encoding fallback (utf-8 -> cp1252 -> latin1)"""
@@ -1535,9 +1603,104 @@ class DataProcessor:
         
         return data
     
-    def get_dashboard_data(self, filter_date=None, date_context=None):
+    def get_dashboard_data(self, filter_date=None, date_context=None, source='csv'):
         """Get all data for dashboard, optionally filtered by date"""
+        
+        print(f"DEBUG: get_dashboard_data called. Source={source}, FilterDate={filter_date}. AIMS count={len(self.aims_flights)}")
+        
+        # If source is AIMS, temporarily swap all flight data for calculation
+        if source == 'aims' and self.aims_flights:
+            # Store original state
+            originals = {
+                'flights': self.flights,
+                'flights_by_date': self.flights_by_date,
+                'available_dates': self.available_dates,
+                'reg_flight_hours': self.reg_flight_hours,
+                'reg_flight_count': self.reg_flight_count,
+                'crew_to_regs': self.crew_to_regs,
+                'crew_to_regs_by_date': self.crew_to_regs_by_date,
+                'reg_flight_hours_by_date': self.reg_flight_hours_by_date,
+                'reg_flight_count_by_date': self.reg_flight_count_by_date,
+                'crew_group_rotations': self.crew_group_rotations,
+                'crew_group_rotations_by_date': self.crew_group_rotations_by_date
+            }
+            
+            # Set AIMS state
+            self.flights = self.aims_flights
+            self.flights_by_date = self.aims_flights_by_date
+            self.available_dates = self.aims_available_dates
+            self.reg_flight_hours = self.aims_reg_flight_hours
+            self.reg_flight_count = self.aims_reg_flight_count
+            self.crew_to_regs = self.aims_crew_to_regs
+            self.crew_to_regs_by_date = self.aims_crew_to_regs_by_date
+            self.reg_flight_hours_by_date = self.aims_reg_flight_hours_by_date
+            self.reg_flight_count_by_date = self.aims_reg_flight_count_by_date
+            self.crew_group_rotations = self.aims_crew_group_rotations
+            self.crew_group_rotations_by_date = self.aims_crew_group_rotations_by_date
+            
+            try:
+                data = self.calculate_metrics(filter_date, date_context)
+                data['is_aims_source'] = True
+                return data
+            finally:
+                # Restore original state
+                for key, value in originals.items():
+                    setattr(self, key, value)
+        
         return self.calculate_metrics(filter_date, date_context)
+
+    def _calculate_kpi_maps(self, flights):
+        """Helper to calculate all grouping and KPI maps from a list of flights"""
+        flights_by_date = defaultdict(list)
+        unique_dates = set()
+        crew_to_regs = defaultdict(set)
+        crew_to_regs_by_date = defaultdict(lambda: defaultdict(set))
+        reg_flight_hours = defaultdict(float)
+        reg_flight_hours_by_date = defaultdict(lambda: defaultdict(float))
+        reg_flight_count = defaultdict(int)
+        reg_flight_count_by_date = defaultdict(lambda: defaultdict(int))
+        crew_group_rotations = defaultdict(list)
+        crew_group_rotations_by_date = defaultdict(lambda: defaultdict(list))
+        
+        for flight in flights:
+            op_date = flight.get('date')
+            if op_date:
+                unique_dates.add(op_date)
+                flights_by_date[op_date].append(flight)
+                
+                reg = flight.get('reg', '')
+                if reg:
+                    # Recalculate duration
+                    std = self.parse_time(flight.get('std', ''))
+                    sta = self.parse_time(flight.get('sta', ''))
+                    if std is not None and sta is not None:
+                        duration = sta - std
+                        if duration < 0: duration += 24 * 60
+                        hours = duration / 60
+                        reg_flight_hours[reg] += hours
+                        reg_flight_count[reg] += 1
+                        reg_flight_hours_by_date[op_date][reg] += hours
+                        reg_flight_count_by_date[op_date][reg] += 1
+                
+                crew_str = flight.get('crew', '')
+                if crew_str:
+                    crew_list = self.extract_crew_ids(crew_str)
+                    for role, crew_id in crew_list:
+                        crew_to_regs[crew_id].add(reg)
+                        crew_to_regs_by_date[op_date][crew_id].add(reg)
+                        self.crew_roles[crew_id] = role
+                    
+                    if crew_list:
+                        key = self.get_crew_set_key(crew_str)
+                        if key:
+                            crew_group_rotations[key].append(reg)
+                            crew_group_rotations_by_date[op_date][key].append(reg)
+        
+        available_dates = sorted(list(unique_dates), key=lambda d: self._parse_date_for_sort(d))
+        
+        return flights_by_date, available_dates, reg_flight_hours, reg_flight_count, \
+               crew_to_regs, crew_to_regs_by_date, reg_flight_hours_by_date, \
+               reg_flight_count_by_date, crew_group_rotations, crew_group_rotations_by_date
     
     def export_to_json(self, output_file='dashboard_data.json'):
         """Export data to JSON file"""

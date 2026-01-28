@@ -89,26 +89,26 @@ def insert_flights(flights_data: list):
         print(f"Error inserting flights: {e}")
         return None
 
-def _fetch_all(query):
-    """Fetch all records using pagination to bypass 1000-row limit"""
+def _fetch_all(query_func):
+    """Fetch all records using pagination by calling query_func for each page"""
     all_data = []
     limit = 1000
     start = 0
     
     while True:
         try:
-            # Use range for pagination: start to start + limit - 1
+            # Re-generate query for each page to avoid parameter accumulation
+            query = query_func()
             result = query.range(start, start + limit - 1).execute()
             data = result.data if result.data else []
             all_data.extend(data)
             
-            # If we fetched fewer than limit, we're done
             if len(data) < limit:
                 break
                 
             start += limit
         except Exception as e:
-            print(f"Error in pagination: {e}")
+            print(f"Error in pagination at start={start}: {e}")
             break
             
     return all_data
@@ -119,13 +119,14 @@ def get_flights(filter_date: str = None):
     if not client:
         return []
     
-    try:
-        query = client.table('flights').select('*')
+    def q_func():
+        q = client.table('flights').select('*')
         if filter_date:
-            query = query.eq('date', filter_date)
-        
-        # Use pagination helper
-        return _fetch_all(query)
+            q = q.eq('date', filter_date)
+        return q
+    
+    try:
+        return _fetch_all(q_func)
     except Exception as e:
         print(f"Error getting flights: {e}")
         return []
@@ -137,9 +138,9 @@ def get_available_dates():
         return []
     
     try:
-        # Increase limit to check all dates
-        query = client.table('flights').select('date')
-        all_data = _fetch_all(query)
+        def q_func():
+            return client.table('flights').select('date')
+        all_data = _fetch_all(q_func)
         
         if all_data:
             dates = list(set([r['date'] for r in all_data]))
@@ -185,11 +186,13 @@ def get_ac_utilization(filter_date: str = None):
         return []
     
     try:
-        query = client.table('ac_utilization').select('*')
-        if filter_date:
-            query = query.eq('date', filter_date)
+        def q_func():
+            q = client.table('ac_utilization').select('*')
+            if filter_date:
+                q = q.eq('date', filter_date)
+            return q
         
-        return _fetch_all(query)
+        return _fetch_all(q_func)
     except Exception as e:
         print(f"Error getting AC utilization: {e}")
         return []
@@ -230,8 +233,9 @@ def get_rolling_hours():
         return []
     
     try:
-        query = client.table('rolling_hours').select('*').order('hours_28day', desc=True)
-        return _fetch_all(query)
+        def q_func():
+            return client.table('rolling_hours').select('*').order('hours_28day', desc=True)
+        return _fetch_all(q_func)
     except Exception as e:
         print(f"Error getting rolling hours: {e}")
         return []
@@ -267,15 +271,15 @@ def get_standby_records(filter_date: str = None, duty_type: str = None):
         return []
     
     try:
-        query = client.table('standby_records').select('*')
+        def q_func():
+            q = client.table('standby_records').select('*')
+            if filter_date:
+                q = q.eq('duty_date', filter_date)
+            if duty_type:
+                q = q.eq('duty_type', duty_type)
+            return q
         
-        if filter_date:
-            query = query.eq('duty_date', filter_date)
-        
-        if duty_type:
-            query = query.eq('duty_type', duty_type)
-        
-        return _fetch_all(query)
+        return _fetch_all(q_func)
     except Exception as e:
         print(f"Error getting standby_records: {e}")
         return []
@@ -324,11 +328,13 @@ def get_crew_schedule(filter_date: str = None):
         return []
     
     try:
-        query = client.table('crew_schedule').select('*')
-        if filter_date:
-            query = query.eq('date', filter_date)
+        def q_func():
+            q = client.table('crew_schedule').select('*')
+            if filter_date:
+                q = q.eq('date', filter_date)
+            return q
         
-        return _fetch_all(query)
+        return _fetch_all(q_func)
     except Exception as e:
         print(f"Error getting crew schedule: {e}")
         return []
@@ -412,6 +418,35 @@ def upsert_fact_actuals(records: list):
         except Exception as e:
             print(f"Error in batch insert: {e}")
             return None
+
+def get_fact_actuals(filter_date: str = None):
+    """Get flight actuals from AIMS API (Supabase)"""
+    client = get_client()
+    if not client:
+        return []
+    
+    try:
+        def q_func():
+            q = client.table('fact_actuals').select('*')
+            if filter_date:
+                # Map DD/MM/YY to YYYY-MM-DD if needed, but AIMS sync uses YYYY-MM-DD
+                # Let's handle both
+                f_date = filter_date
+                if '/' in f_date:
+                    try:
+                        parts = f_date.split('/')
+                        year = parts[2]
+                        if len(year) == 2: year = "20" + year
+                        f_date = f"{year}-{parts[1]}-{parts[0]}"
+                    except:
+                        pass
+                q = q.eq('flight_date', f_date)
+            return q
+        
+        return _fetch_all(q_func)
+    except Exception as e:
+        print(f"Error getting fact_actuals: {e}")
+        return []
 
 def upsert_dim_crew(records: list):
     """Upsert crew master data from AIMS API"""

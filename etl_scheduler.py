@@ -34,18 +34,19 @@ class ETLScheduler:
     - Sync data vào Supabase staging tables
     """
     
-    def __init__(self, interval_minutes: int = 15):
+    def __init__(self, interval_minutes: int = 2):
         """
         Khởi tạo ETL Scheduler
         
         Args:
-            interval_minutes: Khoảng thời gian giữa mỗi lần chạy (default: 15 phút)
+            interval_minutes: Khoảng thời gian giữa mỗi lần chạy (default: 2 phút)
         """
         self.interval_minutes = interval_minutes
         self.scheduler = None
         self.is_running = False
         self.last_run = None
         self.last_status = None
+        self.on_success = None
         
     def _get_aims_client(self):
         """Lazy import AIMS client to avoid circular imports"""
@@ -138,6 +139,13 @@ class ETLScheduler:
             logger.info(f"ETL Job completed in {result['duration_seconds']:.2f}s")
             logger.info(f"Flights: {result['flights_synced']}, Crew: {result['crew_synced']}")
             
+            # Trigger success callback - trigger if at least flights were synced
+            if result['flights_synced'] > 0 and self.on_success:
+                try:
+                    self.on_success()
+                except Exception as cb_error:
+                    logger.error(f"Error in on_success callback: {cb_error}")
+            
         return result
     
     def _sync_flights_to_supabase(self, flights: list):
@@ -175,20 +183,26 @@ class ETLScheduler:
                 }
                 records.append(record)
             
-            # Upsert to Supabase fact_actuals table
-            if records:
+            # Deduplicate records locally first to avoid constraint violations in same batch
+            unique_records = {}
+            for r in records:
+                key = (r['flight_date'], r['flight_no'])
+                unique_records[key] = r
+            
+            deduplicated = list(unique_records.values())
+            
+            # Upsert in batches
+            batch_size = 1000
+            for i in range(0, len(deduplicated), batch_size):
+                batch = deduplicated[i:i + batch_size]
                 try:
                     client.table('fact_actuals').upsert(
-                        records, 
+                        batch, 
                         on_conflict='flight_date,flight_no'
                     ).execute()
-                    logger.info(f"Synced {len(records)} flight records to Supabase")
-                except Exception as upsert_error:
-                    logger.warning(f"Upsert failed, trying insert: {upsert_error}")
-                    # Fallback to insert if table doesn't support upsert
-                    for batch_start in range(0, len(records), 100):
-                        batch = records[batch_start:batch_start+100]
-                        client.table('fact_actuals').insert(batch).execute()
+                    logger.info(f"Synced batch of {len(batch)} flights to Supabase")
+                except Exception as e:
+                    logger.error(f"Error syncing batch: {e}")
             
         except Exception as e:
             logger.error(f"Error syncing flights to Supabase: {e}")
@@ -258,7 +272,8 @@ class ETLScheduler:
             trigger=IntervalTrigger(minutes=self.interval_minutes),
             id='aims_etl_job',
             name='AIMS ETL Sync Job',
-            replace_existing=True
+            replace_existing=True,
+            next_run_time=datetime.now()
         )
         
         self.scheduler.start()
