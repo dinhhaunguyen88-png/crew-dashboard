@@ -939,15 +939,21 @@
         <!-- Executive Summary Section -->
         <section class="section-title">Executive Summary</section>
         <div class="executive-grid">
-            <div class="card metric-card">
+            <div class="card metric-card" onclick="openAircraftFlyingModal()" style="cursor: pointer;">
                 <div class="metric-value">{{ data.summary.total_aircraft }}</div>
                 <div class="metric-label">Total Aircraft Flying</div>
-                <span class="metric-trend up">REGs operating today</span>
+                <span class="metric-trend up">REGs operating today (Click to view)</span>
             </div>
             <div class="card metric-card">
                 <div class="metric-value">{{ data.summary.total_flights }}</div>
                 <div class="metric-label">Total Flights</div>
-                <span class="metric-trend up">▲ +12% vs yesterday</span>
+                {% if data.summary.flight_trend_direction == 'up' %}
+                <span class="metric-trend up">▲ +{{ "{:.1f}".format(data.summary.flight_trend) }}% vs yesterday</span>
+                {% elif data.summary.flight_trend_direction == 'down' %}
+                <span class="metric-trend down">▼ {{ "{:.1f}".format(data.summary.flight_trend) }}% vs yesterday</span>
+                {% else %}
+                <span class="metric-trend">No change vs yesterday</span>
+                {% endif %}
             </div>
             <div class="card metric-card" onclick="openCrewOperatingModal()" style="cursor: pointer;">
                 <div class="metric-value">{{ "{:,}".format(data.summary.total_crew) }}</div>
@@ -967,24 +973,8 @@
             </div>
         </div>
 
-        <!-- Second Row - Charts -->
+        <!-- Second Row - Charts (Simplified) -->
         <div class="executive-grid" style="margin-top: 1.5rem;">
-            <div class="card metric-card">
-                <div class="gauge-container">
-                    <canvas id="utilizationGauge" width="200" height="200"></canvas>
-                    <div class="gauge-value">
-                        <div class="value">{{ (data.summary.avg_flight_hours / 24 * 100) | round(1) if
-                            data.summary.avg_flight_hours else 0 }}%</div>
-                        <div class="label">Utilization</div>
-                    </div>
-                </div>
-            </div>
-            <div class="card metric-card">
-                <div class="chart-container">
-                    <canvas id="crewDistribution"></canvas>
-                </div>
-                <div class="metric-label" style="margin-top: 0.5rem;">Crew Distribution</div>
-            </div>
             <div class="card metric-card" onclick="openCrewRotationModal()" style="cursor: pointer;">
                 <div class="metric-value" id="crewRotationCount" style="color: var(--accent-yellow);">{{
                     data.summary.crew_rotation_count }}</div>
@@ -999,7 +989,7 @@
             <div class="card metric-card">
                 <div class="metric-value" id="totalBlockHours">{{ "{:,.0f}h".format(data.summary.total_block_hours) }}
                 </div>
-                <div class="metric-label">Total Block Hours</div>
+                <div class="metric-label">COM Block Hour</div>
                 <span class="metric-trend up">Based on filtered flights</span>
             </div>
         </div>
@@ -1567,6 +1557,63 @@
                 }
             });
         }
+    </script>
+    <!-- Aircraft Flying Modal -->
+    <div id="aircraftFlyingModal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; overflow-y: auto;">
+        <div
+            style="background: var(--bg-secondary); padding: 2rem; border-radius: 16px; max-width: 600px; width: 95%; border: 1px solid var(--border-color); margin: 2rem auto; max-height: 80vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3 style="color: var(--text-primary);">✈️ Aircraft Operating Today</h3>
+                <span
+                    style="background: transparent; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer;"
+                    onclick="closeAircraftFlyingModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                {% if data.aircraft %}
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>REG</th>
+                            <th>Total Hours</th>
+                            <th>Flights</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ac in data.aircraft %}
+                        <tr>
+                            <td>{{ ac.reg }}</td>
+                            <td>{{ ac.total_hours }}</td>
+                            <td>{{ ac.flights }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p style="text-align: center; color: var(--text-secondary); padding: 1rem;">No aircraft data available
+                    for this date.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional Scripts for New Modal -->
+    <script>
+        function openAircraftFlyingModal() {
+            document.getElementById('aircraftFlyingModal').style.display = 'flex';
+        }
+
+        function closeAircraftFlyingModal() {
+            document.getElementById('aircraftFlyingModal').style.display = 'none';
+        }
+
+        // Add to existing window.onclick if possible, or just add event listener
+        window.addEventListener('click', function (event) {
+            var modal = document.getElementById('aircraftFlyingModal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        });
     </script>
 </body>
 

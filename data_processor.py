@@ -43,6 +43,12 @@ class DataProcessor:
         self.crew_group_rotations = defaultdict(list)  # crew_set -> list of REGs
         self.crew_group_rotations_by_date = defaultdict(lambda: defaultdict(list))  # date -> crew_set_key -> list of REGs
         
+        # Upload date context for dynamic date filtering
+        self.upload_date_context = {'min_date': None, 'max_date': None, 'default_date': None}
+        
+        # Existing flight keys for incremental updates
+        self._existing_flight_keys = set()
+        
         # Try to load from Supabase first
         if db.is_connected():
             print("Connected to Supabase. Loading data...")
@@ -135,10 +141,13 @@ class DataProcessor:
             print(f"Loaded AC Util for {len(self.ac_utilization_by_date)} dates")
 
         # 3. Rolling Hours
-        db_rolling = db.get_rolling_hours()
-        if db_rolling:
-            self.rolling_hours = db_rolling
-            print(f"Loaded {len(self.rolling_hours)} rolling hour records")
+        # Changed: Safety & Compliance should default to 0 on startup/refresh
+        # Logic: Only show data when a file is uploaded in the current session
+        # db_rolling = db.get_rolling_hours()
+        # if db_rolling:
+        #     self.rolling_hours = db_rolling
+        #     print(f"Loaded {len(self.rolling_hours)} rolling hour records")
+        pass
 
         # 4. Crew Schedule
         db_schedule = db.get_crew_schedule()
@@ -255,18 +264,22 @@ class DataProcessor:
         return tuple(crew_ids)
     
     def normalize_date(self, date_str):
-        """Normalize date string to DD/MM/YY format"""
+        """Normalize date string to DD/MM/YY format (force 2-digit year)"""
         if not date_str:
             return None
         # Remove leading/trailing spaces
         date_str = date_str.strip()
-        # Handle format like "15/01/26" or "15/01"
+        # Handle format like "15/01/26" or "15/01/2026"
         if '/' in date_str:
             parts = date_str.split('/')
             if len(parts) >= 2:
                 day = parts[0].zfill(2)
                 month = parts[1].zfill(2)
-                year = parts[2] if len(parts) > 2 else '26'
+                if len(parts) > 2:
+                    # Take last 2 digits of year
+                    year = parts[2][-2:]
+                else:
+                    year = '26'
                 return f"{day}/{month}/{year}"
         return date_str
     
@@ -310,6 +323,23 @@ class DataProcessor:
         col_map['has_crew'] = 'crew' in header_lower or len(header_row) > 14
         
         return col_map
+    
+    def _infer_ac_type(self, reg):
+        """Infer aircraft type from registration code"""
+        if not reg:
+            return 'A320'
+        reg_upper = reg.upper()
+        if 'A6' in reg_upper or 'A321' in reg_upper or '321' in reg_upper:
+            return 'A321'
+        elif 'A33' in reg_upper or 'A330' in reg_upper or '330' in reg_upper:
+            return 'A330'
+        elif '32W' in reg_upper or 'C90W' in reg_upper:
+            return 'A320neo'
+        return 'A320'
+    
+    def _get_flight_key(self, flight):
+        """Generate unique key for a flight record (for incremental updates)"""
+        return f"{flight.get('date', '')}_{flight.get('flt', '')}_{flight.get('reg', '')}_{flight.get('std', '')}"
     
     def process_dayrep_csv(self, file_path=None, file_content=None, sync_db=True):
         """Process DayRepReport CSV file with operating day logic (04:00-03:59)
@@ -407,6 +437,7 @@ class DataProcessor:
                         'date': operating_date,
                         'calendar_date': calendar_date,
                         'reg': reg,
+                        'ac_type': self._infer_ac_type(reg),  # A/C Type mapping from REG
                         'flt': row[col_map['flt']].strip() if col_map['flt'] < len(row) else '',
                         'dep': row[col_map['dep']].strip() if col_map['dep'] < len(row) else '',
                         'arr': row[col_map['arr']].strip() if col_map['arr'] < len(row) else '',
@@ -448,6 +479,18 @@ class DataProcessor:
         # Sort dates chronologically
         self.available_dates = sorted(list(unique_dates), key=lambda d: self._parse_date_for_sort(d))
         
+        # Update upload_date_context with the date range from this upload
+        if self.available_dates:
+            self.upload_date_context = {
+                'min_date': self.available_dates[0],
+                'max_date': self.available_dates[-1],
+                'default_date': self.available_dates[-1]  # Default to most recent date
+            }
+            print(f"Upload date context: {self.upload_date_context['min_date']} to {self.upload_date_context['max_date']}")
+        
+        # Track existing flight keys for incremental updates
+        self._existing_flight_keys = set(self._get_flight_key(f) for f in self.flights)
+        
         # INSERT TO SUPABASE
         if sync_db and db.is_connected() and len(self.flights) > 0:
             print("syncing flights to supabase...")
@@ -457,6 +500,7 @@ class DataProcessor:
                     'date': flight.get('date', ''),
                     'calendar_date': flight.get('calendar_date', ''),
                     'reg': flight.get('reg', ''),
+                    'ac_type': flight.get('ac_type', 'A320'),  # Include A/C Type
                     'flt': flight.get('flt', ''),
                     'dep': flight.get('dep', ''),
                     'arr': flight.get('arr', ''),
@@ -823,7 +867,7 @@ class DataProcessor:
             'sick_call': [],
             'fatigue': [],
             'office_standby': [],
-            'summary': {'SL': 0, 'CSL': 0, 'SBY': 0, 'OSBY': 0}
+            'summary': {'SL': 0, 'CSL': 0, 'SBY': 0, 'OSBY': 0, 'FGT': 0, 'OFF': 0, 'NO_DUTY': 0}
         }
         
         # New: Store individual crew records for standby
@@ -875,7 +919,7 @@ class DataProcessor:
                 return 0
         
         # Reset data
-        self.crew_schedule['summary'] = {'SL': 0, 'CSL': 0, 'SBY': 0, 'OSBY': 0}
+        self.crew_schedule['summary'] = {'SL': 0, 'CSL': 0, 'SBY': 0, 'OSBY': 0, 'FGT': 0, 'OFF': 0, 'NO_DUTY': 0}
         self.crew_schedule_by_date.clear()
         self.standby_records = []
         
@@ -890,75 +934,135 @@ class DataProcessor:
         report_month = datetime.now().month
         report_year = datetime.now().year
         
-        # 1. Try to detect Report Month/Year from first few lines
-        for i in range(min(5, len(rows))):
+        # 1. Try to detect Report Month/Year from first few lines and Filename
+        
+        # Strategy A: Check Filename first (often more reliable for manual uploads)
+        if file_path:
+            filename = file_path.name
+            # Pattern: "Feb2026", "Jan 2026", "02-2026", etc.
+            name_match = re.search(r'([A-Za-z]{3})[-_ ]?(\d{4})', filename, re.IGNORECASE)
+            if name_match:
+                try:
+                    d_month_str, d_year = name_match.groups()
+                    d_month = datetime.strptime(d_month_str, "%b").month
+                    report_month = int(d_month)
+                    report_year = int(d_year)
+                    print(f"DEBUG: Parsed Date from Filename ({filename}) - Month={report_month}, Year={report_year}")
+                except Exception as e:
+                    print(f"DEBUG: Filename parse error: {e}")
+
+        # Strategy B: Check File Header (Period) - Overwrites filename if found valid
+        found_header_date = False
+        for i in range(min(10, len(rows))):
             line_str = ",".join(rows[i])
             
             # Try Pattern: "Period: DD/MM/YYYY-DD/MM/YYYY" (e.g., "01/02/2025-28/02/2025")
-            period_match = re.search(r'Period[:\s]+(\d{1,2})/(\d{1,2})/(\d{4})', line_str)
+            # Also handles dot/dash separator: 01.02.2025 or 01-02-2025
+            period_match = re.search(r'Period[:\s]+(\d{1,2})[/\.\-](\d{1,2})[/\.\-](\d{4})', line_str, re.IGNORECASE)
             if period_match:
                 try:
                     d_day, d_month, d_year = period_match.groups()
                     report_month = int(d_month)
                     report_year = int(d_year)
-                    print(f"DEBUG: Parsed Period - Month={report_month}, Year={report_year}")
+                    found_header_date = True
+                    print(f"DEBUG: Parsed Period Header - Month={report_month}, Year={report_year}")
                     break
                 except (ValueError, TypeError):
                     pass
             
             # Try Pattern: "DD Mon YYYY" (e.g., "19 Jan 2026")
-            date_match = re.search(r'(\d{1,2})\s+([A-Za-z]{3})\s+(\d{4})', line_str)
-            if date_match:
-                try:
-                    d_day, d_month_str, d_year = date_match.groups()
-                    d_month = datetime.strptime(d_month_str, "%b").month
-                    report_year = int(d_year)
-                    report_month = int(d_month)
-                    break
-                except (ValueError, TypeError):
-                    pass
+            if not found_header_date:
+                date_match = re.search(r'(\d{1,2})\s+([A-Za-z]{3})\s+(\d{4})', line_str)
+                if date_match:
+                    try:
+                        d_day, d_month_str, d_year = date_match.groups()
+                        d_month = datetime.strptime(d_month_str, "%b").month
+                        report_year = int(d_year)
+                        report_month = int(d_month)
+                        found_header_date = True
+                        print(f"DEBUG: Parsed Date Line - Month={report_month}, Year={report_year}")
+                        break
+                    except (ValueError, TypeError):
+                        pass
 
 
         # 2. Detect columns (Standard vs Matrix)
         is_matrix = False
         
-        for i, row in enumerate(rows[:10]):
-            row_upper = [c.upper().strip() for c in row]
-            
-            # Check for Matrix headers (ID and Day Numbers like '20', '21')
-            day_cols = [idx for idx, c in enumerate(row) if c.strip().isdigit() and 1 <= int(c.strip()) <= 31]
-            
-            if 'ID' in row_upper and len(day_cols) > 3:
+        # Check specific row 5 (index 4) as per Professional Specification
+        if len(rows) > 4:
+            row_4 = [c.upper().strip() for c in rows[4]]
+            if 'ID' in row_4 and ('NAME' in row_4 or 'BASE' in str(row_4)):
                 is_matrix = True
-                data_start_idx = i + 1
+                data_start_idx = 5 # Start from row 6
+                print("DEBUG: Professional Specification Header detected at Row 5")
                 
                 # Map standard columns
-                for idx, col in enumerate(row_upper):
+                for idx, col in enumerate(row_4):
                     if col == 'ID': header_map['id'] = idx
                     elif 'NAM' in col: header_map['name'] = idx
                     elif 'BASE' in col or 'AC' in col or 'POS' in col: header_map['base_ac_pos'] = idx
+                    elif 'DAY' in col: header_map['days_total'] = idx
                 
                 # Map date columns
-                for idx in day_cols:
-                    day_num = int(row[idx].strip())
-                    date_str = f"{day_num:02d}/{report_month:02d}/{str(report_year)[-2:]}"
-                    date_cols[idx] = date_str
-                break
-                
-            # Check for Standard headers (with SL, SBY columns)
-            elif 'ID' in row_upper and ('SL' in row_upper or 'SBY' in row_upper or 'FDUT' in row_upper or 'CREW' in str(row_upper)):
-                for idx, col in enumerate(row_upper):
-                    if col == 'ID': header_map['id'] = idx
-                    elif 'NAM' in col: header_map['name'] = idx
-                    elif 'BASE' in col or 'AC' in col: header_map['base_ac_pos'] = idx
-                    elif col == 'SL': header_map['sl'] = idx
-                    elif col == 'CSL': header_map['csl'] = idx
-                    elif col == 'SBY': header_map['sby'] = idx
-                    elif col == 'OSBY': header_map['osby'] = idx
-                data_start_idx = i + 1
-                break
+                for idx, col in enumerate(rows[4]):
+                    val = col.strip()
+                    if val.isdigit() and 1 <= int(val) <= 31:
+                        day_num = int(val)
+                        
+                        # Fix: If report_year is 2025 but current date is 2026, 
+                        # it's likely a typo in the report header/file. Force current year.
+                        actual_year = report_year
+                        if report_year == 2025 and datetime.now().year == 2026:
+                            actual_year = 2026
+                            
+                        date_str = f"{day_num:02d}/{report_month:02d}/{str(actual_year)[-2:]}"
+                        date_cols[idx] = date_str
         
-        # Default mapping fallback (Standard) - observed from sample file
+        # Fallback to search if Row 5 didn't match
+        if not header_map:
+            for i, row in enumerate(rows[:10]):
+                row_upper = [c.upper().strip() for c in row]
+                
+                # Check for Matrix headers (ID and Day Numbers like '20', '21')
+                day_cols = [idx for idx, c in enumerate(row) if c.strip().isdigit() and 1 <= int(c.strip()) <= 31]
+                
+                if 'ID' in row_upper and len(day_cols) > 3:
+                    is_matrix = True
+                    data_start_idx = i + 1
+                    
+                    # Map standard columns
+                    for idx, col in enumerate(row_upper):
+                        if col == 'ID': header_map['id'] = idx
+                        elif 'NAM' in col: header_map['name'] = idx
+                        elif 'BASE' in col or 'AC' in col or 'POS' in col: header_map['base_ac_pos'] = idx
+                    
+                    # Map date columns
+                    for idx in day_cols:
+                        day_num = int(row[idx].strip())
+                        
+                        actual_year = report_year
+                        if report_year == 2025 and datetime.now().year == 2026:
+                            actual_year = 2026
+                            
+                        date_str = f"{day_num:02d}/{report_month:02d}/{str(actual_year)[-2:]}"
+                        date_cols[idx] = date_str
+                    break
+                    
+                # Check for Standard headers (with SL, SBY columns)
+                elif 'ID' in row_upper and ('SL' in row_upper or 'SBY' in row_upper or 'FDUT' in row_upper or 'CREW' in str(row_upper)):
+                    for idx, col in enumerate(row_upper):
+                        if col == 'ID': header_map['id'] = idx
+                        elif 'NAM' in col: header_map['name'] = idx
+                        elif 'BASE' in col or 'AC' in col: header_map['base_ac_pos'] = idx
+                        elif col == 'SL': header_map['sl'] = idx
+                        elif col == 'CSL': header_map['csl'] = idx
+                        elif col == 'SBY': header_map['sby'] = idx
+                        elif col == 'OSBY': header_map['osby'] = idx
+                    data_start_idx = i + 1
+                    break
+        
+        # Default mapping fallback (Standard)
         if not header_map and not is_matrix:
              header_map = {'id': 1, 'name': 2, 'base_ac_pos': 3, 'sl': 5, 'csl': 6, 'sby': 7, 'osby': 8}
              for i, row in enumerate(rows):
@@ -995,6 +1099,7 @@ class DataProcessor:
 
             if is_matrix:
                 # MATRIX MODE - iterate over date columns
+                row_has_duty = False
                 try:
                      for col_idx, date_str in date_cols.items():
                          if col_idx < len(row):
@@ -1006,13 +1111,18 @@ class DataProcessor:
                                  duty_type = 'SBY'
                              elif 'OSBY' in val:
                                  duty_type = 'OSBY'
-                             elif 'CSL' in val:
+                             elif 'CS' in val: # Handles CS and CSL
                                  duty_type = 'CSL'
                              elif 'SL' in val:
                                  duty_type = 'SL'
+                             elif 'FGT' in val:
+                                 duty_type = 'FGT'
+                             elif 'OFF' in val:
+                                 duty_type = 'OFF'
                              
                              if duty_type:
-                                 self.crew_schedule_by_date[date_str][duty_type] += 1
+                                 row_has_duty = True
+                                 self.crew_schedule_by_date[date_str][duty_type] = self.crew_schedule_by_date[date_str].get(duty_type, 0) + 1
                                  self.crew_schedule['summary'][duty_type] += 1
                                  
                                  # Store individual record
@@ -1023,9 +1133,14 @@ class DataProcessor:
                                      'ac_type': ac_type,
                                      'position': position,
                                      'duty_type': duty_type,
-                                     'duty_date': date_str
+                                     'duty_date': date_str,
+                                     'long_format': True # To confirm it follows normalization
                                  })
-                except (KeyError, IndexError, ValueError, TypeError):
+                     if not row_has_duty:
+                        self.crew_schedule['summary']['NO_DUTY'] += 1
+                        # Mark specifically as NO_DUTY for metadata if needed
+                except (KeyError, IndexError, ValueError, TypeError) as e:
+                    print(f"DEBUG: Matrix row parse error: {e}")
                     continue
             else:
                 # STANDARD LIST MODE - create records for each duty type marked
@@ -1084,21 +1199,43 @@ class DataProcessor:
                 print(f"syncing {len(self.standby_records)} standby_records to supabase...")
                 db.upsert_standby_records(self.standby_records)
 
+        # After processing, update the global upload_date_context
+        # to ensure the dashboard picks up the new date range immediately
+        record_dates = sorted(list(set(r['duty_date'] for r in self.standby_records)), 
+                             key=lambda d: self._parse_date_for_sort(d))
+        
+        if record_dates:
+            self.upload_date_context = {
+                'min_date': record_dates[0],
+                'max_date': record_dates[-1],
+                'default_date': record_dates[0] # Default to start of the schedule
+            }
+            print(f"Updated upload date context from Crew Schedule: {self.upload_date_context}")
+
         return sum(self.crew_schedule['summary'].values())
 
 
 
     
-    def calculate_metrics(self, filter_date=None):
+    def calculate_metrics(self, filter_date=None, date_context=None):
         """Calculate all dashboard KPIs, optionally filtered by date"""
         # Determine which data to use based on filter
-        if filter_date and filter_date in self.flights_by_date:
-            flights = self.flights_by_date[filter_date]
-            crew_to_regs = self.crew_to_regs_by_date[filter_date]
-            reg_flight_hours = self.reg_flight_hours_by_date[filter_date]
-            reg_flight_count = self.reg_flight_count_by_date[filter_date]
-            crew_group_rotations = self.crew_group_rotations_by_date[filter_date]
+        if filter_date:
+            if filter_date in self.flights_by_date:
+                flights = self.flights_by_date[filter_date]
+                crew_to_regs = self.crew_to_regs_by_date[filter_date]
+                reg_flight_hours = self.reg_flight_hours_by_date[filter_date]
+                reg_flight_count = self.reg_flight_count_by_date[filter_date]
+                crew_group_rotations = self.crew_group_rotations_by_date[filter_date]
+            else:
+                # Specified date has no flights in DayRep - show empty for flight cards
+                flights = []
+                crew_to_regs = {}
+                reg_flight_hours = {}
+                reg_flight_count = {}
+                crew_group_rotations = {}
         else:
+            # No filter_date - use all data
             flights = self.flights
             crew_to_regs = self.crew_to_regs
             reg_flight_hours = self.reg_flight_hours
@@ -1281,8 +1418,13 @@ class DataProcessor:
         
         # Calculate rolling hours statistics
         rolling_stats = {'normal': 0, 'warning': 0, 'critical': 0}
+        compliance_rate = 0
         for crew in self.rolling_hours:
             rolling_stats[crew['status']] += 1
+            
+        if self.rolling_hours:
+            safe_crew = rolling_stats['normal'] + rolling_stats['warning']
+            compliance_rate = (safe_crew / len(self.rolling_hours)) * 100
         
         # Calculate total block hours
         total_block_hours = sum(reg_flight_hours.values()) if reg_flight_hours else 0
@@ -1297,13 +1439,54 @@ class DataProcessor:
                 return (int(parts[2]), int(parts[1]), int(parts[0]))
             except (ValueError, TypeError, IndexError, AttributeError):
                 return (0, 0, 0)
+        
+        # Filter dates based on context if provided
+        if date_context and isinstance(date_context, dict):
+            min_date = date_context.get('min_date')
+            max_date = date_context.get('max_date')
+            
+            if min_date and max_date:
+                min_dt = parse_date(min_date)
+                max_dt = parse_date(max_date)
+                
+                filtered_dates = []
+                for d in all_dates:
+                    curr_dt = parse_date(d)
+                    if min_dt <= curr_dt <= max_dt:
+                        filtered_dates.append(d)
+                all_dates = set(filtered_dates)
+
         merged_available_dates = sorted(list(all_dates), key=parse_date)
         
+        # Calculate flight trend vs yesterday
+        flight_trend = 0
+        flight_trend_direction = 'neutral'  # 'up', 'down', 'neutral'
+        if filter_date:
+            try:
+                # Parse current date
+                current_dt = datetime.strptime(filter_date, "%d/%m/%y")
+                # Get previous date
+                from datetime import timedelta
+                prev_dt = current_dt - timedelta(days=1)
+                prev_date_str = prev_dt.strftime("%d/%m/%y")
+                
+                if prev_date_str in self.flights_by_date:
+                    prev_count = len(self.flights_by_date[prev_date_str])
+                    if prev_count > 0:
+                        flight_trend = ((total_flights - prev_count) / prev_count) * 100
+                        if flight_trend > 0: flight_trend_direction = 'up'
+                        elif flight_trend < 0: flight_trend_direction = 'down'
+            except Exception as e:
+                print(f"Error calculating flight trend: {e}")
+
         # Build the data dictionary
         data = {
             'summary': {
                 'total_aircraft': len(set(f['reg'] for f in flights if f['reg'])),
                 'total_flights': total_flights,
+                'flight_trend': flight_trend,
+                'flight_trend_direction': flight_trend_direction,
+                'total_crew': total_crew,
                 'total_crew': total_crew,
                 'crew_rotation_count': rotation_count,  # Renamed from multi_reg_count
                 'avg_flight_hours': round(avg_flight_hours, 1),
@@ -1311,6 +1494,7 @@ class DataProcessor:
             },
             'available_dates': merged_available_dates,
             'current_filter_date': filter_date,
+            'compliance_rate': compliance_rate,
 
             'crew_roles': dict(role_counts),
             'operating_crew': operating_crew,
@@ -1332,7 +1516,7 @@ class DataProcessor:
             filtered_standby = [r for r in self.standby_records if r.get('duty_date') == filter_date]
             
             # Recalculate summary from filtered records
-            filtered_summary = {'SL': 0, 'CSL': 0, 'SBY': 0, 'OSBY': 0}
+            filtered_summary = {'SL': 0, 'CSL': 0, 'SBY': 0, 'OSBY': 0, 'FGT': 0, 'OFF': 0}
             for record in filtered_standby:
                 duty_type = record.get('duty_type', '')
                 if duty_type in filtered_summary:
@@ -1351,9 +1535,9 @@ class DataProcessor:
         
         return data
     
-    def get_dashboard_data(self, filter_date=None):
+    def get_dashboard_data(self, filter_date=None, date_context=None):
         """Get all data for dashboard, optionally filtered by date"""
-        return self.calculate_metrics(filter_date)
+        return self.calculate_metrics(filter_date, date_context)
     
     def export_to_json(self, output_file='dashboard_data.json'):
         """Export data to JSON file"""

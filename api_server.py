@@ -4,7 +4,7 @@ Renders the dashboard directly using Jinja2 templates.
 Features: Auto-reload on CSV changes, improved error handling, centralized middleware
 """
 
-from flask import Flask, request, render_template, redirect, url_for, jsonify
+from flask import Flask, request, render_template, redirect, url_for, jsonify, session
 from werkzeug.utils import secure_filename
 import os
 import threading
@@ -18,7 +18,7 @@ try:
     FILE_WATCHER_AVAILABLE = True
 except ImportError:
     FILE_WATCHER_AVAILABLE = False
-    print("⚠️  Warning: watchdog not installed. Auto-reload disabled.")
+    print("Warning: watchdog not installed. Auto-reload disabled.")
     print("   Install with: pip install watchdog>=3.0.0")
 
 # Import error handler middleware (with fallback)
@@ -27,7 +27,7 @@ try:
     ERROR_HANDLER_AVAILABLE = True
 except ImportError:
     ERROR_HANDLER_AVAILABLE = False
-    print("⚠️  Warning: Error handler middleware not found.")
+    print("Warning: Error handler middleware not found.")
 
 app = Flask(__name__, template_folder='.')  # Look for templates in current dir
 app.secret_key = 'crew-dashboard-secret'  # Required for sessions if needed
@@ -99,10 +99,9 @@ def start_file_watcher():
     
     try:
         file_watcher = create_watcher(project_dir, on_csv_file_change)
-        print(f"✅ File watcher started - monitoring {project_dir}")
-        print("   Changes to CSV files will auto-update the dashboard")
+        print(f"File watcher started - monitoring {project_dir}")
     except Exception as e:
-        print(f"⚠️  Could not start file watcher: {e}")
+        print(f"Warning: Could not start file watcher: {e}")
 
 @app.route('/', methods=['GET'])
 def index():
@@ -112,8 +111,16 @@ def index():
     # Get optional date filter from query parameter
     filter_date = request.args.get('date', None)
     
+    # Get upload context from session
+    date_context = session.get('upload_date_context')
+    
+    # If no filter date provided, try to use default from context
+    if not filter_date and date_context and isinstance(date_context, dict):
+        filter_date = date_context.get('default_date')
+        print(f"Using default date from session context: {filter_date}")
+    
     # Get data
-    data = processor.get_dashboard_data(filter_date)
+    data = processor.get_dashboard_data(filter_date, date_context)
     
     # Calculate compliance rate from rolling_hours
     compliance_stats = processor.calculate_rolling_28day_stats()
@@ -188,23 +195,34 @@ def upload_files():
                     process_method = getattr(processor, method_name)
                     
                     # Process directly with content
-                    result = process_method(file_content=content)
+                    # Pass the filename as a Path object so the processor can use it for date parsing
+                    result = process_method(file_content=content, file_path=Path(file.filename))
                     
                     if result is not None and result > 0:
                         uploaded_any = True
-                        print(f"✅ Processed {field_name}: {result} records")
+                        print(f"Processed {field_name}: {result} records")
                     else:
                         errors.append(f"{field_name}: No data processed")
                         
                 except Exception as e:
                     error_msg = f"{field_name}: {str(e)}"
                     errors.append(error_msg)
-                    print(f"❌ Error processing {field_name}: {e}")
+                    print(f"Error processing {field_name}: {e}")
     
     if uploaded_any:
         global last_update_time, pending_refresh
         last_update_time = datetime.now()
         pending_refresh = True
+        
+        # Save upload context to session
+        if processor.upload_date_context and processor.upload_date_context.get('min_date'):
+            session['upload_date_context'] = processor.upload_date_context
+            print(f"Saved upload context to session: {processor.upload_date_context}")
+        
+        # Save upload context to session
+        if processor.upload_date_context and processor.upload_date_context.get('min_date'):
+            session['upload_date_context'] = processor.upload_date_context
+            print(f"Saved upload context to session: {processor.upload_date_context}")
     
     # Show errors if any (could be added to session flash messages)
     if errors:
@@ -247,9 +265,9 @@ if __name__ == '__main__':
     print("Dashboard: http://localhost:5000")
     print("")
     if FILE_WATCHER_AVAILABLE:
-        print("✅ Auto-reload enabled - CSV changes will update dashboard")
+        print("Auto-reload enabled - CSV changes will update dashboard")
     else:
-        print("⚠️  Auto-reload disabled - install watchdog to enable")
+        print("Warning: Auto-reload disabled - install watchdog to enable")
     print("")
     print("Press Ctrl+C to stop")
     print("============================================================")
