@@ -1290,6 +1290,30 @@
         updateDateTime();
         setInterval(updateDateTime, 60000);
 
+        // Manual Refresh Data from Source
+        async function refreshData() {
+            try {
+                const btn = document.querySelector('button[onclick="refreshData()"]');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '🔄 Reloading...';
+                btn.disabled = true;
+
+                const response = await fetch('/refresh');
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    window.location.reload();
+                } else {
+                    alert('Refresh failed: ' + result.message);
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+            } catch (error) {
+                console.error('Error refreshing data:', error);
+                window.location.reload(); // Fallback to normal reload
+            }
+        }
+
         // Sidebar Navigation
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', function (e) {

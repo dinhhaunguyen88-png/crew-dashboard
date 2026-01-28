@@ -161,6 +161,18 @@ def check_updates():
         'update_time_readable': last_update_time.strftime('%H:%M:%S')
     })
 
+@app.route('/refresh', methods=['GET'])
+def force_refresh():
+    """Manually trigger data reload from source"""
+    global last_update_time, pending_refresh
+    try:
+        refresh_data()
+        last_update_time = datetime.now()
+        pending_refresh = True
+        return jsonify({'status': 'success', 'message': 'Data reloaded from source'})
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
 @app.route('/upload', methods=['POST'])
 def upload_files():
     """Handle file uploads via standard HTML Form - In-Memory Processing for Vercel/Supabase"""
