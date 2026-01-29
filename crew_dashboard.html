@@ -1398,6 +1398,38 @@
         // File label update
         function updateFileLabel(input) {
             const label = document.getElementById(input.id + '-label');
+            if (input.files && input.files[0]) {
+                label.textContent = 'Selected: ' + input.files[0].name;
+            }
+        }
+
+        // Base Selector Logic
+        document.querySelectorAll('.base-btn[data-base]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const base = this.getAttribute('data-base');
+                const url = new URL(window.location.href);
+                if (base === 'all') {
+                    url.searchParams.delete('base');
+                } else {
+                    url.searchParams.set('base', base.toUpperCase());
+                }
+                window.location.href = url.toString();
+            });
+        });
+
+        // Set active base button on load
+        function setActiveBaseButton() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const currentBase = (urlParams.get('base') || 'all').toLowerCase();
+            document.querySelectorAll('.base-btn[data-base]').forEach(btn => {
+                if (btn.getAttribute('data-base') === currentBase) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+        setActiveBaseButton();
             if (input.files.length > 0) {
                 const file = input.files[0];
                 const sizeMB = (file.size / 1024 / 1024).toFixed(2);

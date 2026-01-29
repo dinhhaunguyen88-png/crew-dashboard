@@ -255,10 +255,10 @@ class AIMSSoapClient:
                 ID=crew_id,
                 FmDD=from_parts['DD'],
                 FmMM=from_parts['MM'],
-                FmYY=from_parts['YY'],
+                FmYY=from_parts['YYYY'],
                 ToDD=to_parts['DD'],
                 ToMM=to_parts['MM'],
-                ToYY=to_parts['YY']
+                ToYY=to_parts['YYYY']
             )
             
             # Parse response and map to our schema
@@ -451,10 +451,10 @@ class AIMSSoapClient:
                 PrimaryQualify=True,
                 FmDD=from_parts['DD'],
                 FmMM=from_parts['MM'],
-                FmYY=from_parts['YY'],
+                FmYY=from_parts['YYYY'],
                 ToDD=to_parts['DD'],
                 ToMM=to_parts['MM'],
-                ToYY=to_parts['YY'],
+                ToYY=to_parts['YYYY'],
                 BaseStr=base or '',
                 ACStr=ac_type or '',
                 PosStr=position or ''
@@ -613,7 +613,7 @@ class AIMSSoapClient:
         """
         FetchLegMembersPerDay - Lấy tất cả chuyến bay và phi hành đoàn trong ngày
         
-        Maps to AIMS: TAIMSDayGetLegMembers
+        Maps to AIMS: TAIMSGetLegMembers
         
         Args:
             date: Ngày cần lấy dữ liệu
@@ -622,6 +622,8 @@ class AIMSSoapClient:
             dict: {
                 'success': bool,
                 'legs': list of flights with crew,
+                'total_crew_operating': int,
+                'crew_rotations': list,
                 'error': str or None
             }
         """
@@ -629,52 +631,80 @@ class AIMSSoapClient:
         date_parts = self._format_date_parts(date)
         
         try:
+            # Note: AIMS expects 'YY' parameter to be the 4-digit year (YYYY)
             response = self._service.FetchLegMembersPerDay(
                 UN=self.username,
                 PSW=self.password,
                 DD=date_parts['DD'],
                 MM=date_parts['MM'],
-                YYYY=date_parts['YYYY']
+                YY=date_parts['YYYY'] 
             )
             
-            # Check for AIMS error
-            error_msg = getattr(response, 'ErrorExplanation', None) or getattr(response, 'Error', None)
+            # Check for AIMS error explanation at top level
+            error_msg = getattr(response, 'ErrorExplanation', None)
             if error_msg and str(error_msg).strip():
                 logger.error(f"AIMS Error in FetchLegMembersPerDay: {error_msg}")
                 return {'success': False, 'error': str(error_msg), 'legs': [], 'date': date.strftime('%d/%m/%Y')}
             
             # Parse response
             legs = []
-            leg_list = getattr(response, 'LegList', None) or getattr(response, 'Legs', None)
             
-            if leg_list:
-                # Handle both list and object with items
-                items = leg_list if isinstance(leg_list, list) else getattr(leg_list, 'TAIMSLegMember', [])
+            # Drill down to leg list
+            # Structure: response.DayMember.TAIMSGetLegMembers -> List of Legs
+            day_member = getattr(response, 'DayMember', None)
+            raw_legs = []
+            
+            if day_member:
+                # Zeep might wrap the list in TAIMSGetLegMembers
+                raw_legs = getattr(day_member, 'TAIMSGetLegMembers', [])
                 
-                for leg in items:
-                    leg_data = {
-                        'flight_no': getattr(leg, 'Flt', '') or getattr(leg, 'FlightNo', ''),
-                        'reg': getattr(leg, 'Reg', '') or getattr(leg, 'AcReg', ''),
-                        'dep': getattr(leg, 'Dep', '') or getattr(leg, 'Departure', ''),
-                        'arr': getattr(leg, 'Arr', '') or getattr(leg, 'Arrival', ''),
-                        'std': getattr(leg, 'STD', '') or getattr(leg, 'DepTime', ''),
-                        'sta': getattr(leg, 'STA', '') or getattr(leg, 'ArrTime', ''),
-                        'date': date.strftime('%d/%m/%Y'),
-                        'crew': []
-                    }
-                    
-                    # Parse crew members
-                    crew_list = getattr(leg, 'CrewList', None) or getattr(leg, 'Crew', None)
-                    if crew_list:
-                        crew_items = crew_list if isinstance(crew_list, list) else getattr(crew_list, 'TAIMSCrewMember', [])
-                        for crew in crew_items:
-                            leg_data['crew'].append({
-                                'id': str(getattr(crew, 'ID', '') or getattr(crew, 'CrewId', '')),
-                                'name': getattr(crew, 'Name', '') or getattr(crew, 'CrewName', ''),
-                                'role': getattr(crew, 'Role', '') or getattr(crew, 'Position', '')
-                            })
-                    
-                    legs.append(leg_data)
+            # If it's not a list, try to make it one (single item case)
+            if raw_legs and not isinstance(raw_legs, list):
+                raw_legs = [raw_legs]
+                
+            unique_crew_ids = set()
+            rotations = set()
+                
+            for leg in raw_legs:
+                flight_no = getattr(leg, 'FlightNo', '')
+                
+                leg_data = {
+                    'flight_no': flight_no,
+                    'carrier': getattr(leg, 'FlightCarrier', ''),
+                    'dep': getattr(leg, 'FlightDep', ''),
+                    'arr': getattr(leg, 'FlightArr', ''),
+                    # Construct date from parts
+                    'date': f"{getattr(leg, 'FlightDD', '')}/{getattr(leg, 'FlightMM', '')}/{getattr(leg, 'FlightYY', '')}",
+                    'status': getattr(leg, 'FlightStatus', ''),
+                    'crew': []
+                }
+                
+                # Parse crew members
+                # Structure: leg.FMember.TAIMSMember -> List of Crew
+                f_member = getattr(leg, 'FMember', None)
+                if f_member:
+                    members = getattr(f_member, 'TAIMSMember', [])
+                    if members and not isinstance(members, list):
+                        members = [members]
+                        
+                    for crew in members:
+                        crew_id = str(getattr(crew, 'id', ''))
+                        if crew_id:
+                            unique_crew_ids.add(crew_id)
+                        
+                        crte = getattr(crew, 'crte', '')
+                        if crte:
+                            rotations.add(crte)
+                            
+                        leg_data['crew'].append({
+                            'id': crew_id,
+                            'name': getattr(crew, 'name', ''),
+                            'role': getattr(crew, 'pos', ''),
+                            'rotation': crte,
+                            'base': getattr(crew, 'base', '')
+                        })
+                
+                legs.append(leg_data)
             
             logger.info(f"FetchLegMembersPerDay: Got {len(legs)} legs for {date.strftime('%d/%m/%Y')}")
             
@@ -682,6 +712,8 @@ class AIMSSoapClient:
                 'success': True,
                 'date': date.strftime('%d/%m/%Y'),
                 'count': len(legs),
+                'total_crew_operating': len(unique_crew_ids),
+                'crew_rotations': list(rotations),
                 'legs': legs,
                 'error': None
             }
@@ -826,6 +858,89 @@ class AIMSSoapClient:
         except Exception as e:
             logger.error(f"Error in crew_schedule_changes_for_period: {e}")
             raise
+
+    @retry_on_failure(max_retries=2)
+    def get_bulk_crew_status(
+        self,
+        target_date: datetime,
+        base: str = None
+    ) -> Dict[str, Any]:
+        """
+        Lấy trạng thái SBY, SL, CSL cho toàn bộ crew tại Base vào ngày target_date
+        
+        Args:
+            target_date: Ngày cần truy vấn
+            base: Base (e.g., 'SGN', 'HAN')
+            
+        Returns:
+            dict: Tổng hợp số lượng SBY, SL, CSL
+        """
+        self._init_client()
+        
+        # 1. Lấy danh sách crew tại Base
+        crew_res = self.get_crew_list(base=base)
+        if not crew_res.get('success'):
+            return crew_res
+            
+        crew_list = crew_res.get('crew_list', [])
+        logger.info(f"Categorizing status for {len(crew_list)} crew members at base {base}")
+        
+        counts = {'SBY': 0, 'SL': 0, 'CSL': 0, 'OFF': 0, 'FGT': 0, 'OTHER': 0}
+        
+        # Optimization: Limit concurrent requests or use a smaller sample if base is too large
+        # For real production, AIMS might provide a bulk service, but we use individual roster details here
+        max_crew = 200 # Safety limit for performance
+        
+        for crew in crew_list[:max_crew]:
+            cid = crew.get('crew_id')
+            if not cid: continue
+            
+            try:
+                # Fetch roster for just that day
+                roster = self.get_crew_roster(int(cid), target_date, target_date)
+                if roster.get('success') and roster.get('items'):
+                    status_found = False
+                    for item in roster['items']:
+                        code = str(item.get('activity_type', '')).strip().upper()
+                        
+                        # Classification logic
+                        if code == 'SBY' or 'STANDBY' in code:
+                            counts['SBY'] += 1
+                            status_found = True
+                        elif code in ['SL', 'SICK', 'BN', 'OM']:
+                            counts['SL'] += 1
+                            status_found = True
+                        elif code in ['CSL', 'CSICK']:
+                            counts['CSL'] += 1
+                            status_found = True
+                        elif code == 'OFF':
+                            counts['OFF'] += 1
+                            status_found = True
+                        
+                        if status_found: break
+                    
+                    if not status_found:
+                        counts['FGT'] += 1
+                else:
+                    counts['OTHER'] += 1
+            except Exception as e:
+                logger.error(f"Error fetching roster for crew {cid}: {e}")
+                counts['OTHER'] += 1
+                
+        # Scale counts back up to total crew if we sampled
+        if len(crew_list) > max_crew and max_crew > 0:
+            scale = len(crew_list) / max_crew
+            for k in counts:
+                counts[k] = int(counts[k] * scale)
+                
+        return {
+            'success': True,
+            'date': target_date.strftime('%d/%m/%Y'),
+            'base': base,
+            'summary': counts,
+            'total_crew': len(crew_list),
+            'sampled_crew': min(len(crew_list), max_crew)
+        }
 
 
 # Singleton instance

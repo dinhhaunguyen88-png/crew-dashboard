@@ -128,6 +128,10 @@ def index():
     
     # Get data source (csv or aims)
     source = request.args.get('source', 'csv')
+    
+    # Get base filter
+    base = request.args.get('base', None)
+    if base and base.upper() == 'ALL': base = None
 
     # If no filter date provided, try to use default from context
     # FIX: Do not use default date if source is AIMS, to avoid masking live data with old CSV dates
@@ -146,7 +150,7 @@ def index():
     effective_date_context = date_context if source != 'aims' else None
 
     # Get data
-    data = processor.get_dashboard_data(filter_date, effective_date_context, source=source)
+    data = processor.get_dashboard_data(filter_date, effective_date_context, source=source, base=base)
     
     # Calculate compliance rate from rolling_hours
     compliance_stats = processor.calculate_rolling_28day_stats()

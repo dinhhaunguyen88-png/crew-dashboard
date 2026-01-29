@@ -1603,14 +1603,15 @@ class DataProcessor:
         
         return data
     
-    def get_dashboard_data(self, filter_date=None, date_context=None, source='csv'):
+    def get_dashboard_data(self, filter_date=None, date_context=None, source='csv', base=None):
         """Get all data for dashboard, optionally filtered by date"""
         
         print(f"DEBUG: get_dashboard_data called. Source={source}, FilterDate={filter_date}. AIMS count={len(self.aims_flights)}")
         
-        # If source is AIMS, temporarily swap all flight data for calculation
+        # 1. Get base data from selected source
+        current_flights = self.flights
         if source == 'aims' and self.aims_flights:
-            # Store original state
+            # Store original state for restoration
             originals = {
                 'flights': self.flights,
                 'flights_by_date': self.flights_by_date,
@@ -1637,17 +1638,149 @@ class DataProcessor:
             self.reg_flight_count_by_date = self.aims_reg_flight_count_by_date
             self.crew_group_rotations = self.aims_crew_group_rotations
             self.crew_group_rotations_by_date = self.aims_crew_group_rotations_by_date
+            current_flights = self.aims_flights
             
             try:
                 data = self.calculate_metrics(filter_date, date_context)
                 data['is_aims_source'] = True
-                return data
+                
+                # Apply Live Override while AIMS source is active if needed
+                data = self._apply_live_crew_override(data, filter_date, current_flights, base=base)
+                
             finally:
                 # Restore original state
                 for key, value in originals.items():
                     setattr(self, key, value)
-        
-        return self.calculate_metrics(filter_date, date_context)
+        else:
+            data = self.calculate_metrics(filter_date, date_context)
+            data['is_aims_source'] = False
+            # Apply Live Override for CSV source
+            data = self._apply_live_crew_override(data, filter_date, self.flights, base=base)
+
+        return data
+
+    def _apply_live_crew_override(self, data, filter_date, current_flights, base=None):
+        """Helper to apply live AIMS crew data over base metrics"""
+        try:
+            from aims_soap_client import is_aims_available, get_aims_client
+            
+            if is_aims_available():
+                target_date_str = filter_date or datetime.now().strftime('%d/%m/%y')
+                
+                # Parse date string to datetime
+                try:
+                    parts = target_date_str.split('/')
+                    if len(parts) == 3:
+                        day, month, year_short = parts
+                        y_int = int(year_short)
+                        year = y_int + 2000 if y_int < 100 else y_int
+                        target_dt = datetime(year, int(month), int(day))
+                        
+                        client = get_aims_client()
+                        
+                        # 1. Fetch live crew status (SBY, SL, CSL)
+                        status_res = client.get_bulk_crew_status(target_dt, base=base)
+                        if status_res.get('success'):
+                            status_summary = status_res.get('summary', {})
+                            data['crew_schedule']['summary'] = {
+                                'SBY': status_summary.get('SBY', 0),
+                                'OSBY': status_summary.get('OSBY', 0),
+                                'SL': status_summary.get('SL', 0),
+                                'CSL': status_summary.get('CSL', 0),
+                                'FGT': status_summary.get('FGT', 0),
+                                'OFF': status_summary.get('OFF', 0)
+                            }
+                            data['crew_status_source'] = f'AIMS Live (Bulk - {status_res.get("sampled_crew")}/{status_res.get("total_crew")})'
+
+                        live_data = client.fetch_leg_members_per_day(target_dt)
+                        
+                        if live_data.get('success'):
+                            live_crew_count = live_data.get('total_crew_operating', 0)
+                            live_legs = live_data.get('legs', [])
+                            
+                            # Update Summary
+                            data['summary']['total_crew'] = live_crew_count
+                            data['data_source_crew'] = 'AIMS Live'
+                            
+                            # Detailed Crew List
+                            new_operating_crew = []
+                            new_role_counts = {'CP': 0, 'FO': 0, 'PU': 0, 'FA': 0}
+                            seen_crew = set()
+                            
+                            for leg in live_legs:
+                                for crew in leg.get('crew', []):
+                                    c_id = crew.get('id')
+                                    if c_id and c_id not in seen_crew:
+                                        seen_crew.add(c_id)
+                                        role = crew.get('role', 'FA')
+                                        if role in new_role_counts: new_role_counts[role] += 1
+                                        else: new_role_counts['FA'] += 1
+                                        new_operating_crew.append({'id': c_id, 'name': crew.get('name', 'Unknown'), 'role': role})
+                            
+                            if new_operating_crew:
+                                data['operating_crew'] = new_operating_crew
+                                data['crew_roles'] = new_role_counts
+
+                            # 3. Calculate Rotations mapping flights to registrations
+                            flight_reg_map = {}
+                            full_d = target_dt.strftime('%d/%m/%Y')
+                            short_d = target_dt.strftime('%d/%m/%y')
+                            
+                            for f in (current_flights or []):
+                                f_date = str(f.get('flight_date') or f.get('date') or '')
+                                if f_date == full_d or f_date == short_d or f_date.replace('/0', '/') == full_d.replace('/0', '/'):
+                                    f_no = str(f.get('flight_no') or f.get('flt') or '')
+                                    reg = f.get('reg') or f.get('ac_reg')
+                                    if f_no and reg:
+                                        flight_reg_map[f_no] = reg
+                                        if f_no.startswith('VJ'): flight_reg_map[f_no[2:]] = reg
+                                        elif f_no.isdigit(): flight_reg_map['VJ' + f_no] = reg
+                            
+                            crte_groups = defaultdict(list)
+                            for leg in live_legs:
+                                f_no = str(leg.get('flight_no', ''))
+                                reg = flight_reg_map.get(f_no) or leg.get('reg')
+                                crte = None
+                                crew_ids = []
+                                for c in leg.get('crew', []):
+                                    if not crte: crte = c.get('rotation')
+                                    if c.get('id'): crew_ids.append(c.get('id'))
+                                if crte: crte_groups[crte].append({'flt': f_no, 'reg': reg, 'crew_ids': sorted(crew_ids)})
+                            
+                            new_rotation_details = []
+                            for crte, legs in crte_groups.items():
+                                regs = []
+                                for l in legs:
+                                    if l['reg'] and (not regs or l['reg'] != regs[-1]): regs.append(l['reg'])
+                                
+                                if len(regs) > 1:
+                                    main_crew = legs[0]['crew_ids']
+                                    lead_role = "FA"
+                                    for c_id in main_crew:
+                                        for oc in new_operating_crew:
+                                            if oc['id'] == c_id:
+                                                if oc['role'] == 'CP': lead_role = 'CP'; break
+                                                if oc['role'] == 'FO' and lead_role != 'CP': lead_role = 'FO'
+                                        if lead_role == 'CP': break
+                                    
+                                    new_rotation_details.append({
+                                        'id': crte, 'crew_count': len(main_crew), 'role': lead_role,
+                                        'regs': regs, 'flights': [l['flt'] for l in legs], 'rotations': len(regs) - 1
+                                    })
+                            
+                            if new_rotation_details:
+                                new_rotation_details.sort(key=lambda x: (-x['rotations'], -x['crew_count']))
+                                data['crew_rotations'] = new_rotation_details[:100]
+                                data['summary']['crew_rotation_count'] = len(new_rotation_details)
+                            else:
+                                data['crew_rotations'] = []
+                                data['summary']['crew_rotation_count'] = 0
+                except Exception as e:
+                    print(f"Error applying live crew override: {e}")
+        except ImportError:
+            pass
+        return data
+
 
     def _calculate_kpi_maps(self, flights):
         """Helper to calculate all grouping and KPI maps from a list of flights"""
